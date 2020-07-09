@@ -9,6 +9,7 @@ const List<Migration> appMigrations = <Migration>[
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_ports',
     sql: 'CREATE TABLE ports ( '
@@ -17,6 +18,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_vessels',
     sql: 'CREATE TABLE vessels ( '
@@ -26,6 +28,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_fishing_areas',
     sql: 'CREATE TABLE fishing_areas ( '
@@ -34,6 +37,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_sea_bottom_types',
     sql: 'CREATE TABLE sea_bottom_types ( '
@@ -42,6 +46,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_sea_conditions',
     sql: 'CREATE TABLE sea_conditions ( '
@@ -50,6 +55,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_cloud_types',
     sql: 'CREATE TABLE cloud_types ( '
@@ -58,6 +64,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_cloud_covers',
     sql: 'CREATE TABLE cloud_covers ( '
@@ -66,6 +73,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_moon_phases',
     sql: 'CREATE TABLE moon_phases ( '
@@ -74,6 +82,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_disposal_states',
     sql: 'CREATE TABLE disposal_states ( '
@@ -82,6 +91,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_conditions',
     sql: 'CREATE TABLE conditions ( '
@@ -90,6 +100,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_species',
     sql: 'CREATE TABLE species ( '
@@ -99,6 +110,7 @@ const List<Migration> appMigrations = <Migration>[
         'scientific_name TEXT UNIQUE '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_fishing_methods',
     sql: 'CREATE TABLE fishing_methods ( '
@@ -107,6 +119,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_trips',
     sql: 'CREATE TABLE trips ( '
@@ -132,6 +145,7 @@ const List<Migration> appMigrations = <Migration>[
         'FOREIGN KEY (port_id) REFERENCES ports (id) '
         ')',
   ),
+  // Ittai
   Migration(
     name: 'create_fishing_sets',
     sql: 'CREATE TABLE fishing_sets ( '
@@ -169,6 +183,7 @@ const List<Migration> appMigrations = <Migration>[
         'FOREIGN KEY (trip_id) REFERENCES trips (id) '
         ')',
   ),
+  // Patrick
   Migration(
     name: 'create_fishing_set_events',
     sql: 'CREATE TABLE fishing_set_events ( '
