@@ -1,3 +1,5 @@
+//changed
+
 import 'package:migrator/migrator.dart';
 
 const List<Migration> appMigrations = <Migration>[
@@ -146,31 +148,32 @@ const List<Migration> appMigrations = <Migration>[
         ')',
   ),
   // Ittai
+  // Do we not need a list of set_events 
   Migration(
     name: 'create_fishing_sets',
     sql: 'CREATE TABLE fishing_sets ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         //  start
-        'start_datetime TIMESTAMP, '
-        'start_latitude REAL, '
-        'start_longitude REAL, '
+        'start_datetime TIMESTAMP, '  
+        'start_latitude REAL, '       
+        'start_longitude REAL, '      
         //  end
-        'end_datetime TIMESTAMP, '
-        'end_latitude REAL, '
-        'end_longitude REAL, '
+        'end_datetime TIMESTAMP, ' 
+        'end_latitude REAL, '   
+        'end_longitude REAL, '  
         // Other
-        'sea_bottom_depth INTEGER, '
-        'minimum_hook_size INTEGER, '
-        'hooks INTEGER, '
-        'traps INTEGER, '
-        'lines_used INTEGER, '
-        'notes TEXT, '
+        'sea_bottom_depth INTEGER, ' 
+        'minimum_hook_size INTEGER, ' 
+        'hooks INTEGER, ' 
+        'traps INTEGER, ' 
+        'lines_used INTEGER, ' 
+        'notes TEXT, ' 
         // Foreign keys
-        'trip_id INTEGER, '
-        'target_species_id INTEGER, '
-        'moon_phase_id INTEGER, '
-        'cloud_type_id INTEGER, '
+        'trip_id INTEGER, ' 
+        'target_species_id INTEGER, ' 
+        'moon_phase_id INTEGER, ' 
+        'cloud_type_id INTEGER, ' 
         'cloud_cover_id INTEGER, '
         'sea_condition_id INTEGER, '
         'fishing_method_id INTEGER, '

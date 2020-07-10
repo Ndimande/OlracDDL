@@ -1,3 +1,5 @@
+//changed
+
 const bool DEV_RESET_DB = true;
 
 class AppConfig {
@@ -18,4 +20,9 @@ class AppConfig {
 
   /// The sqlite database filename
   static const String DATABASE_FILENAME = 'sharktrace_factory.db';
+
+    //Make sure with Werner that this is okay 
+    //*************************************** 
+    /// The API key for this app for Sentry.io error reporting
+  static const String SENTRY_DSN = 'https://46c3ef2535a2460a8a00c013f0738e17@sentry.io/3728395';  
 }
