@@ -9,7 +9,7 @@ const List<Migration> appMigrations = <Migration>[
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick done!
   Migration(
     name: 'create_ports',
     sql: 'CREATE TABLE ports ( '
@@ -18,7 +18,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick Done!
   Migration(
     name: 'create_vessels',
     sql: 'CREATE TABLE vessels ( '
@@ -28,7 +28,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick Done!
   Migration(
     name: 'create_fishing_areas',
     sql: 'CREATE TABLE fishing_areas ( '
@@ -37,7 +37,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick Done!
   Migration(
     name: 'create_sea_bottom_types',
     sql: 'CREATE TABLE sea_bottom_types ( '
@@ -46,7 +46,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick Done!
   Migration(
     name: 'create_sea_conditions',
     sql: 'CREATE TABLE sea_conditions ( '
@@ -55,7 +55,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL '
         ')',
   ),
-  // Patrick
+  // Patrick Done!
   Migration(
     name: 'create_cloud_types',
     sql: 'CREATE TABLE cloud_types ( '

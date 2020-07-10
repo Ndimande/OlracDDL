@@ -27,6 +27,8 @@ dependencies:
     git: git@ssh.dev.azure.com:v3/Olrac/migrator/migrator
   database_repo:
     git: git@ssh.dev.azure.com:v3/Olrac/database_repo/database_repo
+  olrac_utils:
+    git: git@ssh.dev.azure.com:v3/Olrac/olrac_utils/olrac_utils
   sqflite: ^1.3.1
 
 dev_dependencies:
