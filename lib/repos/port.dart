@@ -6,7 +6,7 @@ class PortRepo extends DatabaseRepo<Port> {
   PortRepo() : super(tableName: 'ports', database: DatabaseProvider().database);
 
   @override
-  Port fromDatabaseResult(Map<String, dynamic> result) {
+  Future<Port> fromDatabaseResult(Map<String, dynamic> result) async {
     return Port(
       id: result['id'],
       name: result['name'],

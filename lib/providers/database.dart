@@ -1,5 +1,3 @@
-//changed
-
 import 'package:olracddl/app_config.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,13 +11,13 @@ class DatabaseProvider {
   static const _filename = AppConfig.DATABASE_FILENAME;
 
   /// DatabaseProvider instance
-  static final DatabaseProvider _databaseProvider = DatabaseProvider._privateConstructor();
+  static final DatabaseProvider _databaseProvider = DatabaseProvider._();
 
   /// Database instance
   Database _database;
 
   /// Private constructor
-  DatabaseProvider._privateConstructor();
+  DatabaseProvider._();
 
   /// Get the database object
   Database get database {

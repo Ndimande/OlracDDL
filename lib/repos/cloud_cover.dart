@@ -6,7 +6,7 @@ class CloudCoverRepo extends DatabaseRepo<CloudCover> {
   CloudCoverRepo() : super(tableName: 'cloud_covers', database: DatabaseProvider().database);
 
   @override
-  CloudCover fromDatabaseResult(Map<String, dynamic> result) {
+  Future<CloudCover> fromDatabaseResult(Map<String, dynamic> result) async {
     return CloudCover(
       id: result['id'],
       name: result['name'],

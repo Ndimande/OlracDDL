@@ -6,7 +6,7 @@ class SeaConditionRepo extends DatabaseRepo<SeaCondition> {
   SeaConditionRepo() : super(tableName: 'sea_conditions', database: DatabaseProvider().database);
 
   @override
-  SeaCondition fromDatabaseResult(Map<String, dynamic> result) {
+  Future<SeaCondition> fromDatabaseResult(Map<String, dynamic> result) async {
     return SeaCondition(
       id: result['id'],
       name: result['name'],

@@ -6,7 +6,7 @@ class FishingMethodRepo extends DatabaseRepo<FishingMethod> {
   FishingMethodRepo() : super(tableName: 'fishing_methods', database: DatabaseProvider().database);
 
   @override
-  FishingMethod fromDatabaseResult(Map<String, dynamic> result) {
+  Future<FishingMethod> fromDatabaseResult(Map<String, dynamic> result) async {
     return FishingMethod(
       id: result['id'],
       name: result['name'],

@@ -59,13 +59,20 @@ packages:
       url: "git@ssh.dev.azure.com:v3/Olrac/database_repo/database_repo"
     source: git
     version: "0.0.1"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.9"
   equatable:
     dependency: transitive
     description:
       name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   fake_async:
     dependency: transitive
     description:
@@ -162,13 +169,31 @@ packages:
       url: "git@ssh.dev.azure.com:v3/Olrac/migrator/migrator"
     source: git
     version: "0.0.1"
+  olrac_themes:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: ab90858a5e7465c87df1c57542bbbbb90a61a436
+      url: "git@ssh.dev.azure.com:v3/Olrac/olrac_themes/olrac_themes"
+    source: git
+    version: "0.0.1"
   olrac_utils:
     dependency: "direct main"
     description:
       path: "."
       ref: HEAD
-      resolved-ref: fdfdb87cf00c92e22138893cba4d3f50b6ad6e2f
+      resolved-ref: abaea0e3077b1cb6ab7c1d12ab49535065f48d35
       url: "git@ssh.dev.azure.com:v3/Olrac/olrac_utils/olrac_utils"
+    source: git
+    version: "0.0.3"
+  olrac_widgets:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "47963ee34fe740b0d285e44ebbd89a189f86d60f"
+      url: "git@ssh.dev.azure.com:v3/Olrac/olrac_widgets/olrac_widgets"
     source: git
     version: "0.0.2"
   path:
