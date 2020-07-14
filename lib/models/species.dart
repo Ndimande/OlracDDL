@@ -8,7 +8,7 @@ class Species extends Model {
   Species({int id, this.commonName, this.scientificName, this.createdAt}) : super(id: id);
 
   @override
-  Map<String, dynamic> toDatabaseMap() {
+  Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'commonName': commonName,
       'scientificName': scientificName,

@@ -6,7 +6,7 @@ class VesselRepo extends DatabaseRepo<Vessel> {
   VesselRepo() : super(tableName: 'vessels', database: DatabaseProvider().database);
 
   @override
-  Vessel fromDatabaseResult(Map<String, dynamic> result) {
+  Future<Vessel> fromDatabaseResult(Map<String, dynamic> result) async {
     return Vessel(
       id: result['id'],
       name: result['name'],

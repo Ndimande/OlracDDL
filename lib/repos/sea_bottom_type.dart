@@ -6,7 +6,7 @@ class SeaBottomTypeRepo extends DatabaseRepo<SeaBottomType> {
   SeaBottomTypeRepo() : super(tableName: 'sea_bottom_types', database: DatabaseProvider().database);
 
   @override
-  SeaBottomType fromDatabaseResult(Map<String, dynamic> result) {
+  Future<SeaBottomType> fromDatabaseResult(Map<String, dynamic> result) async {
     return SeaBottomType(
       id: result['id'],
       name: result['name'],

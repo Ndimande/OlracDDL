@@ -6,7 +6,7 @@ class DisposalStateRepo extends DatabaseRepo<DisposalState> {
   DisposalStateRepo() : super(tableName: 'disposal_states', database: DatabaseProvider().database);
 
   @override
-  DisposalState fromDatabaseResult(Map<String, dynamic> result) {
+  Future<DisposalState> fromDatabaseResult(Map<String, dynamic> result) async {
     return DisposalState(
       id: result['id'],
       name: result['name'],

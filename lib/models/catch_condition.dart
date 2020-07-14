@@ -1,10 +1,10 @@
 import 'package:database_repo/database_repo.dart';
 
-class Port extends Model {
+class CatchCondition extends Model {
   String name;
   DateTime createdAt;
 
-  Port({int id, this.name, this.createdAt}) : super(id: id);
+  CatchCondition({int id, this.name, this.createdAt}) : super(id: id);
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {

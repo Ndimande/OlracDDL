@@ -7,7 +7,7 @@ class FishingMethod extends Model {
   FishingMethod({int id, this.name, this.createdAt}) : super(id: id);
 
   @override
-  Map<String, dynamic> toDatabaseMap() {
+  Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
     };

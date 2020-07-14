@@ -6,7 +6,7 @@ class CloudTypeRepo extends DatabaseRepo<CloudType> {
   CloudTypeRepo() : super(tableName: 'cloud_types', database: DatabaseProvider().database);
 
   @override
-  CloudType fromDatabaseResult(Map<String, dynamic> result) {
+  Future<CloudType> fromDatabaseResult(Map<String, dynamic> result) async {
     return CloudType(
       id: result['id'],
       name: result['name'],

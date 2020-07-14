@@ -6,7 +6,7 @@ class MoonPhaseRepo extends DatabaseRepo<MoonPhase> {
   MoonPhaseRepo() : super(tableName: 'moon_phases', database: DatabaseProvider().database);
 
   @override
-  MoonPhase fromDatabaseResult(Map<String, dynamic> result) {
+  Future<MoonPhase> fromDatabaseResult(Map<String, dynamic> result) async {
     return MoonPhase(
       id: result['id'],
       name: result['name'],

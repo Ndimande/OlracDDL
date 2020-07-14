@@ -1,28 +1,51 @@
 import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/models/catch_condition.dart';
+import 'package:olracddl/models/disposal_state.dart';
+import 'package:olracddl/models/species.dart';
 
 class FishingSetEvent extends Model {
+  /// Green weight and unit
   int greenWeight;
   WeightUnit greenWeightUnit;
+
+  /// Estimated green weight and unit
   int estimatedGreenWeight;
   WeightUnit estimatedGreenWeightUnit;
+
+  /// Estimated weight and unit
   int estimatedWeight;
   WeightUnit estimatedWeightUnit;
-  int individuals;
+
+  /// The time the event was created.
   DateTime createdAt;
+
+  /// Latitude and Longitude
   double latitude;
   double longitude;
+
+  /// Number of animals
+  int individuals;
+
   String tagNumber;
+
+  /// The parent fishing set ID
   int fishingSetId;
-  int speciesId;
-  int disposalStateId;
-  int conditionId;
-  int tripId;
+
+  /// The species that the event involves
+  Species species;
+
+  /// The disposal state.
+  /// null if no disposal.
+  DisposalState disposalState;
+
+  /// Catch condition
+  CatchCondition catchCondition;
 
   FishingSetEvent({
     int id,
-    this.conditionId,
-    this.disposalStateId,
+    this.catchCondition,
+    this.disposalState,
     this.estimatedGreenWeight,
     this.estimatedGreenWeightUnit,
     this.estimatedWeight,
@@ -33,14 +56,13 @@ class FishingSetEvent extends Model {
     this.individuals,
     this.latitude,
     this.longitude,
-    this.speciesId,
+    this.species,
     this.tagNumber,
-    this.tripId,
     this.createdAt,
   }) : super(id: id);
 
   @override
-  Map<String, dynamic> toDatabaseMap() {
+  Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'green_weight': greenWeight,
       'green_weight_unit': greenWeightUnit.toString(),
@@ -54,16 +76,9 @@ class FishingSetEvent extends Model {
       'longitude': longitude,
       'tag_number': tagNumber,
       'fishing_set_id': fishingSetId,
-      'species_id': speciesId,
-      'disposal_state_id': disposalStateId,
-      'condition_id': conditionId,
-      'trip_id': tripId,
+      'species_id': species.id,
+      'disposal_state_id': disposalState.id,
+      'condition_id': catchCondition.id,
     };
   }
 }
-//Need to ask about this....
-
-//'FOREIGN KEY (condition_id) REFERENCES conditions (id), '
-//'FOREIGN KEY (species_id) REFERENCES species (id), '
-//'FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id), '
-//'FOREIGN KEY (trip_id) REFERENCES trips (id) '

@@ -6,7 +6,7 @@ class SpeciesRepo extends DatabaseRepo<Species> {
   SpeciesRepo() : super(tableName: 'species', database: DatabaseProvider().database);
 
   @override
-  Species fromDatabaseResult(Map<String, dynamic> result) {
+  Future<Species> fromDatabaseResult(Map<String, dynamic> result) async {
     return Species(
       id: result['id'],
       commonName: result['common_name'],

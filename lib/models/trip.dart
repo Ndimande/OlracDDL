@@ -1,58 +1,66 @@
+import 'dart:convert';
+
 import 'package:database_repo/database_repo.dart';
+import 'package:olracddl/models/fishing_set.dart';
+import 'package:olracddl/models/port.dart';
 
 class Trip extends Model {
   String uuid;
+
   DateTime createdAt;
 
-  DateTime startDatetime;
+  DateTime startedAt;
   String startLatitude;
   String startLongitude;
 
-  DateTime endDatetime;
+  DateTime endedAt;
   String endLatitude;
-
   String endLongitude;
 
   String skipperName;
-  String crewMembersJson;
+  List<String> crewMembers;
   String notes;
+
   DateTime uploadedAt;
 
-  int portId;
+  Port port;
 
-  Trip(
-      {int id,
-      this.uuid,
-      this.createdAt,
-      this.startDatetime,
-      this.startLatitude,
-      this.startLongitude,
-      this.endDatetime,
-      this.endLatitude,
-      this.endLongitude,
-      this.skipperName,
-      this.crewMembersJson,
-      this.notes,
-      this.uploadedAt,
-      this.portId})
-      : super(id: id);
+  List<FishingSet> fishingSets;
+
+  Trip({
+    int id,
+    this.uuid,
+    this.createdAt,
+    this.startedAt,
+    this.startLatitude,
+    this.startLongitude,
+    this.endedAt,
+    this.endLatitude,
+    this.endLongitude,
+    this.skipperName,
+    this.crewMembers,
+    this.notes,
+    this.uploadedAt,
+    this.port,
+    this.fishingSets,
+  }) : super(id: id);
 
   @override
-  Map<String, dynamic> toDatabaseMap() {
+  Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'uuid': uuid,
-      'createdAt': createdAt,
-      'startDatetime': startDatetime,
-      'startLatitude': startLatitude,
-      'startLongitude': startLongitude,
-      'endDatetime': endDatetime,
-      'endLatitude': endLatitude,
-      'endLongitude': endLongitude,
-      'skipperName': skipperName,
-      'crewMembersJson': crewMembersJson,
+      'created_at': createdAt,
+      'started_at': startedAt,
+      'start_latitude': startLatitude,
+      'start_longitude': startLongitude,
+      'ended_at': endedAt,
+      'end_latitude': endLatitude,
+      'end_longitude': endLongitude,
+      'skipper_name': skipperName,
+      'crew_members_json': jsonEncode(crewMembers),
       'notes': notes,
-      'uploadedAt': uploadedAt,
-      'portId': portId,
+      'uploaded_at': uploadedAt.toIso8601String(),
+      'port_id': port.id,
     };
   }
 }
