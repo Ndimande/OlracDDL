@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 
+import '../../app_config.dart';
+
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -29,6 +31,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   /// The street or other address of the factory
   String _factoryAddress = '';
+
+
+  final  _nameFocusNode= FocusNode();
+  final _positionAtFactoryFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _contactNumberFocusNode = FocusNode();
+  final _companyNameFocusNode = FocusNode();
+  final _factoryNameFocusNode = FocusNode();
+  final _factoryAddressFocusNode = FocusNode();
+
 
   Future<void> _onPressSaveButton() async {
 //    if (!_allValid()) {
@@ -64,11 +76,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Name', style: Theme.of(context).textTheme.headline2),
+          Text('Name',  style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            focusNode: _nameFocusNode,
+
             onChanged: (String name) => setState(() => _name = name),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _nameFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_emailFocusNode);
+            },
           )
         ],
       ),
@@ -83,9 +102,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Position at Factory', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            focusNode: _positionAtFactoryFocusNode,
+
             onChanged: (String positionAtFactory) => setState(() => _positionAtFactory = positionAtFactory),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _positionAtFactoryFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_companyNameFocusNode);
+            },
+
           )
         ],
       ),
@@ -100,9 +127,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Email', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+             textInputAction: TextInputAction.next,
+             focusNode:  _emailFocusNode,
             onChanged: (String email) => setState(() => _email = email),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _emailFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_positionAtFactoryFocusNode);
+            },
           )
         ],
       ),
@@ -117,9 +150,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Contact Number', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            focusNode:  _contactNumberFocusNode,
             onChanged: (String contactNumber) => setState(() => _contactNumber = contactNumber),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _contactNumberFocusNode.unfocus();
+              _saveButton();
+            },
           )
         ],
       ),
@@ -134,9 +173,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Factory Name', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            textInputAction: TextInputAction.next,
+            focusNode: _factoryNameFocusNode,
             onChanged: (String factoryName) => setState(() => _factoryName = factoryName),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _factoryNameFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_factoryAddressFocusNode);
+            },
           )
         ],
       ),
@@ -151,9 +196,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Factory Address', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            textInputAction: TextInputAction.next,
+             focusNode: _factoryAddressFocusNode,
             onChanged: (String factoryAddress) => setState(() => _factoryAddress = factoryAddress),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _factoryAddressFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_contactNumberFocusNode);
+            },
           )
         ],
       ),
@@ -168,9 +219,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text('Company Name', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
-          TextField(
+          TextFormField(
+            focusNode: _companyNameFocusNode,
             onChanged: (String companyName) => setState(() => _companyName = companyName),
             keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) {
+              _companyNameFocusNode.unfocus();
+              FocusScope.of(context).requestFocus(_factoryNameFocusNode);
+            },
           )
         ],
       ),
@@ -215,7 +271,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
       labelText: 'Save',
-      onPressed: _onPressSaveButton,
+      onPressed: () {
+        return _onPressSaveButton;
+      },
     );
   }
 
@@ -227,4 +285,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: _body(),
     );
   }
+
+
+
+
 }
