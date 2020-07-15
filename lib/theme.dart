@@ -184,6 +184,7 @@ class OlracThemesLight {
       color: OlracColoursLight.olspsTopGradientLight,
     ),
     inputDecorationTheme: const InputDecorationTheme(
+      isDense: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         borderSide: BorderSide(color: Colors.white),

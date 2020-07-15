@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   TextStyle _fontStyle(double fontSize, FontWeight fontWeight) => TextStyle(
-      color: Color.fromRGBO(43, 59, 100, 1),
+      color: Theme.of(context).primaryColor,
       fontSize: _scaleText(fontSize),
       fontWeight: fontWeight,
       fontFamily: 'RobotoLight');

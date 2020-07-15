@@ -4,8 +4,14 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/app_migrations.dart';
 import 'package:olracddl/providers/database.dart';
 import 'package:olracddl/screens/splash_screen.dart';
+import 'package:olracddl/screens/start_set_screen.dart';
+import 'package:olracddl/screens/start_set_screen_two.dart';
 import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'screens/login_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/splash_screen.dart';
 
 final DatabaseProvider _databaseProvider = DatabaseProvider();
 Database _database;
@@ -25,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: AppConfig.APP_TITLE,
       theme: OlracThemesLight.olspsLightTheme,
-      home: SplashScreen(), // Change to the screen you're working on
+      home: StartSetScreenTwo(), // Change to the screen you're working on
     );
   }
 }

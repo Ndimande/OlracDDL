@@ -44,18 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   TextStyle _fontStyle(double fontSize, FontWeight fontWeight) => TextStyle(
-      color: Color.fromRGBO(43, 59, 100, 1),
+      color: Theme.of(context).primaryColor,
       fontSize: _scaleText(fontSize),
       fontWeight: fontWeight,
       fontFamily: 'RobotoLight');
 
   Image _olracLogo(double imageWidth) => Image(
         image: const AssetImage('assets/images/olrac_logo.png'),
-        width: _scaleImage(imageWidth),
-      );
-
-  Image _olspsLogo(double imageWidth) => Image(
-        image: const AssetImage('assets/images/olsps_logo_darkblue.png'),
         width: _scaleImage(imageWidth),
       );
 
@@ -91,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             SizedBox(height: _screenHeight * 0.2),
             _appInfo(),
-            //SizedBox(height: _screenHeight * 0.02),
             _loginButton(),
             SizedBox(height: _screenHeight * 0.02),
           ],

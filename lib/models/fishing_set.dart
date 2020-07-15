@@ -9,6 +9,8 @@ import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/models/sea_condition.dart';
 import 'package:olracddl/models/species.dart';
 
+import 'sea_bottom_type.dart';
+
 class FishingSet extends Model {
   int id;
 
@@ -27,6 +29,9 @@ class FishingSet extends Model {
   /// Sea bottom depth and unit
   int seaBottomDepth;
   LengthUnit seaBottomDepthUnit;
+
+  /// Sea bottom type
+  SeaBottomType seaBottomType;
 
   int minimumHookSize;
 
@@ -77,6 +82,7 @@ class FishingSet extends Model {
     this.endLocation,
     this.seaBottomDepth,
     this.seaBottomDepthUnit,
+    this.seaBottomType,
     this.minimumHookSize,
     this.hooks,
     this.traps,
@@ -115,6 +121,7 @@ class FishingSet extends Model {
       'notes': notes,
       // Related
       'trip_id': tripId,
+      'sea_bottom_type_id': seaBottomType.id,
       'target_species_id': targetSpecies.id,
       'moon_phase_id': moonPhase.id,
       'cloud_type_id': cloudType.id,

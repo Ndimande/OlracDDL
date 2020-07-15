@@ -39,6 +39,7 @@ dependencies:
   uuid: ^2.2.0
   geolocator: ^5.3.2+2
   dio: ^3.0.9
+  
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.5
@@ -71,6 +72,20 @@ flutter:
     - assets/images/olrac_logo.png
     - assets/images/olsps_logo_darkblue.png
     - assets/images/download_from_server.png
+    - assets/images/arrow_darkBlue.png
+    - assets/images/arrow_grey.png
+    - assets/images/arrow_highlighterBlue.png
+    - assets/images/cloud.png
+    - assets/images/location_icon.png
+    - assets/images/partly_clouded.png
+    - assets/images/moon_phase.png
+    - assets/images/wave.png
+    - assets/images/camera_icon.png
+    - assets/images/upload_required_icon.png
+    - assets/images/marine_life_icon.png
+    - assets/images/successful_upload_icon.png
+    - assets/images/disposal_icon.png
+    - assets/images/catch_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

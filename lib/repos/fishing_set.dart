@@ -15,11 +15,15 @@ import 'package:olracddl/repos/moon_phase.dart';
 import 'package:olracddl/repos/sea_condition.dart';
 import 'package:olracddl/repos/species.dart';
 
+import '../models/sea_bottom_type.dart';
+import 'sea_bottom_type.dart';
+
 class FishingSetRepo extends DatabaseRepo<FishingSet> {
   FishingSetRepo() : super(tableName: 'fishing_sets', database: DatabaseProvider().database);
 
   @override
   Future<FishingSet> fromDatabaseResult(Map<String, dynamic> result) async {
+    final SeaBottomType seaBottomType = await SeaBottomTypeRepo().find(result['sea_bottom_type_id']);
     final MoonPhase moonPhase = await MoonPhaseRepo().find(result['moon_phase_id']);
     final CloudType cloudType = await CloudTypeRepo().find(result['cloud_type_id']);
     final CloudCover cloudCover = await CloudCoverRepo().find(result['cloud_cover_id']);
@@ -49,6 +53,7 @@ class FishingSetRepo extends DatabaseRepo<FishingSet> {
       notes: result['notes'],
       // related
       tripId: result['trip_id'],
+      seaBottomType: seaBottomType,
       moonPhase: moonPhase,
       cloudType: cloudType,
       cloudCover: cloudCover,
