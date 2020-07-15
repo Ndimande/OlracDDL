@@ -14,4 +14,12 @@ class Vessel extends Model {
       'vesselId': vesselId,
     };
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'vesselID': vesselId,
+    };
+  }
 }

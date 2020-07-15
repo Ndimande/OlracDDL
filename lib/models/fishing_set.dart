@@ -12,8 +12,6 @@ import 'package:olracddl/models/species.dart';
 import 'sea_bottom_type.dart';
 
 class FishingSet extends Model {
-  int id;
-
   /// When the set started
   DateTime startedAt;
 
@@ -75,7 +73,7 @@ class FishingSet extends Model {
   DateTime createdAt;
 
   FishingSet({
-    this.id,
+    int id,
     @required this.startedAt,
     this.endedAt,
     @required this.startLocation,
@@ -128,6 +126,32 @@ class FishingSet extends Model {
       'cloud_cover_id': cloudCover.id,
       'sea_condition_id': seaCondition.id,
       'fishing_method_id': fishingMethod.id,
+    };
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'startedAt': startedAt == null ? null : startedAt.toUtc().toIso8601String(),
+      'endedAt': endedAt == null ? null : endedAt.toUtc().toIso8601String(),
+      'startLatitude': startLocation.latitude,
+      'startLongitude': startLocation.longitude,
+      'endLatitude': endLocation.latitude,
+      'endLongitude': endLocation.longitude,
+      'seaBottomDepth': seaBottomDepth,
+      'seaBottomDepthUnit': seaBottomDepthUnit,
+      'minimumHookSize': minimumHookSize,
+      'hooks': hooks,
+      'traps': traps,
+      'lines_used': linesUsed,
+      'notes': notes,
+      'tripID': tripId,
+      'targetSpeciesID': targetSpecies.id,
+      'moonPhaseID': moonPhase.id,
+      'cloudTypeID': cloudType.id,
+      'cloudCoverID': cloudCover.id,
+      'seaConditionID': seaCondition.id,
+      'fishingMethodID': fishingMethod.id,
     };
   }
 }

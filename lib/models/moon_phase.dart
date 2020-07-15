@@ -12,4 +12,12 @@ class MoonPhase extends Model {
       'name': name,
     };
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'createdAt': createdAt,
+    };
+  }
 }

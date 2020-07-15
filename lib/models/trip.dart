@@ -63,4 +63,23 @@ class Trip extends Model {
       'port_id': port.id,
     };
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'uuid': uuid,
+      'createdAt': createdAt,
+      'startedAt': startedAt,
+      'startLatitude': startLatitude,
+      'startLongitude': startLongitude,
+      'endedAt': endedAt,
+      'endLatitude': endLatitude,
+      'endLongitude': endLongitude,
+      'skipperName': skipperName,
+      'crewMembersJson': jsonEncode(crewMembers),
+      'notes': notes,
+      'uploadedAt': uploadedAt.toIso8601String(),
+      'portID': port.id,
+    };
+  }
 }

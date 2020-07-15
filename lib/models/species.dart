@@ -14,4 +14,13 @@ class Species extends Model {
       'scientificName': scientificName,
     };
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'commonName':commonName,
+      'scientificName': scientificName,
+    };
+
+  }
 }

@@ -32,8 +32,7 @@ class FishingSetEventRepo extends DatabaseRepo<FishingSetEvent> {
       estimatedWeight: result['estimated_weight'],
       estimatedWeightUnit: estimatedWeightUnit,
       // time / location
-      latitude: result['latitude'],
-      longitude: result['longitude'],
+      location: Location(latitude: result['latitude'], longitude: result['longitude']),
       createdAt: DateTime.parse(result['created_at']),
       individuals: result['individuals'],
       //other

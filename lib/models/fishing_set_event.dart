@@ -20,9 +20,7 @@ class FishingSetEvent extends Model {
   /// The time the event was created.
   DateTime createdAt;
 
-  /// Latitude and Longitude
-  double latitude;
-  double longitude;
+  Location location;
 
   /// Number of animals
   int individuals;
@@ -54,8 +52,7 @@ class FishingSetEvent extends Model {
     this.greenWeight,
     this.greenWeightUnit = WeightUnit.GRAMS,
     this.individuals,
-    this.latitude,
-    this.longitude,
+    this.location,
     this.species,
     this.tagNumber,
     this.createdAt,
@@ -72,13 +69,32 @@ class FishingSetEvent extends Model {
       'estimated_weight_unit': estimatedWeightUnit.toString(),
       'individuals': individuals,
       'created_at': createdAt.toIso8601String(),
-      'latitude': latitude,
-      'longitude': longitude,
+      'latitude': location.latitude,
+      'longitude': location.longitude,
       'tag_number': tagNumber,
       'fishing_set_id': fishingSetId,
       'species_id': species.id,
       'disposal_state_id': disposalState.id,
-      'condition_id': catchCondition.id,
+      'catch_condition_id': catchCondition.id,
+    };
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'greenWeight': greenWeight,
+      'greenWeightUnit': greenWeightUnit,
+      'estimatedWeight': estimatedGreenWeight,
+      'estimatedWeightUnit': estimatedGreenWeightUnit,
+      'individuals': individuals,
+      'createdAt': createdAt,
+      'latitude': location.latitude,
+      'longitude': location.longitude,
+      'tagName': tagNumber,
+      'fishingSetID': fishingSetId,
+      'speciesID': species.id,
+      'disposalStateID': disposalState.id,
+      'catchConditionID': catchCondition.id,
     };
   }
 }

@@ -12,4 +12,10 @@ class CatchCondition extends Model {
       'name': name,
     };
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
 }

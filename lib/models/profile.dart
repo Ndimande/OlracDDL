@@ -1,41 +1,30 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:olracddl/models/country.dart';
 import 'package:olracddl/providers/database.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 class Profile {
   static const jsonKey = 'user';
 
   Profile({
-    this.factoryName,
-    this.name,
-    this.email,
-    this.positionAtFactory,
-    this.contactNumber,
-    this.companyName,
-    this.factoryAddress,
-  });
+    @required this.uuid,
+    @required this.username,
+    @required this.email,
+    @required this.country,
+  }) : assert(uuid != null);
 
-  String factoryName;
-  final String uuid = Uuid().v4();
-  String name;
-  String positionAtFactory;
+  String uuid;
+  String username;
   String email;
-  String contactNumber;
-  String companyName;
-  String factoryAddress;
+  Country country;
 
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,
-      'factoryName': factoryName,
-      'name': name,
-      'positionAtFactory': positionAtFactory,
+      'username': username,
       'email': email,
-      'contactNumber': contactNumber,
-      'companyName': companyName,
-      'factoryAddress': factoryAddress
     };
   }
 
@@ -49,7 +38,11 @@ class Profile {
     }
     final resultJson = jsonDecode(results.first['json'] as String);
 
-    return Profile(factoryName: resultJson['factoryName'] as String);
+    return Profile(uuid: resultJson['uuid'] as String,
+        username: resultJson['username'] as String,
+        email: resultJson['email'] as String,
+        country: Country.fromMap(resultJson['country'] as Map)
+    );
   }
 
   static Future<void> set(Profile profile) async {
@@ -57,7 +50,10 @@ class Profile {
 
     final Database db = DatabaseProvider().database;
     final Map<String, dynamic> userMap = {
-      'factoryName': profile.factoryName,
+      'uuid': profile.uuid,
+      'username': profile.username,
+      'email': profile.email,
+      'country': profile.country.toMap(),
     };
 
     final String json = jsonEncode(userMap);
