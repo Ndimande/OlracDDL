@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_themes/olrac_themes.dart';
 import 'package:olrac_widgets/common/gradient_background.dart';
+import 'package:olracddl/app_data.dart';
 
 const double drawerLabelFontSize = 20;
 const double drawerTextFontSize = 26;
 
 Widget _drawerHeader() {
   return Builder(builder: (context) {
-    final vesselName = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Vessel Name',
-          style: Theme.of(context).textTheme.headline2,
-        ),
-        Text(
-          'TODO',
-          style: Theme.of(context).textTheme.headline1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
+//    final vesselName = Column(
+//      crossAxisAlignment: CrossAxisAlignment.start,
+//      children: <Widget>[
+//        Text(
+//          'Vessel Name',
+//          style: Theme.of(context).textTheme.headline2,
+//        ),
+//        Text(
+//          'TODO',
+//          style: Theme.of(context).textTheme.headline1,
+//          overflow: TextOverflow.ellipsis,
+//        ),
+//      ],
+//    );
 
-    final skipperName = Column(
+    final username = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Skipper Name',
+          'Username',
           style: Theme.of(context).textTheme.headline2,
         ),
         Text(
-          'TODO',
+          AppData.profile.username,
           style: Theme.of(context).textTheme.headline1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -54,8 +55,7 @@ Widget _drawerHeader() {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      vesselName,
-                      skipperName,
+                      username,
                     ],
                   ),
                 ],
@@ -79,15 +79,8 @@ class MainDrawer extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         return ListTile(
-          leading: Icon(
-            iconData,
-            color: OlracColours.olspsDarkBlue,
-            size: 36,
-          ),
-          title: Text(
-            text,
-            style: Theme.of(context).textTheme.headline2,
-          ),
+          leading: Icon(iconData, color: OlracColours.olspsDarkBlue, size: 36),
+          title: Text(text, style: Theme.of(context).textTheme.headline2),
           onTap: onTap,
         );
       },
@@ -112,17 +105,17 @@ class MainDrawer extends StatelessWidget {
                   _listTile(
                     iconData: Icons.history,
                     text: 'Trip History',
-                    onTap: () => Navigator.pushNamed(context, '/trip_history'),
+                    onTap: () => null,
                   ),
                   _listTile(
                     iconData: Icons.settings,
                     text: 'Settings',
-                    onTap: () => Navigator.pushNamed(context, '/settings'),
+                    onTap: () => null,
                   ),
                   _listTile(
                     iconData: Icons.info,
                     text: 'About',
-                    onTap: () => Navigator.pushNamed(context, '/about'),
+                    onTap: () => null,
                   ),
                 ],
               )

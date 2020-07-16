@@ -108,6 +108,30 @@ const List<Migration> appMigrations = <Migration>[
         ')',
   ),
   Migration(
+    name: 'create_countries',
+    sql: 'CREATE TABLE countries ( '
+        'id INTEGER PRIMARY KEY, '
+        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'name TEXT UNIQUE NOT NULL '
+        ')',
+  ),
+  Migration(
+    name: 'create_skippers',
+    sql: 'CREATE TABLE skippers ( '
+        'id INTEGER PRIMARY KEY, '
+        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'name TEXT UNIQUE NOT NULL '
+        ')',
+  ),
+  Migration(
+    name: 'create_crew_members',
+    sql: 'CREATE TABLE crew_members ( '
+        'id INTEGER PRIMARY KEY, '
+        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'name TEXT UNIQUE NOT NULL '
+        ')',
+  ),
+  Migration(
     name: 'create_trips',
     sql: 'CREATE TABLE trips ( '
         //ids
@@ -123,14 +147,26 @@ const List<Migration> appMigrations = <Migration>[
         'end_latitude REAL, '
         'end_longitude REAL, '
         // other
-        'skipper_name TEXT, '
         'crew_members_json TEXT, '
         'notes TEXT, '
         'uploaded_at TIMESTAMP, '
         // Foreign keys
         'port_id INTEGER, '
+        'vessel_id INTEGER, '
+        'skipper_id INTEGER, '
+        'FOREIGN KEY (vessel_id) REFERENCES vessels (id), '
+        'FOREIGN KEY (skipper_id) REFERENCES skipper (id), '
         'FOREIGN KEY (port_id) REFERENCES ports (id) '
         ')',
+  ),
+  Migration(
+    name: 'create_trip_has_crew_members',
+    sql: 'CREATE TABLE trip_has_crew_members ( '
+        'trip_id INTEGER NOT NULL, '
+        'crew_member_id INTEGER NOT NULL, '
+        'FOREIGN KEY (crew_member_id) REFERENCES crew_members (id), '
+        'FOREIGN KEY (trip_id) REFERENCES trips (id) '
+    ')',
   ),
   Migration(
     name: 'create_fishing_sets',

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:database_repo/database_repo.dart';
+import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
+import 'package:olracddl/models/vessel.dart';
 
 class Trip extends Model {
   String uuid;
@@ -10,12 +12,11 @@ class Trip extends Model {
   DateTime createdAt;
 
   DateTime startedAt;
-  String startLatitude;
-  String startLongitude;
+  Location startLocation;
 
   DateTime endedAt;
-  String endLatitude;
-  String endLongitude;
+  Location endLocation;
+
 
   String skipperName;
   List<String> crewMembers;
@@ -27,40 +28,41 @@ class Trip extends Model {
 
   List<FishingSet> fishingSets;
 
+  Vessel vessel;
+
   Trip({
     int id,
     this.uuid,
     this.createdAt,
     this.startedAt,
-    this.startLatitude,
-    this.startLongitude,
+    this.startLocation,
     this.endedAt,
-    this.endLatitude,
-    this.endLongitude,
+    this.endLocation,
     this.skipperName,
     this.crewMembers,
     this.notes,
     this.uploadedAt,
     this.port,
-    this.fishingSets,
+    this.fishingSets = const [],
+    this.vessel,
   }) : super(id: id);
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'uuid': uuid,
-      'created_at': createdAt,
-      'started_at': startedAt,
-      'start_latitude': startLatitude,
-      'start_longitude': startLongitude,
+      'started_at': startedAt.toIso8601String(),
+      'start_latitude': startLocation.latitude,
+      'start_longitude': startLocation.longitude,
       'ended_at': endedAt,
-      'end_latitude': endLatitude,
-      'end_longitude': endLongitude,
+      'end_latitude': endLocation != null ? endLocation.latitude : null,
+      'end_longitude': endLocation != null ? endLocation.longitude: null,
       'skipper_name': skipperName,
       'crew_members_json': jsonEncode(crewMembers),
       'notes': notes,
-      'uploaded_at': uploadedAt.toIso8601String(),
+      'uploaded_at': uploadedAt == null ? null :uploadedAt.toIso8601String(),
       'port_id': port.id,
+      'vessel_id': vessel.id,
     };
   }
 
@@ -70,16 +72,15 @@ class Trip extends Model {
       'uuid': uuid,
       'createdAt': createdAt,
       'startedAt': startedAt,
-      'startLatitude': startLatitude,
-      'startLongitude': startLongitude,
+      'startLocation': startLocation.toMap(),
       'endedAt': endedAt,
-      'endLatitude': endLatitude,
-      'endLongitude': endLongitude,
+      'endLocation': endLocation.toMap(),
       'skipperName': skipperName,
       'crewMembersJson': jsonEncode(crewMembers),
       'notes': notes,
-      'uploadedAt': uploadedAt.toIso8601String(),
+      'uploadedAt': uploadedAt == null ? null : uploadedAt.toIso8601String(),
       'portID': port.id,
+      'vesselID': vessel.id,
     };
   }
 }

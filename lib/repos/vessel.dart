@@ -10,7 +10,7 @@ class VesselRepo extends DatabaseRepo<Vessel> {
     return Vessel(
       id: result['id'],
       name: result['name'],
-      vesselId: result['vessel_id'],
+      vesselID: result['vessel_id'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

@@ -92,6 +92,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.5"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -199,7 +206,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: faff241bf21b83e65aea9a1d4716cbb2f7a47119
+      resolved-ref: d1ba24d74f0fd6845b07d947b992016a5c317ff9
       url: "git@ssh.dev.azure.com:v3/Olrac/olrac_widgets/olrac_widgets"
     source: git
     version: "0.0.2"
@@ -347,7 +354,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0+1"
+    version: "2.2.0+2"
   term_glyph:
     dependency: transitive
     description:

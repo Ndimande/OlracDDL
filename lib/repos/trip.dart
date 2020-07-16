@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:database_repo/database_repo.dart';
+import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/providers/database.dart';
@@ -20,20 +21,22 @@ class TripRepo extends DatabaseRepo<Trip> {
   Future<Trip> fromDatabaseResult(Map<String, dynamic> result) async {
     final Port port = await PortRepo().find(result['port_id']);
 
+    final DateTime startedAt = DateTime.parse(result['started_at']);
+    final Location startLocation = result['start_latitude'] == null ? null : Location(latitude: result['start_latitude'],longitude: result['start_longitude']);
+    final Location endLocation = result['end_latitude'] == null ? null: Location(latitude: result['end_latitude'],longitude: result['end_longitude']);
+
     return Trip(
       id: result['id'],
       uuid: result['uuid'],
-      startedAt: DateTime.parse(result['started_at']),
-      startLatitude: result['start_latitude'],
-      startLongitude: result['start_longitude'],
-      endedAt: DateTime.parse(result['ended_at']),
-      endLatitude: result['end_latitude'],
-      endLongitude: result['end_longitude'],
+      startedAt: startedAt,
+      startLocation: startLocation,
+      endedAt: result['ended_at'] == null ? null : DateTime.parse(result['ended_at']),
+      endLocation: endLocation,
       skipperName: result['skipper_name'],
-      crewMembers: jsonDecode(result['crew_members_json']) as List<String>,
+      crewMembers: (jsonDecode(result['crew_members_json']) as List<dynamic>).map((name) => name.toString()).toList(),
       notes: result['notes'],
       port: port,
-      uploadedAt: DateTime.parse(result['uploaded_at']),
+      uploadedAt: result['uploaded_at'] == null? null : DateTime.parse(result['uploaded_at']),
       createdAt: DateTime.parse(result['created_at']),
     );
   }

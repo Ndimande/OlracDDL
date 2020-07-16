@@ -3,15 +3,15 @@ import 'package:database_repo/database_repo.dart';
 class Vessel extends Model {
   String name;
   DateTime createdAt;
-  int vesselId;
+  String vesselID;
 
-  Vessel({int id, this.name, this.vesselId, this.createdAt}) : super(id: id);
+  Vessel({int id, this.name, this.vesselID, this.createdAt}) : super(id: id);
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      'vesselId': vesselId,
+      'vesselId': vesselID,
     };
   }
 
@@ -19,7 +19,7 @@ class Vessel extends Model {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'vesselID': vesselId,
+      'vesselID': vesselID,
     };
   }
 }

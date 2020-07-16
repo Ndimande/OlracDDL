@@ -3,9 +3,17 @@ import 'package:olrac_utils/olrac_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/datetime_editor.dart';
+import 'package:olracddl/widgets/location_editor.dart';
 import '../widgets/weather_condition_button.dart';
 
 import '../models/fishing_area.dart';
+
+enum Page {
+  One,
+  Two,
+}
 
 class StartSetScreen extends StatefulWidget {
   @override
@@ -39,6 +47,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
   /// sea bottom type
   int _minimumHookSize;
 
+  Page _page = Page.One;
+
   bool _allValid() {
     if (_startedAt == null) {
       return false;
@@ -53,26 +63,24 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date, Time and Location',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Date, Time and Location', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
                 flex: 5,
-                child: TextField(
-                    //onChanged: (String name) => setState(() => _name = name),
-                    //keyboardType: TextInputType.text,
-                    ),
+                child: DateTimeEditor(
+                  initialDateTime: DateTime.now(),
+                  title: 'foo',
+                  onChanged: () {},
+                ),
               ),
-              SizedBox(
-                width: 5,
-              ),
+              const SizedBox(width: 5),
               Flexible(
                 flex: 1,
-                child: IconButton(icon:
-                  Image.asset('assets/images/location_icon.png'),
-                  onPressed: (){},
+                child: IconButton(
+                  icon: Image.asset('assets/images/location_icon.png'),
+                  onPressed: () {},
                 ),
               ),
             ],
@@ -88,8 +96,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Fishing Area (Statistical Rectangle)',
-              style: Theme.of(context).textTheme.headline3),
+          Text('Fishing Area (Statistical Rectangle)', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             onChanged: (String name) => setState(() => _fishingArea = name),
@@ -106,8 +113,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sea Bottom Depth (m)',
-              style: Theme.of(context).textTheme.headline3),
+          Text('Sea Bottom Depth (m)', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             onChanged: (String name) => setState(() => _seaBottomDepth = name),
@@ -141,8 +147,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Minimum Hook Size',
-              style: Theme.of(context).textTheme.headline3),
+          Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             onChanged: (String name) => setState(() => _seaBottomDepth = name),
@@ -153,56 +158,75 @@ class _StartSetScreenState extends State<StartSetScreen> {
     );
   }
 
-  Widget _body() {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
-      ),
-      child: Stack(
+  StripButton _saveButton() {
+    return StripButton(
+        color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
+        onPressed: _allValid() ? () {} : () {},
+        labelText: 'Save');
+  }
+
+  Widget _page1() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
         children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(children: [
-              const SizedBox(height: 70),
-            ]),
-          ),
-          Container(
-            margin: const EdgeInsets.only(right: 12),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _dateTimeInput(),
-                  SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Operational',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  _fishingAreaInput(),
-                  _seaBottomDepthInput(),
-                  _seaBottomTypeInput(),
-                  _minimumHookSizeInput(),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(''),
-                      Text(
-                        '1/2',
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      _nextButton()
-                    ],
-                  ),
-                ],
-              ),
+          _dateTimeInput(),
+          const SizedBox(height: 15),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Operational',
+              style: Theme.of(context).textTheme.headline2,
             ),
-          )
+          ),
+          const SizedBox(height: 15),
+          _fishingAreaInput(),
+          _seaBottomDepthInput(),
+          _seaBottomTypeInput(),
+          _minimumHookSizeInput(),
+          const SizedBox(height: 15),
+          Container(
+            constraints: const BoxConstraints.expand(height: 38),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Text(
+                  '1/2',
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                Positioned(child: _nextButton(), right: 0),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _page2() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _dateTimeInput(),
+          const SizedBox(height: 15),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Weather Conditions',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          const SizedBox(height: 15),
+          WeatherConditionButton(),
+          const SizedBox(height: 15),
+          _minimumHookSizeInput(),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [_saveButton()],
+          ),
         ],
       ),
     );
@@ -214,8 +238,11 @@ class _StartSetScreenState extends State<StartSetScreen> {
         icon: _allValid()
             ? Image.asset('assets/images/arrow_highlighterBlue.png')
             : Image.asset('assets/images/arrow_grey.png'),
-        onPressed: () {} //_onPressSaveButton,
-        );
+        onPressed: () {
+          setState(() {
+            _page = Page.Two;
+          });
+        });
   }
 
   @override
@@ -223,14 +250,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
       title: 'Start Fishing Set',
-      body: _body(),
-      actions: [Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Spacer(),
-          BackButton(),   
-        ],
-      )],
+      body: _page == Page.One ? _page1() : _page2(),
+//      actions: [Row(
+//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//        children: [
+//          Spacer(),
+//          BackButton(),
+//        ],
+//      )],
     );
   }
 }

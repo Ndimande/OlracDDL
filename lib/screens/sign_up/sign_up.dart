@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-
-import '../../app_config.dart';
+import 'package:olracddl/app_data.dart';
+import 'package:olracddl/models/country.dart';
+import 'package:olracddl/models/profile.dart';
+import 'package:olracddl/screens/home/home.dart';
+import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -12,58 +16,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// First and last name
-  String _name = '';
-
-  /// Role at the factory. e.g manager
-  String _positionAtFactory = '';
+  String _username = '';
 
   /// Email address
   String _email = '';
 
-  /// Phone number
-  String _contactNumber = '';
+  Country _country;
 
-  /// The name of the company
-  String _companyName = '';
-
-  /// The name of the factory
-  String _factoryName = '';
-
-  /// The street or other address of the factory
-  String _factoryAddress = '';
-
-
-  final  _nameFocusNode= FocusNode();
-  final _positionAtFactoryFocusNode = FocusNode();
+  final _nameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
-  final _contactNumberFocusNode = FocusNode();
-  final _companyNameFocusNode = FocusNode();
-  final _factoryNameFocusNode = FocusNode();
-  final _factoryAddressFocusNode = FocusNode();
-
 
   Future<void> _onPressSaveButton() async {
-//    if (!_allValid()) {
-//      return;
-//    }
-//
-//    final profile = Profile(
-//      name: _name,
-//    );
-//    await Profile.set(profile);
-//
-//    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    final Profile profile = Profile(
+      country: _country,
+      username: _username,
+      email: _email,
+      uuid: Uuid().v4(),
+    );
+    await Profile.set(profile);
+    AppData.profile = profile;
+
+    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 
   bool _allValid() {
-    if (_factoryName.isEmpty ||
-        _name.isEmpty ||
-        _positionAtFactory.isEmpty ||
-        _email.isEmpty ||
-        _contactNumber.isEmpty ||
-        _companyName.isEmpty ||
-        _factoryName.isEmpty ||
-        _factoryAddress.isEmpty) {
+    if (_username.isEmpty || _email.isEmpty || _country == null) {
       return false;
     }
 
@@ -76,43 +53,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Name',  style: Theme.of(context).textTheme.headline2),
+          Text('Username', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
             textInputAction: TextInputAction.next,
             focusNode: _nameFocusNode,
-
-            onChanged: (String name) => setState(() => _name = name),
+            onChanged: (String name) => setState(() => _username = name),
             keyboardType: TextInputType.text,
             onFieldSubmitted: (value) {
               _nameFocusNode.unfocus();
               FocusScope.of(context).requestFocus(_emailFocusNode);
             },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _positionAtFactoryTextInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Position at Factory', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 5),
-          TextFormField(
-            textInputAction: TextInputAction.next,
-            focusNode: _positionAtFactoryFocusNode,
-
-            onChanged: (String positionAtFactory) => setState(() => _positionAtFactory = positionAtFactory),
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              _positionAtFactoryFocusNode.unfocus();
-              FocusScope.of(context).requestFocus(_companyNameFocusNode);
-            },
-
           )
         ],
       ),
@@ -128,13 +79,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Email', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
-             textInputAction: TextInputAction.next,
-             focusNode:  _emailFocusNode,
+            textInputAction: TextInputAction.done,
+            focusNode: _emailFocusNode,
             onChanged: (String email) => setState(() => _email = email),
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.emailAddress,
             onFieldSubmitted: (value) {
               _emailFocusNode.unfocus();
-              FocusScope.of(context).requestFocus(_positionAtFactoryFocusNode);
             },
           )
         ],
@@ -142,94 +92,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _contactNumberTextInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Contact Number', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 5),
-          TextFormField(
-            textInputAction: TextInputAction.next,
-            focusNode:  _contactNumberFocusNode,
-            onChanged: (String contactNumber) => setState(() => _contactNumber = contactNumber),
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              _contactNumberFocusNode.unfocus();
-              _saveButton();
-            },
-          )
-        ],
-      ),
-    );
-  }
+  Widget _countryDropdown() {
+    final List<Country> countries = [
+      Country(id: 1, name: 'Portugal',createdAt: DateTime.now()),
+      Country(id: 2, name: 'South Africa',createdAt: DateTime.now()),
+    ];
 
-  Widget _factoryNameTextInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Factory Name', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 5),
-          TextFormField(
-            textInputAction: TextInputAction.next,
-            focusNode: _factoryNameFocusNode,
-            onChanged: (String factoryName) => setState(() => _factoryName = factoryName),
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              _factoryNameFocusNode.unfocus();
-              FocusScope.of(context).requestFocus(_factoryAddressFocusNode);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _factoryAddressTextInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Factory Address', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 5),
-          TextFormField(
-            textInputAction: TextInputAction.next,
-             focusNode: _factoryAddressFocusNode,
-            onChanged: (String factoryAddress) => setState(() => _factoryAddress = factoryAddress),
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              _factoryAddressFocusNode.unfocus();
-              FocusScope.of(context).requestFocus(_contactNumberFocusNode);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _companyNameTextInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Company Name', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 5),
-          TextFormField(
-            focusNode: _companyNameFocusNode,
-            onChanged: (String companyName) => setState(() => _companyName = companyName),
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              _companyNameFocusNode.unfocus();
-              FocusScope.of(context).requestFocus(_factoryNameFocusNode);
-            },
-          )
-        ],
-      ),
+    return DDLModelDropdown<Country>(
+      labelTheme: true,
+      selected: _country,
+      label: 'Country',
+      onChanged: (Country country) => setState(() => _country = country),
+      items: countries.map<DropdownMenuItem<Country>>((Country country) {
+        return DropdownMenuItem<Country>(
+          value: country,
+          child: Text(country.name),
+        );
+      }).toList(),
     );
   }
 
@@ -241,11 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(children: [
             _nameTextInput(),
             _emailTextInput(),
-            _positionAtFactoryTextInput(),
-            _companyNameTextInput(),
-            _factoryNameTextInput(),
-            _factoryAddressTextInput(),
-            _contactNumberTextInput(),
+            _countryDropdown(),
             const SizedBox(height: 70),
           ]),
         ),
@@ -271,9 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
       labelText: 'Save',
-      onPressed: () {
-        return _onPressSaveButton;
-      },
+      onPressed: _allValid() ?_onPressSaveButton:null,
     );
   }
 
@@ -281,12 +154,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
-      title: 'Profile',
+      title: 'Sign Up',
       body: _body(),
     );
   }
-
-
-
-
 }

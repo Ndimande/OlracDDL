@@ -7,12 +7,14 @@ class TripTile extends StatelessWidget {
   int setEntries;
   int tripWeight;
   Duration tripDuration;
-
-  TripTile(
-      {@required this.tripNumber,
-      @required this.setEntries,
-      @required this.tripWeight,
-      @required this.tripDuration});
+  bool isUploaded;
+  TripTile({
+    @required this.tripNumber,
+    @required this.setEntries,
+    @required this.tripWeight,
+    @required this.tripDuration,
+    this.isUploaded = false,
+  });
 
   Widget imageButton(String imagePath) {
     return GestureDetector(
@@ -33,12 +35,11 @@ class TripTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var tripUploaded = false;
+
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       child: Container(
         height: 120,
@@ -60,9 +61,7 @@ class TripTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DateFormat('yyyy/MMM/dd, kk:mm')
-                        .format(DateTime.now())
-                        .toString(),
+                    DateFormat('yyyy/MMM/dd, kk:mm').format(DateTime.now()).toString(),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
@@ -80,7 +79,7 @@ class TripTile extends StatelessWidget {
                 ],
               ),
             ),
-            tripUploaded
+            isUploaded
                 ? imageButton('assets/images/successful_upload_icon.png')
                 : imageButton('assets/images/upload_required_icon.png'),
           ],

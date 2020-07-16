@@ -1,13 +1,13 @@
 import 'package:database_repo/database_repo.dart';
 
-class Country extends Model {
+class CrewMember extends Model {
   String name;
   DateTime createdAt;
 
-  Country({int id, this.name, this.createdAt}) : super(id: id);
+  CrewMember({int id, this.name, this.createdAt}) : super(id: id);
 
-  factory Country.fromMap(Map map) {
-    return Country(
+  factory CrewMember.fromMap(Map map) {
+    return CrewMember(
       id: map['id'] as int,
       name: map['name'],
       createdAt: DateTime.parse(map['createdAt'] as String),
