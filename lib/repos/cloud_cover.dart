@@ -11,6 +11,7 @@ class CloudCoverRepo extends DatabaseRepo<CloudCover> {
       id: result['id'],
       name: result['name'],
       createdAt: DateTime.parse(result['created_at']),
+      imageString: result['image_string'],
     );
   }
 }

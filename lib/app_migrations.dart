@@ -47,6 +47,7 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE sea_conditions ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'image_string TEXT NOT NULL, '
         'name TEXT NOT NULL '
         ')',
   ),
@@ -55,6 +56,7 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE cloud_types ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'image_string TEXT NOT NULL, '
         'name TEXT NOT NULL '
         ')',
   ),
@@ -63,6 +65,7 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE cloud_covers ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'image_string TEXT NOT NULL, '
         'name TEXT NOT NULL '
         ')',
   ),
@@ -71,6 +74,7 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE moon_phases ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'image_string TEXT NOT NULL, '
         'name TEXT NOT NULL '
         ')',
   ),
@@ -166,7 +170,7 @@ const List<Migration> appMigrations = <Migration>[
         'crew_member_id INTEGER NOT NULL, '
         'FOREIGN KEY (crew_member_id) REFERENCES crew_members (id), '
         'FOREIGN KEY (trip_id) REFERENCES trips (id) '
-    ')',
+        ')',
   ),
   Migration(
     name: 'create_fishing_sets',
@@ -235,4 +239,51 @@ const List<Migration> appMigrations = <Migration>[
         'FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id) '
         ')',
   ),
+  Migration(name: 'populate_sea_conditions', sql: '''
+    INSERT INTO sea_conditions (id, image_string,name) VALUES
+    (1, "assets/images/b1.png", "00-02 Calm/Still"),
+    (2, "assets/images/b2.png", "03-04 Choppy"),
+    (3, "assets/images/b3.png", "05-07 Rough"),
+    (4, "assets/images/b4.png", "08-10 Stormy"),
+    (5, "assets/images/b5.png", "11-12 Extreme")
+  '''),
+  Migration(name: 'populate_cloud_types', sql: '''
+    INSERT INTO cloud_types (id, image_string,name) VALUES
+    (1, "assets/images/ct1.jpeg", "Altocumulus"),
+    (2, "assets/images/ct2.jpeg", "Altostratus"),
+    (3, "assets/images/ct3.jpeg", "Cirrocumulus"),
+    (4, "assets/images/ct4.jpeg", "Cirrostratus"),
+    (5, "assets/images/ct5.jpeg", "Cirrus"),
+    (6, "assets/images/ct6.jpeg", "Cumulunimbus"),
+    (7, "assets/images/ct7.jpeg", "Cumulus"),
+    (8, "assets/images/ct8.jpeg", "Fog"),
+    (9, "assets/images/ct9.jpeg", "Lenticular"),
+    (10, "assets/images/ct10.jpeg", "Mammatus"),
+    (11, "assets/images/ct11.jpeg", "Nimbostratus"),
+    (12, "assets/images/ct12.jpeg", "Stratocumulus"),
+    (13, "assets/images/ct13.jpeg", "Stratus")
+  '''),
+  Migration(name: 'populate_cloud_covers', sql: '''
+    INSERT INTO cloud_covers (id, image_string,name) VALUES
+    (1, "assets/images/cc1.jpeg", "0/8"),
+    (2, "assets/images/cc2.jpeg", "1/8"),
+    (3, "assets/images/cc3.jpeg", "2/8"),
+    (4, "assets/images/cc4.jpeg", "3/8"),
+    (5, "assets/images/cc5.jpeg", "4/8"),
+    (6, "assets/images/cc6.jpeg", "5/8"),
+    (7, "assets/images/cc7.jpeg", "6/8"),
+    (8, "assets/images/cc8.jpeg", "7/8"),
+    (9, "assets/images/cc9.jpeg", "8/8")
+  '''),
+  Migration(name: 'populate_moon_phases', sql: '''
+    INSERT INTO moon_phases (id, image_string,name) VALUES
+    (1, "assets/images/mp1.jpeg", "New moon"),
+    (2, "assets/images/mp2.jpeg", "Waxing crescent"),
+    (3, "assets/images/mp3.jpeg", "First quarter"),
+    (4, "assets/images/mp4.jpeg", "Waxing gibbous"),
+    (5, "assets/images/mp5.jpeg", "Full moon"),
+    (6, "assets/images/mp6.jpeg", "Waning gibbous"),
+    (7, "assets/images/mp7.jpeg", "Last quarter"),
+    (8, "assets/images/mp8.jpeg", "Waning crescent")
+  ''')
 ];

@@ -78,7 +78,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
                     child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/${_currentModel.toMap()['name']}.png'),
+                          image: AssetImage(_currentModel.toMap()['image_string']),
                         ),
                       ),
                     ),
