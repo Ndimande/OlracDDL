@@ -13,9 +13,8 @@ const double iconBaseSize = 200;
 
 class FishingMethodScreen extends StatelessWidget {
   Future<void> _onCardPressed(context, method) async {
-    // todo save selected FM in DB
     await CurrentFishingMethod.set(method);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => StartTripScreen()));
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => StartTripScreen()));
   }
 
   Widget _buildFishingMethodCard(FishingMethod method) {

@@ -4,6 +4,7 @@ import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
+import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/vessel.dart';
 
 class Trip extends Model {
@@ -18,7 +19,7 @@ class Trip extends Model {
   Location endLocation;
 
 
-  String skipperName;
+  Skipper skipper;
   List<String> crewMembers;
   String notes;
 
@@ -38,7 +39,7 @@ class Trip extends Model {
     this.startLocation,
     this.endedAt,
     this.endLocation,
-    this.skipperName,
+    this.skipper,
     this.crewMembers,
     this.notes,
     this.uploadedAt,
@@ -57,7 +58,7 @@ class Trip extends Model {
       'ended_at': endedAt,
       'end_latitude': endLocation != null ? endLocation.latitude : null,
       'end_longitude': endLocation != null ? endLocation.longitude: null,
-      'skipper_name': skipperName,
+      'skipper_id': skipper.id,
       'crew_members_json': jsonEncode(crewMembers),
       'notes': notes,
       'uploaded_at': uploadedAt == null ? null :uploadedAt.toIso8601String(),
@@ -75,7 +76,7 @@ class Trip extends Model {
       'startLocation': startLocation.toMap(),
       'endedAt': endedAt,
       'endLocation': endLocation.toMap(),
-      'skipperName': skipperName,
+      'skipper': skipper.toMap(),
       'crewMembersJson': jsonEncode(crewMembers),
       'notes': notes,
       'uploadedAt': uploadedAt == null ? null : uploadedAt.toIso8601String(),

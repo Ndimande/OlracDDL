@@ -6,11 +6,15 @@ class DateTimeEditor extends StatelessWidget {
   final DateTime initialDateTime;
   final Function onChanged;
   final String title;
+  final TextStyle titleStyle;
+  final Color fieldColor;
 
   const DateTimeEditor({
     @required this.title,
     @required this.initialDateTime,
     @required this.onChanged,
+    this.titleStyle,
+    this.fieldColor,
   })  : assert(title != null),
         assert(initialDateTime != null),
         assert(onChanged != null);
@@ -26,33 +30,53 @@ class DateTimeEditor extends StatelessWidget {
     Picker(
       selecteds: [],
       adapter: adapter,
-      title: Text(title, style: Theme.of(context).textTheme.subtitle1),
-      onConfirm: (Picker picker, List<int> selectedIndices) => onChanged(picker, selectedIndices),
+      title: Container(
+        child: Text(
+          'Date and Time',
+          style: Theme.of(context).textTheme.headline2,
+        ),
+      ),
+      onConfirm: (Picker picker, List<int> selectedIndices) =>
+          onChanged(picker, selectedIndices),
     ).showModal(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[350], width: 1))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(title, style: Theme.of(context).accentTextTheme.headline6),
-          FlatButton(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.symmetric(
+            vertical: 15,
+          ),
+          child: Text(
+            title,
+            style: titleStyle ?? Theme.of(context).textTheme.headline3,
+          ),
+        ),
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+              color: fieldColor?? Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
+          child: FlatButton(
             padding: const EdgeInsets.all(0),
             onPressed: () => _onPressEditStartDateTime(context),
             child: Row(
               children: <Widget>[
-                Text(
-                  friendlyDateTime(initialDateTime),
-                  style: Theme.of(context).textTheme.headline5,
-                )
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    friendlyDateTime(initialDateTime),
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

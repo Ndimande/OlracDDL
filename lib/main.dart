@@ -5,11 +5,9 @@ import 'package:olracddl/app_data.dart';
 import 'package:olracddl/app_migrations.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/database.dart';
-import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/home/home.dart';
 import 'package:olracddl/screens/sign_up/sign_up.dart';
 import 'package:olracddl/screens/splash_screen.dart';
-import 'package:olracddl/screens/start_set_screen.dart';
 import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,8 +27,6 @@ Future<void> main() async {
 /// Run things once the app has started and the splash screen is showing.
 Future<void> _onAppRunning() async {
   AppData.profile = await Profile.get();
-  print('AppData.profile');
-  print(AppData.profile);
 }
 
 class MyApp extends StatefulWidget {
@@ -60,7 +56,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateRoute:(RouteSettings settings) {
+      onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             maintainState: false,
             builder: (_) {

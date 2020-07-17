@@ -55,7 +55,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ec1607e5c968ba58075b1fa5cecad369bb0e5fef
+      resolved-ref: "42dcf09d416b746810c30c6755ead3ad5a7fe44c"
       url: "git@ssh.dev.azure.com:v3/Olrac/database_repo/database_repo"
     source: git
     version: "0.0.2"
@@ -131,7 +131,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http_parser:
     dependency: transitive
     description:

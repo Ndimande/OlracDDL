@@ -3,6 +3,7 @@ import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/models/country.dart';
 import 'package:olracddl/models/profile.dart';
+import 'package:olracddl/repos/country.dart';
 import 'package:olracddl/screens/home/home.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
@@ -60,6 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             focusNode: _nameFocusNode,
             onChanged: (String name) => setState(() => _username = name),
             keyboardType: TextInputType.text,
+            autocorrect: false,
+            textCapitalization: TextCapitalization.words,
             onFieldSubmitted: (value) {
               _nameFocusNode.unfocus();
               FocusScope.of(context).requestFocus(_emailFocusNode);
@@ -93,22 +96,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _countryDropdown() {
-    final List<Country> countries = [
-      Country(id: 1, name: 'Portugal',createdAt: DateTime.now()),
-      Country(id: 2, name: 'South Africa',createdAt: DateTime.now()),
-    ];
+    Future<List<Country>> getCountries() async => CountryRepo().all();
+    return FutureBuilder(
+      future: getCountries(),
+      builder: (context, snapshot) {
+        if(!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Country> countries = snapshot.data;
 
-    return DDLModelDropdown<Country>(
-      labelTheme: true,
-      selected: _country,
-      label: 'Country',
-      onChanged: (Country country) => setState(() => _country = country),
-      items: countries.map<DropdownMenuItem<Country>>((Country country) {
-        return DropdownMenuItem<Country>(
-          value: country,
-          child: Text(country.name),
+        return DDLModelDropdown<Country>(
+          labelTheme: true,
+          selected: _country,
+          label: 'Country',
+          onChanged: (Country country) => setState(() => _country = country),
+          items: countries.map<DropdownMenuItem<Country>>((Country country) {
+            return DropdownMenuItem<Country>(
+              value: country,
+              child: Text(country.name),
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 

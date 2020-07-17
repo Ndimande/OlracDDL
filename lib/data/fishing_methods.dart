@@ -52,7 +52,7 @@ List<FishingMethod> defaultFishingMethods = <FishingMethod>[
   FishingMethod(
     id: 7,
     name: 'Handline',
-    svgPath: '',
+    svgPath: 'assets/icons/fishing_methods/handline.svg',
     abbreviation: 'HL',
     createdAt: DateTime.now(),
   ),

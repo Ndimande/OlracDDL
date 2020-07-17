@@ -179,6 +179,12 @@ class OlracThemesLight {
         fontWeight: FontWeight.w500,
         color: OlracColoursLight.olspsGrey,
       ),
+      //DialogBox Heading
+      subtitle1: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w900,
+        color: OlracColoursLight.olspsDarkBlue,
+      ),
     ),
     appBarTheme: const AppBarTheme(
       color: OlracColoursLight.olspsTopGradientLight,

@@ -21,7 +21,7 @@ const List<Migration> appMigrations = <Migration>[
     name: 'create_vessels',
     sql: 'CREATE TABLE vessels ( '
         'id INTEGER PRIMARY KEY, '
-        'vessel_id INTEGER, '
+        'vessel_id TEXT, ' // NOT A FK
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'name TEXT UNIQUE NOT NULL '
         ')',
@@ -285,5 +285,27 @@ const List<Migration> appMigrations = <Migration>[
     (6, "assets/images/mp6.jpeg", "Waning gibbous"),
     (7, "assets/images/mp7.jpeg", "Last quarter"),
     (8, "assets/images/mp8.jpeg", "Waning crescent")
-  ''')
+  '''),
+  Migration(name: 'populate_ports', sql: '''
+    INSERT INTO ports (id, name) VALUES
+    (1, "Ponta Delgada"),
+    (2, "Madalena"),
+    (3, "Angra do Heroísmo"),
+    (4, "Velas")
+  '''),
+  Migration(name: 'populate_skippers', sql: '''
+    INSERT INTO skippers (id, name) VALUES
+    (1, "José Mourinho"),
+    (2, "Cristiano Ronaldo")
+  '''),
+  Migration(name: 'populate_countries', sql: '''
+    INSERT INTO countries (id, name) VALUES
+    (1, "Portugal"),
+    (2, "United Kingdom")
+  '''),
+  Migration(name: 'populate_vessels', sql: '''
+    INSERT INTO vessels (id, name, vessel_id) VALUES
+    (1, "Pier Pressure", "00123456"),
+    (2, "Knot Shore", "00987654")
+  '''),
 ];

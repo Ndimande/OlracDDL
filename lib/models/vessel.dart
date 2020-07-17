@@ -11,7 +11,7 @@ class Vessel extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      'vesselId': vesselID,
+      'vessel_id': vesselID,
     };
   }
 

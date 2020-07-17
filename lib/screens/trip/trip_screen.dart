@@ -45,7 +45,7 @@ class _TripScreenState extends State<TripScreen> {
 
   Widget _startFishingSet() {
     return StripButton(
-      labelText: 'Start Fishing Set',
+      labelText: 'Start Set',
       onPressed: _onPressStartFishingSet,
     );
   }
