@@ -3,12 +3,16 @@ import 'package:migrator/migrator.dart';
 import 'package:olracddl/app_config.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/app_migrations.dart';
+import 'package:olracddl/http/get_vessels.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/database.dart';
+import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/screens/home/home.dart';
 import 'package:olracddl/screens/sign_up/sign_up.dart';
 import 'package:olracddl/screens/splash_screen.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/end_trip_dialogbox.dart';
+import 'package:olracddl/widgets/end_trip_information_dialog.dart';
 import 'package:sqflite/sqflite.dart';
 
 final DatabaseProvider _databaseProvider = DatabaseProvider();
@@ -20,6 +24,8 @@ Future<void> main() async {
   _database = await _databaseProvider.connect();
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
+  DioProvider().init();
+  await getVessels();
 
   runApp(MyApp());
 }
@@ -45,11 +51,11 @@ class _MyAppState extends State<MyApp> {
       // Delay to show logos
       if (!AppConfig.debugMode) await Future.delayed(const Duration(seconds: 5));
 
-      if (AppData.profile != null) {
-        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
-      } else {
-        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (_) => SignUpScreen()));
-      }
+    //  if (AppData.profile != null) {
+     //   await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+  //    } else {
+  //      await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(builder: (_) => SignUpScreen()));
+  //    }
     });
   }
 
@@ -66,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: _navigatorKey,
       title: AppConfig.APP_TITLE,
       theme: OlracThemesLight.olspsLightTheme,
-      home: SplashScreen(), // Change to the screen you're working on
+      home: EndTripInformationDialog(), // Change to the screen you're working on
     );
   }
 }
