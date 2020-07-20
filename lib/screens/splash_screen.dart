@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: <Widget>[
             Text(
-              'Customised for the Azores\nHand-Line Fishery',
+              'In co-operation with Ana Fraga',
               style: _fontStyle(14, FontWeight.w500),
               textAlign: TextAlign.center,
             ),
@@ -105,13 +105,35 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(height: _screenHeight * 0.2),
+            SizedBox(height: _screenHeight * 0.1),
             _appInfo(),
-            SizedBox(height: _screenHeight * 0.05),
+            SizedBox(height: _screenHeight * 0.03),
             _developedBy(),
-            SizedBox(height: _screenHeight * 0.05),
+            SizedBox(height: _screenHeight * 0.03),
             _customisedFor(),
-            SizedBox(height: _screenHeight * 0.05),
+            SizedBox(height: _screenHeight * 0.02),
+            Column(children: [
+              Image.asset(
+                      'assets/images/sponsor_logo1.png',
+                      height: 50,
+                      width: 150,
+                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                Image.asset(
+                      'assets/images/sponsor_logo2.png',
+                      height: 100,
+                      width: 100,
+                    ),
+                    Image.asset(
+                      'assets/images/sponsor_logo3.png',
+                      height: 170,
+                      width: 170,
+                    ),
+              ],),
+            ],),
+            SizedBox(height: _screenHeight * 0.02),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
@@ -15,6 +16,7 @@ import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/repos/vessel.dart';
 import 'package:olracddl/screens/trip/trip_screen.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/add_crew_dialogbox.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
@@ -65,7 +67,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
 
     final int tripID = await TripRepo().store(newTrip);
 
-    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
+    await Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
   }
 
   Widget _fishingMethodButton() {
@@ -79,7 +82,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
           color: OlracColoursLight.olspsDarkBlue,
-          child: Text(snapshot.hasData ? snapshot.data.name : '', style: Theme.of(context).primaryTextTheme.headline5),
+          child: Text(snapshot.hasData ? snapshot.data.name : '',
+              style: Theme.of(context).primaryTextTheme.headline5),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -127,15 +131,18 @@ class _StartTripScreenState extends State<StartTripScreen> {
           _skipperDropdown(),
           _crew(),
           _notesInput(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              StripButton(
-                labelText: 'Save',
-                onPressed: _onPressSave,
-                color: OlracColoursLight.olspsHighlightBlue,
-              )
-            ],
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                StripButton(
+                  labelText: 'Save',
+                  onPressed: _onPressSave,
+                  color: OlracColoursLight.olspsHighlightBlue,
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -270,21 +277,111 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
-  Widget _crew() {
-    final title = Row(
+  Widget _columnHeader(int flex, String header) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        margin: EdgeInsets.only(
+          right: 10,
+        ),
+        child: Text(
+          header,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
+      ),
+    );
+  }
+
+  Widget _rowLayout(int flex, String info) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        margin: EdgeInsets.only(
+          right: 10,
+        ),
+        child: Text(
+          info,
+          style: Theme.of(context).textTheme.headline3,
+        ),
+      ),
+    );
+  }
+
+  Widget _crewMemberRow(
+    int index,
+    String shortName,
+    String seamanId,
+    int mainRole,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Crew', style: Theme.of(context).textTheme.headline3),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            setState(() {
-              _crewMembers.add('');
-            });
-          },
+        _rowLayout(1, index.toString()),
+        _rowLayout(3, shortName),
+        _rowLayout(3, seamanId),
+        _rowLayout(2, mainRole.toString()),
+      ],
+    );
+  }
+
+  Widget _crew() {
+    final title = Column(
+      children: [
+        Row(
+          children: [
+            Text('Crew', style: Theme.of(context).textTheme.headline3),
+            InkWell(
+              onTap: () {
+                showDialog(
+                  builder: (_) => AddCrewDialog(),
+                  context: context,
+                );
+                setState(() {
+                  // _crewMembers.add('');
+                });
+              },
+              child: Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                child: SvgPicture.asset(
+                  'assets/icons/image/add_icon.svg',
+                  height: 20,
+                  width: 20,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _columnHeader(1, '#'),
+              _columnHeader(3, 'Name'),
+              _columnHeader(3, 'Seaman ID'),
+              _columnHeader(2, 'Role'),
+            ],
+          ),
+        ),
+        Container(
+          height: 200,
+          child: 
+          _crewMembers.isEmpty
+              ? Container(
+                margin: const EdgeInsets.symmetric(vertical: 30),
+                  child: Text(
+                  'No Crew Members Added',
+                  style: Theme.of(context).textTheme.headline3,
+                )) :
+               ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _crewMemberRow(1, 'Ittai Barkai', '123', 2);
+                  }),
         ),
       ],
     );
-
     final textInputs = Column(
       children: _crewMembers.map(
         (String crewMember) {
