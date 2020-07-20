@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/models/current_fishing_method.dart';
+import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/home/drawer.dart';
+import 'package:olracddl/screens/start_trip_screen.dart';
 import 'package:olracddl/screens/trip/trip_screen.dart';
 import 'package:olracddl/widgets/trip_tile.dart';
 
@@ -19,11 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Trip _activeTrip;
 
   Future<void> _onPressStartTripButton() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+    final FishingMethod method =
+        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+    await CurrentFishingMethod.set(method);
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => StartTripScreen()));
+    setState(() {});
   }
 
   Future<void> _onPressActiveTripButton() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
+    await Navigator.of(context)
+        .push(MaterialPageRoute(maintainState: false, builder: (_) => TripScreen(_activeTrip.id)));
   }
 
   Widget _trips() {
@@ -41,14 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView.builder(
         itemCount: allTrips.length,
         itemBuilder: (BuildContext context, int index) {
+          final Trip trip = allTrips[index];
           return TripTile(
-            setEntries: allTrips[index].fishingSets.length,
-            tripNumber: index,
-            tripWeight: 5,
-            tripDuration: Duration(minutes: 1),
-
+            trip: trip,
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(trip.id)));
+            },
+            index: index,
           );
-          return Text(allTrips[index].startedAt.toIso8601String());
         });
   }
 

@@ -3,9 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:olrac_themes/olrac_themes.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/data/fishing_methods.dart';
-import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
-import 'package:olracddl/screens/start_trip_screen.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/svg_icon.dart';
 
@@ -13,8 +11,7 @@ const double iconBaseSize = 200;
 
 class FishingMethodScreen extends StatelessWidget {
   Future<void> _onCardPressed(context, method) async {
-    await CurrentFishingMethod.set(method);
-    await Navigator.push(context, MaterialPageRoute(builder: (_) => StartTripScreen()));
+    Navigator.pop(context, method);
   }
 
   Widget _buildFishingMethodCard(FishingMethod method) {
@@ -30,10 +27,7 @@ class FishingMethodScreen extends StatelessWidget {
 
     return Builder(builder: (BuildContext context) {
       return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(25))
-        ),
+        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
         margin: const EdgeInsets.all(12),
         child: FlatButton(
           padding: const EdgeInsets.all(8),

@@ -187,7 +187,7 @@ const List<Migration> appMigrations = <Migration>[
         // Other
         'sea_bottom_depth INTEGER, '
         'sea_bottom_depth_unit TEXT, '
-        'minimum_hook_size INTEGER, '
+        'minimum_hook_size TEXT, '
         'hooks INTEGER, '
         'traps INTEGER, '
         'lines_used INTEGER, '
@@ -308,4 +308,20 @@ const List<Migration> appMigrations = <Migration>[
     (1, "Pier Pressure", "00123456"),
     (2, "Knot Shore", "00987654")
   '''),
+  Migration(
+    name: 'populate_sea_bottom_types',
+    sql: '''
+    INSERT INTO sea_bottom_types (id, name) VALUES
+    (1, "Type 1"),
+    (2, "Type 2")
+  ''',
+  ),
+  Migration(
+    name: 'populate_species',
+    sql: '''
+    INSERT INTO species (id, common_name, scientific_name) VALUES
+    (1, "Species 1", "Sci 1"),
+    (2, "Species 2", "Sci 2")
+  ''',
+  ),
 ];

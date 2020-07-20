@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:database_repo/database_repo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
@@ -18,7 +19,6 @@ class Trip extends Model {
   DateTime endedAt;
   Location endLocation;
 
-
   Skipper skipper;
   List<String> crewMembers;
   String notes;
@@ -31,22 +31,35 @@ class Trip extends Model {
 
   Vessel vessel;
 
+  bool get isActive => endedAt == null;
+
+  bool get isUploaded => uploadedAt != null;
+
   Trip({
     int id,
-    this.uuid,
+    @required this.uuid,
     this.createdAt,
-    this.startedAt,
-    this.startLocation,
+    @required this.startedAt,
+    @required this.startLocation,
     this.endedAt,
     this.endLocation,
-    this.skipper,
-    this.crewMembers,
+    @required this.skipper,
+    @required this.crewMembers,
     this.notes,
     this.uploadedAt,
-    this.port,
+    @required this.port,
     this.fishingSets = const [],
-    this.vessel,
-  }) : super(id: id);
+    @required this.vessel,
+  })  : assert(uuid != null),
+        assert(startedAt != null),
+        assert(startLocation != null),
+        assert(skipper != null),
+        assert(crewMembers != null),
+        assert(port != null),
+        assert(vessel != null),
+        assert(startLocation != null),
+        assert(startLocation != null),
+        super(id: id);
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
@@ -55,13 +68,13 @@ class Trip extends Model {
       'started_at': startedAt.toIso8601String(),
       'start_latitude': startLocation.latitude,
       'start_longitude': startLocation.longitude,
-      'ended_at': endedAt,
+      'ended_at': endedAt == null ? null : endedAt.toIso8601String(),
       'end_latitude': endLocation != null ? endLocation.latitude : null,
-      'end_longitude': endLocation != null ? endLocation.longitude: null,
+      'end_longitude': endLocation != null ? endLocation.longitude : null,
       'skipper_id': skipper.id,
       'crew_members_json': jsonEncode(crewMembers),
       'notes': notes,
-      'uploaded_at': uploadedAt == null ? null :uploadedAt.toIso8601String(),
+      'uploaded_at': uploadedAt == null ? null : uploadedAt.toIso8601String(),
       'port_id': port.id,
       'vessel_id': vessel.id,
     };

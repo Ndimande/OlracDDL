@@ -3,40 +3,43 @@ import 'package:intl/intl.dart';
 import 'package:olracddl/theme.dart';
 
 class FishingSetTile extends StatelessWidget {
-  int setNumber;
-  int catchEntries;
+  final int setNumber;
+  final int catchEntries;
+  final Function onPressRetained;
+  final Function onPressDisposal;
+  final Function onPressMarineLife;
 
-  FishingSetTile({
+  const FishingSetTile({
     @required this.setNumber,
     @required this.catchEntries,
+    this.onPressDisposal,
+    this.onPressMarineLife,
+    this.onPressRetained,
   });
 
-  Widget imageButton(String imagePath){
-    return
-    GestureDetector(
-          onTap: () {},
-          child: Container(
-            margin: EdgeInsets.all(5),
-            height: 40,
-            width: 40,
+  Widget imageButton(String imagePath, onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        margin: const EdgeInsets.all(5),
+        height: 40,
+        width: 40,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                imagePath),
+            image: AssetImage(imagePath),
             fit: BoxFit.fill,
           ),
         ),
       ),
     );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       child: Container(
         height: 80,
@@ -58,9 +61,7 @@ class FishingSetTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DateFormat('yyyy/MMM/dd, kk:mm')
-                        .format(DateTime.now())
-                        .toString(),
+                    DateFormat('yyyy/MMM/dd, kk:mm').format(DateTime.now()).toString(),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
@@ -74,9 +75,9 @@ class FishingSetTile extends StatelessWidget {
                 ],
               ),
             ),
-            imageButton('assets/images/catch_icon.png'),
-            imageButton('assets/images/disposal_icon.png'),
-            imageButton('assets/images/marine_life_icon.png'),
+            imageButton('assets/images/catch_icon.png',onPressRetained),
+            imageButton('assets/images/disposal_icon.png',onPressDisposal),
+            imageButton('assets/images/marine_life_icon.png',onPressMarineLife),
           ],
         ),
       ),

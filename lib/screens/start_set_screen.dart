@@ -1,14 +1,22 @@
 //import 'dart:html';
-import 'package:olrac_utils/olrac_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/models/current_fishing_method.dart';
+import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/fishing_set.dart';
+import 'package:olracddl/models/sea_bottom_type.dart';
+import 'package:olracddl/models/species.dart';
+import 'package:olracddl/repos/fishing_set.dart';
+import 'package:olracddl/repos/sea_bottom_type.dart';
+import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
-import 'package:olracddl/widgets/location_editor.dart';
-import '../widgets/weather_condition_button.dart';
+import 'package:olracddl/widgets/model_dropdown.dart';
 
-import '../models/fishing_area.dart';
+import '../widgets/weather_condition_button.dart';
 
 enum Page {
   One,
@@ -16,6 +24,8 @@ enum Page {
 }
 
 class StartSetScreen extends StatefulWidget {
+  final int _tripID;
+  const StartSetScreen(this._tripID);
   @override
   _StartSetScreenState createState() => _StartSetScreenState();
 }
@@ -23,38 +33,75 @@ class StartSetScreen extends StatefulWidget {
 class _StartSetScreenState extends State<StartSetScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //unique identifier for new set
-  int _id;
-
   /// When the set started
-  DateTime _startedAt;
-
-  /// When the set ended
-  DateTime _endedAt;
-
-  /// GPS Start Location
-  Location _startLocation;
-
-  /// GPS End Location
-  Location _endLocation;
+  DateTime _startedAt = DateTime.now();
 
   String _fishingArea;
 
   /// Sea bottom depth and unit
   String _seaBottomDepth; //************ needs to be changed
-  LengthUnit _seaBottomDepthUnit;
 
-  /// sea bottom type
-  int _minimumHookSize;
+  String _minimumHookSize;
 
   Page _page = Page.One;
 
-  bool _allValid() {
+  SeaBottomType _seaBottomType;
+
+  Species _targetSpecies;
+
+  String _notes;
+
+  bool _page1Valid() {
+    if (_fishingArea == null) {
+      return false;
+    }
+
+    if (_seaBottomDepth == null) {
+      return false;
+    }
+
+    if (_seaBottomType == null) {
+      return false;
+    }
+
+    if (_minimumHookSize == null) {
+      return false;
+    }
+
     if (_startedAt == null) {
       return false;
-    } else {
-      return true;
     }
+
+    return true;
+  }
+
+  bool _page2Valid() {
+
+    if(_targetSpecies == null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> _onPressSaveButton() async {
+    final Position p = await Geolocator().getCurrentPosition();
+    final Location location = Location(longitude: p.longitude, latitude: p.latitude);
+
+    final FishingMethod currentFishingMethod = await CurrentFishingMethod.get();
+
+    final FishingSet fishingSet = FishingSet(
+      startedAt: _startedAt,
+      startLocation: location,
+      fishingMethod: currentFishingMethod,
+      notes: _notes,
+      minimumHookSize: _minimumHookSize,
+      tripId: widget._tripID,
+    );
+
+    await FishingSetRepo().store(fishingSet);
+
+    Navigator.pop(context);
   }
 
   Widget _dateTimeInput() {
@@ -63,16 +110,19 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date, Time and Location', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
                 flex: 5,
                 child: DateTimeEditor(
+                  titleStyle: Theme.of(context).textTheme.headline2,
                   initialDateTime: DateTime.now(),
-                  title: 'foo',
-                  onChanged: () {},
+                  title: 'Date, Time and Location',
+                  onChanged: (picker, indices) {
+                    setState(() {
+                      _startedAt = DateTime.parse(picker.adapter.toString());
+                    });
+                  },
                 ),
               ),
               const SizedBox(width: 5),
@@ -117,27 +167,56 @@ class _StartSetScreenState extends State<StartSetScreen> {
           const SizedBox(height: 15),
           TextField(
             onChanged: (String name) => setState(() => _seaBottomDepth = name),
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.number,
           )
         ],
       ),
     );
   }
 
-  Widget _seaBottomTypeInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Sea Bottom Type', style: Theme.of(context).textTheme.headline3),
-          const SizedBox(height: 15),
-          TextField(
-            onChanged: (String name) => setState(() => _seaBottomDepth = name),
-            keyboardType: TextInputType.text,
-          )
-        ],
-      ),
+  Widget _seaBottomTypeDropdown() {
+    Future<List<SeaBottomType>> _getSeaBottomType() async => await SeaBottomTypeRepo().all();
+
+    return FutureBuilder(
+      future: _getSeaBottomType(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return DDLModelDropdown<SeaBottomType>(
+          labelTheme: false,
+          selected: _seaBottomType,
+          label: 'Sea Bottom Type',
+          onChanged: (SeaBottomType seaBottomType) => setState(() => _seaBottomType = seaBottomType),
+          items: snapshot.data.map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
+            return DropdownMenuItem<SeaBottomType>(value: sbt, child: Text(sbt.name));
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _targetSpeciesDropdown() {
+    Future<List<Species>> _getSpecies() async => await SpeciesRepo().all();
+
+    return FutureBuilder(
+      future: _getSpecies(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return DDLModelDropdown<Species>(
+          labelTheme: true,
+          selected: _targetSpecies,
+          label: 'Target Species',
+          onChanged: (Species species) => setState(() => _targetSpecies = species),
+          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+          }).toList(),
+        );
+      },
     );
   }
 
@@ -150,7 +229,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
-            onChanged: (String name) => setState(() => _seaBottomDepth = name),
+            onChanged: (String minimumHookSize) => setState(() => _minimumHookSize = minimumHookSize),
             keyboardType: TextInputType.text,
           )
         ],
@@ -158,11 +237,15 @@ class _StartSetScreenState extends State<StartSetScreen> {
     );
   }
 
-  StripButton _saveButton() {
-    return StripButton(
-        color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
-        onPressed: _allValid() ? () {} : () {},
-        labelText: 'Save');
+  Widget _notesInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Notes', style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
+        TextField(),
+      ],
+    );
   }
 
   Widget _page1() {
@@ -182,7 +265,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           const SizedBox(height: 15),
           _fishingAreaInput(),
           _seaBottomDepthInput(),
-          _seaBottomTypeInput(),
+          _seaBottomTypeDropdown(),
           _minimumHookSizeInput(),
           const SizedBox(height: 15),
           Container(
@@ -209,7 +292,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _dateTimeInput(),
+          _targetSpeciesDropdown(),
           const SizedBox(height: 15),
           Align(
             alignment: Alignment.centerLeft,
@@ -221,10 +304,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
           const SizedBox(height: 15),
           WeatherConditionButton(),
           const SizedBox(height: 15),
-          _minimumHookSizeInput(),
-          const SizedBox(height: 15),
+          _notesInput(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [_saveButton()],
           ),
         ],
@@ -234,8 +316,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   IconButton _nextButton() {
     return IconButton(
-        //color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
-        icon: _allValid()
+        icon: _page1Valid()
             ? Image.asset('assets/images/arrow_highlighterBlue.png')
             : Image.asset('assets/images/arrow_grey.png'),
         onPressed: () {
@@ -245,19 +326,20 @@ class _StartSetScreenState extends State<StartSetScreen> {
         });
   }
 
+  StripButton _saveButton() {
+    return StripButton(
+      color: _page2Valid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
+      onPressed: _page2Valid() ? _onPressSaveButton : () {},
+      labelText: 'Save',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
       title: 'Start Fishing Set',
       body: _page == Page.One ? _page1() : _page2(),
-//      actions: [Row(
-//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//        children: [
-//          Spacer(),
-//          BackButton(),
-//        ],
-//      )],
     );
   }
 }

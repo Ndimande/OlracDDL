@@ -31,7 +31,7 @@ class FishingSet extends Model {
   /// Sea bottom type
   SeaBottomType seaBottomType;
 
-  int minimumHookSize;
+  String minimumHookSize;
 
   /// Number of hooks
   int hooks;
@@ -107,8 +107,8 @@ class FishingSet extends Model {
       // Locations
       'start_latitude': startLocation.latitude,
       'start_longitude': startLocation.longitude,
-      'end_latitude': endLocation.latitude,
-      'end_longitude': endLocation.longitude,
+      'end_latitude': endLocation == null ? null : endLocation.latitude,
+      'end_longitude': endLocation == null ? null : endLocation.longitude,
       // Others
       'sea_bottom_depth': seaBottomDepth,
       'sea_bottom_depth_unit': seaBottomDepthUnit.toString(),
@@ -119,13 +119,13 @@ class FishingSet extends Model {
       'notes': notes,
       // Related
       'trip_id': tripId,
-      'sea_bottom_type_id': seaBottomType.id,
-      'target_species_id': targetSpecies.id,
-      'moon_phase_id': moonPhase.id,
-      'cloud_type_id': cloudType.id,
-      'cloud_cover_id': cloudCover.id,
-      'sea_condition_id': seaCondition.id,
-      'fishing_method_id': fishingMethod.id,
+      'sea_bottom_type_id': null,//seaBottomType.id,
+      'target_species_id': null,//targetSpecies.id,
+      'moon_phase_id': null,//moonPhase.id,
+      'cloud_type_id': null,//cloudType.id,
+      'cloud_cover_id': null,//cloudCover.id,
+      'sea_condition_id': null,//seaCondition.id,
+      'fishing_method_id': null,//fishingMethod.id,
     };
   }
 

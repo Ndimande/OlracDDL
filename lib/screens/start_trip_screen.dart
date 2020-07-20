@@ -34,7 +34,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   Port _port;
   Vessel _vessel;
   Skipper _skipper;
-  List<String> _crewMembers =  [];
+  List<String> _crewMembers = [];
   String _notes;
   Page _page = Page.One;
 
@@ -52,7 +52,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   Future<void> _onPressSave() async {
     final Position p = await Geolocator().getCurrentPosition();
 
-    final int tripID = await TripRepo().store(Trip(
+    final newTrip = Trip(
       uuid: Uuid().v4(),
       startLocation: Location(latitude: p.latitude, longitude: p.longitude),
       startedAt: startDatetime,
@@ -61,7 +61,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
       notes: _notes,
       crewMembers: _crewMembers,
       skipper: _skipper,
-    ));
+    );
+
+    final int tripID = await TripRepo().store(newTrip);
 
     await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
   }
@@ -203,7 +205,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return FutureBuilder(
       future: getVessels(),
       builder: (context, AsyncSnapshot<List<Vessel>> snapshot) {
-        if(snapshot.hasError) {
+        if (snapshot.hasError) {
           throw snapshot.error;
         }
         if (!snapshot.hasData) {
@@ -233,7 +235,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return FutureBuilder(
       future: getSkippers(),
       builder: (context, AsyncSnapshot<List<Skipper>> snapshot) {
-        if(snapshot.hasError) {
+        if (snapshot.hasError) {
           throw snapshot.error;
         }
         if (!snapshot.hasData) {
@@ -245,7 +247,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           label: 'Skipper',
           onChanged: (Skipper skipper) => setState(() => _skipper = skipper),
           items: snapshot.data.map(
-                (Skipper v) {
+            (Skipper v) {
               return DropdownMenuItem<Skipper>(
                 value: v,
                 child: Text(v.name),

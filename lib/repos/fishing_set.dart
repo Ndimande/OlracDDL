@@ -32,14 +32,22 @@ class FishingSetRepo extends DatabaseRepo<FishingSet> {
     final SeaCondition seaCondition = await SeaConditionRepo().find(result['sea_condition_id']);
     final LengthUnit lengthUnit = lengthUnitFromString(result['sea_bottom_depth_unit']);
     final Location startLocation = Location(latitude: result['start_latitude'], longitude: result['start_longitude']);
-    final Location endLocation = Location(latitude: result['end_latitude'], longitude: result['end_longitude']);
 
+    Location endLocation;
+    if(result['end_latitude'] != null) {
+      endLocation = Location(latitude: result['end_latitude'], longitude: result['end_longitude']);
+    }
+
+    DateTime endedAt;
+    if(result['ended_at'] != null) {
+      endedAt = DateTime.parse(result['ended_at']);
+    }
     return FishingSet(
       id: result['id'],
       // Timestamps
       createdAt: DateTime.parse(result['created_at']),
       startedAt: DateTime.parse(result['started_at']),
-      endedAt: DateTime.parse(result['ended_at']),
+      endedAt: endedAt,
       // Locations
       startLocation: startLocation,
       endLocation: endLocation,

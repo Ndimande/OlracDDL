@@ -3,6 +3,7 @@ import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/trip.dart';
+import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/elapsed_counter.dart';
 import 'package:olracddl/widgets/numbered_boat.dart';
@@ -51,16 +52,23 @@ class TripSection extends StatelessWidget {
     Future<FishingMethod> currentFM() async {
       return await CurrentFishingMethod.get();
     }
+
     return FutureBuilder(
       future: currentFM(),
       builder: (context, AsyncSnapshot snapshot) {
-        if(!snapshot.hasData) {
+        if (!snapshot.hasData) {
           return Container();
         }
         final FishingMethod fm = snapshot.data;
         return IconButton(
-          icon: SvgIcon(assetPath:  fm.svgPath,color: OlracColoursLight.olspsDarkBlue),
-          onPressed: () {},
+          icon: SvgIcon(assetPath: fm.svgPath, color: OlracColoursLight.olspsDarkBlue),
+          onPressed: () async {
+            final FishingMethod method =
+                await Navigator.push(context, MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            if (method != null) {
+              CurrentFishingMethod.set(method);
+            }
+          },
         );
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/app_config.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/models/country.dart';
 import 'package:olracddl/models/profile.dart';
@@ -17,10 +18,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// First and last name
-  String _username = '';
+  String _username = AppConfig.debugMode ? 'debugMode': '';
 
   /// Email address
-  String _email = '';
+  String _email = AppConfig.debugMode ? 'debug@mode': '';
 
   Country _country;
 
@@ -57,6 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Username', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
+            initialValue: _username,
             textInputAction: TextInputAction.next,
             focusNode: _nameFocusNode,
             onChanged: (String name) => setState(() => _username = name),
@@ -82,6 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Email', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
+            initialValue: _email,
             textInputAction: TextInputAction.done,
             focusNode: _emailFocusNode,
             onChanged: (String email) => setState(() => _email = email),
