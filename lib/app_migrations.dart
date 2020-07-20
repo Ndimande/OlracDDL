@@ -86,7 +86,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  Migration(
+  Migration( // refers to marine life condition
     name: 'create_conditions',
     sql: 'CREATE TABLE conditions ( '
         'id INTEGER PRIMARY KEY, '
@@ -211,34 +211,54 @@ const List<Migration> appMigrations = <Migration>[
         'FOREIGN KEY (trip_id) REFERENCES trips (id) '
         ')',
   ),
-  Migration(
-    name: 'create_fishing_set_events',
-    sql: 'CREATE TABLE fishing_set_events ( '
-        'id INTEGER PRIMARY KEY, '
-        // Measurements
-        'green_weight INTEGER, '
-        'green_weight_unit TEXT, '
-        'estimated_green_weight INTEGER, '
-        'estimated_green_weight_unit TEXT, '
-        'estimated_weight INTEGER, '
-        'estimated_weight_unit TEXT, '
-        // time / location
-        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'latitude REAL, '
-        'longitude REAL '
-        // other
-        'individuals INTEGER, '
-        'tag_number TEXT, '
-        // Foreign keys
-        'fishing_set_id INTEGER, '
-        'species_id INTEGER, '
-        'disposal_state_id INTEGER, '
-        'condition_id INTEGER,'
-        'FOREIGN KEY (condition_id) REFERENCES conditions (id), '
-        'FOREIGN KEY (species_id) REFERENCES species (id), '
-        'FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id) '
-        ')',
-  ),
+  Migration(name: 'create_retained_catch', sql: '''
+    CREATE TABLE retained_catch (
+    id INTEGER PRIMARY KEY,
+    green_weight INTEGER, 
+    green_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+    species_id INTEGER,
+    fishing_set_id INTEGER, 
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
+  Migration(name: 'create_disposals', sql: '''
+    CREATE TABLE disposals (
+    id INTEGER PRIMARY KEY,
+    estimated_green_weight INTEGER, 
+    estimated_green_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    species_id INTEGER,
+    disposal_state_id INTEGER,
+    fishing_set_id INTEGER, 
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
+  Migration(name: 'create_marine_life', sql: '''
+    CREATE TABLE marine_life (
+    id INTEGER PRIMARY KEY,
+    estimated_weight INTEGER, 
+    estimated_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    tagNumber TEXT,
+    species_id INTEGER,
+    fishing_set_id INTEGER, 
+    condition_id INTEGER,
+    FOREIGN KEY (condition_id) REFERENCES conditions (id),
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
   Migration(name: 'populate_sea_conditions', sql: '''
     INSERT INTO sea_conditions (id, image_string,name) VALUES
     (1, "assets/images/b1.png", "00-02 Calm/Still"),
