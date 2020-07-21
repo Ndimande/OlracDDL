@@ -22,4 +22,6 @@ class AppConfig {
 
   /// The API key for this app for Sentry.io error reporting
   static const String SENTRY_DSN = 'https://TODO@sentry.io/3728395';
+
+  static const String DDM_URL = 'https://azores.olracddm.com';
 }
