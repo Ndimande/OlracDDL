@@ -1,29 +1,23 @@
-//import 'dart:html';
 import 'package:flutter_svg/svg.dart';
-import 'package:olrac_utils/olrac_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import '../widgets/weather_condition_button.dart';
 import 'home/home.dart';
-
-
 
 class DisposalScreen extends StatefulWidget {
   @override
-  _DisposalScreenState createState() =>  _DisposalScreenState();
+  _DisposalScreenState createState() => _DisposalScreenState();
 }
 
-class  _DisposalScreenState extends State<DisposalScreen> {
+class _DisposalScreenState extends State<DisposalScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int _numberOfIndividuals;
   String _date;
   String _species;
   String _disposal;
+
   //LengthUnit _estimatedGreenWeight;
   String _estimatedGreenWeight;
-
 
   bool _allValid() {
     if (_species == null) {
@@ -32,23 +26,23 @@ class  _DisposalScreenState extends State<DisposalScreen> {
       return true;
     }
   }
+
   Widget _dateInput() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date, Time and Location',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Date, Time and Location', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
                 flex: 5,
                 child: TextField(
-                  //onChanged: (String name) => setState(() => _name = name),
-                  //keyboardType: TextInputType.text,
-                ),
+                    //onChanged: (String name) => setState(() => _name = name),
+                    //keyboardType: TextInputType.text,
+                    ),
               ),
               SizedBox(
                 width: 5,
@@ -69,13 +63,11 @@ class  _DisposalScreenState extends State<DisposalScreen> {
   }
 
   Widget _speciesInput() {
-
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Species',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Species', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
@@ -90,22 +82,19 @@ class  _DisposalScreenState extends State<DisposalScreen> {
                   ),
                 ),
               ),
-
-
             ],
           )
         ],
       ),
     );
   }
-  Widget _disposalInput() {
 
+  Widget _disposalInput() {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Disposal State',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Disposal State', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
@@ -120,8 +109,6 @@ class  _DisposalScreenState extends State<DisposalScreen> {
                   ),
                 ),
               ),
-
-
             ],
           )
         ],
@@ -137,16 +124,11 @@ class  _DisposalScreenState extends State<DisposalScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text('Green Weight',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Green Weight', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
-
-
           TextField(
-            onChanged: ( String name) => setState(() => _estimatedGreenWeight = (name)),
+            onChanged: (String name) => setState(() => _estimatedGreenWeight = (name)),
             keyboardType: TextInputType.text,
-
           )
         ],
       ),
@@ -160,22 +142,16 @@ class  _DisposalScreenState extends State<DisposalScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Number of Individuals',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Number of Individuals', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           TextField(
-           // onChanged: (String name) => setState(() => _numberOfIndividuals = name),
+            // onChanged: (String name) => setState(() => _numberOfIndividuals = name),
             keyboardType: TextInputType.text,
-
-
-
           ),
-
         ],
       ),
     );
   }
-
 
   Widget _body() {
     return Container(
@@ -186,7 +162,6 @@ class  _DisposalScreenState extends State<DisposalScreen> {
         children: [
           Container(
               margin: const EdgeInsets.only(right: 12),
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,8 +178,7 @@ class  _DisposalScreenState extends State<DisposalScreen> {
                     ],
                   ),
                 ],
-              )
-          ),
+              )),
         ],
       ),
     );
@@ -216,24 +190,19 @@ class  _DisposalScreenState extends State<DisposalScreen> {
       scaffoldKey: _scaffoldKey,
       body: _body(),
       actions: [
-        Expanded(child:
-        Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              BackButton(),
-              Text(
-                '       Disposals',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ]
-
-
-        ),)
-
-
-
+        Expanded(
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            BackButton(),
+            Text(
+              '       Disposals',
+              style: Theme.of(context).textTheme.headline1,
+            ),
+          ]),
+        )
       ],
     );
   }
+
   StripButton _saveButton() {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : Colors.lightBlue,
@@ -243,7 +212,6 @@ class  _DisposalScreenState extends State<DisposalScreen> {
   }
 
   Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 }

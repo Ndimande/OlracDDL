@@ -1,13 +1,23 @@
-//import 'dart:html';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/models/retained_catch.dart';
+import 'package:olracddl/models/species.dart';
+import 'package:olracddl/repos/retained_catch.dart';
+import 'package:olracddl/repos/species.dart';
+import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/model_dropdown.dart';
 import '../widgets/weather_condition_button.dart';
 import 'home/home.dart';
 
 class AddRetainedScreen extends StatefulWidget {
+  final int fishingSetID;
+
+  const AddRetainedScreen(this.fishingSetID);
+
   @override
   _AddRetainedScreenState createState() => _AddRetainedScreenState();
 }
@@ -15,143 +25,144 @@ class AddRetainedScreen extends StatefulWidget {
 class _AddRetainedScreenState extends State<AddRetainedScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String _numberOfIndividuals;
-  String _greenWeights;
-  LengthUnit _seaBottomDepthUnit;
+  int _numberOfIndividuals;
+  int _greenWeight;
+  Species _species;
 
   bool _allValid() {
-    if (_greenWeights == null) {
+    if (_greenWeight == null) {
       return false;
-    } else {
-      return true;
     }
+    if (_numberOfIndividuals == null) {
+      return false;
+    }
+
+    if (_species == null) {
+      return false;
+    }
+
+    return true;
   }
 
-  Widget _speciesInput() {
-    return Container(
-      height: 150,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Species', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+  Widget _speciesDropdown() {
+    Future<List<Species>> _getSpecies() async => await SpeciesRepo().all();
+
+    return FutureBuilder(
+      future: _getSpecies(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return DDLModelDropdown<Species>(
+          labelTheme: true,
+          selected: _species,
+          label: 'Species',
+          onChanged: (Species species) => setState(() => _species = species),
+          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+          }).toList(),
+        );
+      },
     );
   }
 
   Widget _greenWeightsInput() {
-    return Container(
-      height: 150,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Green Weight', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-
-          Row(children: [
-            Container(
-                  width: 110,
-                  child: TextField(
-                    onChanged: (String name) => setState(() => _greenWeights = name),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                const Padding(
-                  padding:  EdgeInsets.all(8.0),
-                  child: Text('Kg'),
-                ),
-              ],
-            ),
-
-        ],
-      ),
-    );
-  }
-
-  Widget _numberOfIndividualInput() {
-    return Container(
-      height: 150,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Number of Individuals', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-
-          Row(children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Green Weight', style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
+        Row(
+          children: [
             Container(
               width: 110,
               child: TextField(
-                onChanged: (String name) => setState(() => _numberOfIndividuals = name),
-                keyboardType: TextInputType.text,
+                onChanged: (String greenWeight) =>
+                    setState(() => _greenWeight = (double.parse(greenWeight) * 1000).toInt()),
+                keyboardType: TextInputType.number,
               ),
             ),
-            const Padding(padding:  EdgeInsets.all(8),
-              child:
-               Text('Individuals'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Kg', style: Theme.of(context).textTheme.headline2),
             ),
           ],
-          ),
+        ),
+      ],
+    );
+  }
 
-        ],
-      ),
+  Widget _numberOfIndividualsInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Number of Individuals', style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
+        Row(
+          children: [
+            Container(
+              width: 110,
+              child: TextField(
+                onChanged: (String numberOfIndividuals) =>
+                    setState(() => _numberOfIndividuals = int.parse(numberOfIndividuals)),
+                keyboardType: TextInputType.number,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text('Individuals', style: Theme.of(context).textTheme.headline3),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _body() {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      child: Stack(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
         children: [
-          Container(
-              margin: const EdgeInsets.only(right: 12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _speciesInput(),
-                  _greenWeightsInput(),
-                  _numberOfIndividualInput(),
-                  Expanded(
-                      child: Container(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  margin: const  EdgeInsets.symmetric(vertical: 20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      _saveButton(),
-                                    ],
-                                  ),
-                                )
-
-                              ])
-                      )
-                  )
-                ],
-              )),
+          _speciesDropdown(),
+          const SizedBox(height: 15),
+          _greenWeightsInput(),
+          const SizedBox(height: 15),
+          _numberOfIndividualsInput(),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [_saveButton()]),
         ],
       ),
     );
+  }
+
+  StripButton _saveButton() {
+    return StripButton(
+      color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
+      labelText: 'Save',
+      onPressed:_onPressSaveButton,
+    );
+  }
+
+  Future<void> _onPressSaveButton() async {
+    if(!_allValid()) {
+      return;
+    }
+
+    final Position p = await Geolocator().getCurrentPosition();
+    final Location location = Location(latitude: p.latitude, longitude: p.longitude);
+
+    final RetainedCatch retainedCatch = RetainedCatch(
+      species: _species,
+      greenWeight: _greenWeight,
+      fishingSetID: widget.fishingSetID,
+      greenWeightUnit: WeightUnit.GRAMS,
+      individuals: _numberOfIndividuals,
+      location: location,
+    );
+
+    await RetainedCatchRepo().store(retainedCatch);
+
+    Navigator.pop(context);
   }
 
   @override
@@ -159,30 +170,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
       body: _body(),
-      actions: [
-        Expanded(
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            BackButton(),
-            Text(
-              '  Catch Information',
-              style: Theme.of(context).textTheme.headline1,
-            ),
-          ]),
-        )
-      ],
+      title: 'Catch Information',
     );
-  }
-
-  StripButton _saveButton() {
-    return StripButton(
-      color: _allValid() ? Theme.of(context).accentColor : Colors.lightBlue,
-      labelText: 'Save',
-      onPressed: () => _onPressSaveButton,
-    );
-  }
-
-  Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 }

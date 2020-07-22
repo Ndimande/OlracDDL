@@ -8,12 +8,12 @@ import 'package:olracddl/theme.dart';
 class TripTile extends StatelessWidget {
   final Trip trip;
   final VoidCallback onPressed;
-  final int index;
+  final int listIndex;
 
   const TripTile({
     this.trip,
     this.onPressed,
-    this.index,
+    this.listIndex,
   });
 
   Widget imageButton(String imagePath) {
@@ -52,6 +52,23 @@ class TripTile extends StatelessWidget {
     });
   }
 
+  Widget _indexNumber() {
+    return Builder(builder: (context){
+      return Column(children: [
+        Container(height: 20, child: trip.isActive ? Icon(Icons.star,color: Colors.amber,size: 20) : Container()),
+        SizedBox(height: 11),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            listIndex.toString(),
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        )
+      ],);
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -67,13 +84,7 @@ class TripTile extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.9,
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  '1',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-              ),
+              _indexNumber(),
               _details(),
               trip.isUploaded
                   ? imageButton('assets/images/successful_upload_icon.png')

@@ -18,6 +18,7 @@ class RetainedCatchRepo extends DatabaseRepo<RetainedCatch> {
       greenWeightUnit: greenWeightUnit,
       individuals: result['individuals'],
       createdAt: DateTime.parse(result['created_at']),
+      location: Location(latitude: result['latitude'], longitude: result['longitude']),
       species: species,
       fishingSetID: result['fishing_set_id']
     );

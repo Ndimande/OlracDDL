@@ -243,7 +243,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
       children: [
         Text('Notes', style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        TextField(),
+        TextField(
+          onChanged: (String text ) => setState(()=> _notes),
+        ),
       ],
     );
   }

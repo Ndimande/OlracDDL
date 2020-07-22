@@ -98,6 +98,7 @@ class FishingSet extends Model {
   })  : assert(startedAt != null),
         super(id: id);
 
+  bool get isActive => endedAt == null;
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {

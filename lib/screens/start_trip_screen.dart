@@ -13,6 +13,7 @@ import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/repos/vessel.dart';
+import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/trip/trip_screen.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
@@ -25,11 +26,12 @@ class StartTripScreen extends StatefulWidget {
   const StartTripScreen();
 
   @override
-  _StartTripScreenState createState() => _StartTripScreenState();
+  _StartTripScreenState createState() => _StartTripScreenState(startDatetime: DateTime.now());
 }
 
 class _StartTripScreenState extends State<StartTripScreen> {
-  DateTime startDatetime = DateTime.now();
+  _StartTripScreenState({this.startDatetime});
+  DateTime startDatetime;
 
   Port _port;
   Vessel _vessel;
@@ -38,7 +40,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   String _notes;
   Page _page = Page.One;
 
-  bool _allValid() {
+  bool _page1Valid() {
     if (_port == null) {
       return false;
     }
@@ -49,7 +51,18 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return true;
   }
 
+  bool _page2Valid() {
+    if(_skipper == null) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _onPressSave() async {
+    if(!_page2Valid()) {
+      return;
+    }
+
     final Position p = await Geolocator().getCurrentPosition();
 
     final newTrip = Trip(
@@ -65,7 +78,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
 
     final int tripID = await TripRepo().store(newTrip);
 
-    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
+    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(_) => TripScreen(tripID)));
   }
 
   Widget _fishingMethodButton() {
@@ -80,8 +93,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
           color: OlracColoursLight.olspsDarkBlue,
           child: Text(snapshot.hasData ? snapshot.data.name : '', style: Theme.of(context).primaryTextTheme.headline5),
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            final FishingMethod fm = await Navigator.push(context,MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            await CurrentFishingMethod.set(fm);
+            setState(() {});
           },
         );
       },
@@ -130,11 +145,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              StripButton(
-                labelText: 'Save',
-                onPressed: _onPressSave,
-                color: OlracColoursLight.olspsHighlightBlue,
-              )
+              _saveButton()
             ],
           ),
         ],
@@ -142,14 +153,22 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
+  Widget _saveButton() {
+    return StripButton(
+      labelText: 'Save',
+      onPressed: _onPressSave,
+      color: _page2Valid() ? OlracColoursLight.olspsHighlightBlue : OlracColoursLight.olspsGrey,
+    );
+  }
+
   IconButton _nextButton() {
     return IconButton(
-        icon: _allValid()
+        icon: _page1Valid()
             ? Image.asset('assets/images/arrow_highlighterBlue.png')
             : Image.asset('assets/images/arrow_grey.png'),
         onPressed: () {
           setState(() {
-            if (_allValid()) {
+            if (_page1Valid()) {
               _page = Page.Two;
             }
           });
@@ -192,7 +211,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
               startDatetime = DateTime.parse(picker.adapter.toString());
             });
           },
-          initialDateTime: DateTime.now(),
+          initialDateTime: startDatetime,
         ),
         _portDropdown(),
       ],

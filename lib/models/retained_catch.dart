@@ -1,4 +1,5 @@
 import 'package:database_repo/database_repo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/species.dart';
 
@@ -10,9 +11,11 @@ class RetainedCatch extends Model {
     this.individuals,
     this.location,
     this.createdAt,
-    this.species,
-    this.fishingSetID,
-  }) : super(id: id);
+    @required this.species,
+    @required this.fishingSetID,
+  })  : assert(species != null),
+        assert(fishingSetID != null),
+        super(id: id);
 
   int greenWeight;
   WeightUnit greenWeightUnit;
@@ -26,7 +29,7 @@ class RetainedCatch extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'green_weight': greenWeight,
-      'green_weight_unit': greenWeightUnit,
+      'green_weight_unit': greenWeightUnit.toString(),
       'individuals': individuals,
       'latitude': location.latitude,
       'longitude': location.longitude,

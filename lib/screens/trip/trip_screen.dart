@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/disposals.dart';
 import 'package:olracddl/models/fishing_set.dart';
@@ -11,6 +9,7 @@ import 'package:olracddl/screens/retained.dart';
 import 'package:olracddl/screens/start_set_screen.dart';
 import 'package:olracddl/screens/trip/trip_section.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/end_trip_information_dialog.dart';
 import 'package:olracddl/widgets/fishing_set_tile.dart';
 
 part 'load.dart';
@@ -29,22 +28,28 @@ class _TripScreenState extends State<TripScreen> {
 
   Future<void> _onPressEndTrip() async {
     final Trip trip = await TripRepo().find(widget.tripID);
-    trip.endedAt = DateTime.now();
-    final Position p = await Geolocator().getCurrentPosition();
-    trip.endLocation = Location(latitude: p.latitude, longitude: p.longitude);
+    final Map result = await showDialog(context: context, builder: (_) => EndTripInformationDialog());
+
+    if (result == null) {
+      return;
+    }
+
+    trip.endedAt = result['endedAt'];
+    trip.endLocation = result['endLocation'];
     await TripRepo().store(trip);
     Navigator.pop(context);
   }
 
   Future<void> _onPressStartFishingSet() async {
     await Navigator.push(context, MaterialPageRoute(builder: (_) => StartSetScreen(_trip.id)));
+    setState(() {});
   }
 
   Widget _endTripButton() {
     return StripButton(
       color: OlracColoursLight.olspsRed,
       labelText: 'End Trip',
-      onPressed: _onPressEndTrip,
+      onPressed: _trip.endedAt != null ? null : _onPressEndTrip,
     );
   }
 
@@ -66,24 +71,28 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Widget _fishingSetList() {
-    return ListView.builder(itemCount: _trip.fishingSets.length, itemBuilder: (context, int index) {
-      final FishingSet  fishingSet = _trip.fishingSets[index];
+    return ListView.builder(
+        itemCount: _trip.fishingSets.length,
+        itemBuilder: (context, int index) {
+          final FishingSet fishingSet = _trip.fishingSets[index];
 
-      return FishingSetTile(
-        catchEntries: 1,
-        setNumber: 1,
-        onPressDisposal: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (_) => DisposalsScreen()));
-        },
-        onPressMarineLife: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (_) => MarineLifeScreen()));
-        },
-        onPressRetained: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (_) => RetainedScreen()));
-        },
-      );
-    });
-
+          return FishingSetTile(
+            fishingSet: fishingSet,
+            indexNumber: index,
+            onPressDisposal: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => DisposalsScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
+            },
+            onPressMarineLife: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => MarineLifeScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
+            },
+            onPressRetained: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => RetainedScreen(tripID: _trip.id, setID: fishingSet.id)),
+              );
+            },
+          );
+        });
   }
 
   Widget _body() {
@@ -93,7 +102,7 @@ class _TripScreenState extends State<TripScreen> {
         Expanded(
           child: _trip.fishingSets.isEmpty ? _noFishingActivities() : _fishingSetList(),
         ),
-        _bottomButtons(),
+        if (_trip.isActive) _bottomButtons(),
       ],
     );
   }

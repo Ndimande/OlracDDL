@@ -29,6 +29,17 @@ class TripSection extends StatelessWidget {
     });
   }
 
+  Widget _ended() {
+    return Builder(builder: (BuildContext context) {
+      return Row(
+        children: [
+          Text('Ended: ', style: Theme.of(context).textTheme.headline6),
+          Text(friendlyDateTime(trip.startedAt), style: Theme.of(context).textTheme.headline6)
+        ],
+      );
+    });
+  }
+
   Widget _duration() {
     return Builder(builder: (BuildContext context) {
       return Row(
@@ -83,7 +94,7 @@ class TripSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _started(),
-              _duration(),
+              if (trip.isActive) _duration() else _ended(),
             ],
           ),
           _locationButton(),

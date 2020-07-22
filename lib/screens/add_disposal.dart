@@ -1,4 +1,3 @@
-//import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
@@ -241,7 +240,6 @@ class  _AddDisposalScreenState extends State<AddDisposalScreen> {
   }
 
   Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => HomeScreen()));
+
   }
 }
