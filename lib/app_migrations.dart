@@ -108,7 +108,9 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE fishing_methods ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL '
+        'name TEXT UNIQUE NOT NULL, '
+        'abbreviation TEXT UNIQUE NOT NULL, '
+        'svgPath TEXT UNIQUE NOT NULL '
         ')',
   ),
   Migration(
@@ -342,6 +344,20 @@ const List<Migration> appMigrations = <Migration>[
     INSERT INTO species (id, common_name, scientific_name) VALUES
     (1, "Species 1", "Sci 1"),
     (2, "Species 2", "Sci 2")
+  ''',
+  ),
+  Migration(
+    name: 'populate_fishing_methods',
+    sql: '''
+    INSERT INTO fishing_methods (id, name, svgPath, abbreviation) VALUES
+    (1, "Beach Seine", "assets/icons/fishing_methods/Oltrace_Beach_Seine.svg", "SB"),
+    (2, "Boat Seine", "assets/icons/fishing_methods/Oltrace_Purse_Seine.svg", "SV"),
+    (3, "Beam Trawl", "assets/icons/fishing_methods/Oltrace_Beam_Trawl.svg", "TBB"),
+    (4, "Otter Trawl", "assets/icons/fishing_methods/Oltrace_Otter_Trawl.svg", "OTB"),
+    (5, "Gillnets Anchored", "assets/icons/fishing_methods/Oltrace_Set_Gillnet.svg", "GNS"),
+    (6, "Drift Gillnet", "assets/icons/fishing_methods/Oltrace_Drift_Gillnet.svg", "GND"),
+    (7, "Handline", "assets/icons/fishing_methods/handline.svg", "HL"),
+    (8, "Drifting Longline", "assets/icons/fishing_methods/Oltrace_Drift_Longline.svg", "LLD")
   ''',
   ),
 ];

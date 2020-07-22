@@ -326,14 +326,14 @@ class _StartTripScreenState extends State<StartTripScreen> {
     final title = Row(
       children: [
         Text('Notes', style: Theme.of(context).textTheme.headline3),
-        IconButton(icon: Icon(Icons.camera_alt)),
+        IconButton(icon: Icon(Icons.camera_alt),onPressed: (){},),
       ],
     );
-    final input = TextField(minLines: 2, maxLines: 4);
+
     return Column(
       children: [
         title,
-        input,
+       const TextField(minLines: 2, maxLines: 4),
       ],
     );
   }

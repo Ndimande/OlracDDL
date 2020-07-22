@@ -106,7 +106,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
     final Location location = Location(longitude: p.longitude, latitude: p.latitude);
 
     final FishingMethod currentFishingMethod = await CurrentFishingMethod.get();
-
+    assert(currentFishingMethod != null);
     final FishingSet fishingSet = FishingSet(
       startedAt: _startedAt,
       startLocation: location,
@@ -116,8 +116,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
       tripId: widget._tripID,
       cloudCover: _cloudCover,
       cloudType: _cloudType,
+      seaBottomDepth: int.parse(_seaBottomDepth),
+      seaBottomType: _seaBottomType,
+      seaBottomDepthUnit: LengthUnit.METERS,
       seaCondition: _seaCondition,
       moonPhase: _moonPhase,
+      targetSpecies: _targetSpecies,
     );
 
     await FishingSetRepo().store(fishingSet);

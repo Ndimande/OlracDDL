@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
             trip: trip,
             onPressed: () async {
               await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(trip.id)));
+              setState(() {});
             },
             listIndex: trip.id,
           ),

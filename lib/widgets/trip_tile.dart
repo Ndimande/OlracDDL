@@ -86,9 +86,7 @@ class TripTile extends StatelessWidget {
             children: [
               _indexNumber(),
               _details(),
-              trip.isUploaded
-                  ? imageButton('assets/images/successful_upload_icon.png')
-                  : imageButton('assets/images/upload_required_icon.png'),
+              if (trip.isUploaded) imageButton('assets/images/successful_upload_icon.png') else imageButton('assets/images/upload_required_icon.png'),
             ],
           ),
         ),
