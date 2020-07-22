@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
@@ -9,13 +10,22 @@ import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/sea_bottom_type.dart';
 import 'package:olracddl/models/species.dart';
+import 'package:olracddl/models/cloud_cover.dart';
+import 'package:olracddl/models/cloud_type.dart';
+import 'package:olracddl/models/sea_condition.dart';
+import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/repos/fishing_set.dart';
 import 'package:olracddl/repos/sea_bottom_type.dart';
 import 'package:olracddl/repos/species.dart';
+import 'package:olracddl/repos/sea_condition.dart';
+import 'package:olracddl/repos/moon_phase.dart';
+import 'package:olracddl/repos/cloud_cover.dart';
+import 'package:olracddl/repos/cloud_type.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
+import 'package:olracddl/widgets/environment_dialog.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/weather_condition_button.dart';
 
 enum Page {
@@ -51,6 +61,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   String _notes;
 
+  SeaCondition _seaCondition;
+
+  CloudCover _cloudCover;
+
+  CloudType _cloudType;
+
+  MoonPhase _moonPhase;
+
   bool _page1Valid() {
     if (_fishingArea == null) {
       return false;
@@ -76,8 +94,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   bool _page2Valid() {
-
-    if(_targetSpecies == null) {
+    if (_targetSpecies == null) {
       return false;
     }
 
@@ -97,6 +114,10 @@ class _StartSetScreenState extends State<StartSetScreen> {
       notes: _notes,
       minimumHookSize: _minimumHookSize,
       tripId: widget._tripID,
+      cloudCover: _cloudCover,
+      cloudType: _cloudType,
+      seaCondition: _seaCondition,
+      moonPhase: _moonPhase,
     );
 
     await FishingSetRepo().store(fishingSet);
@@ -146,7 +167,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Fishing Area (Statistical Rectangle)', style: Theme.of(context).textTheme.headline3),
+          Text('Fishing Area (Statistical Rectangle)',
+              style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             onChanged: (String name) => setState(() => _fishingArea = name),
@@ -188,7 +210,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
           labelTheme: false,
           selected: _seaBottomType,
           label: 'Sea Bottom Type',
-          onChanged: (SeaBottomType seaBottomType) => setState(() => _seaBottomType = seaBottomType),
+          onChanged: (SeaBottomType seaBottomType) =>
+              setState(() => _seaBottomType = seaBottomType),
           items: snapshot.data.map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
             return DropdownMenuItem<SeaBottomType>(value: sbt, child: Text(sbt.name));
           }).toList(),
@@ -229,7 +252,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
-            onChanged: (String minimumHookSize) => setState(() => _minimumHookSize = minimumHookSize),
+            onChanged: (String minimumHookSize) =>
+                setState(() => _minimumHookSize = minimumHookSize),
             keyboardType: TextInputType.text,
           )
         ],
@@ -304,7 +328,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
             ),
           ),
           const SizedBox(height: 15),
-          WeatherConditionButton(),
+          _weatherConditions(),
+          //WeatherConditionButton(),
           const SizedBox(height: 15),
           _notesInput(),
           Row(
@@ -314,6 +339,176 @@ class _StartSetScreenState extends State<StartSetScreen> {
         ],
       ),
     );
+  }
+
+  Widget _weatherConditions() {
+    return Container(
+      height: 220,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _weatherConditionButton(
+                  _onSeaConditionPressed,
+                  'Sea Condition',
+                  'assets/icons/svg/wave.svg',
+                  RoundedCorner.topLeft,
+                ),
+                _weatherConditionButton(
+                  _onCloudTypePressed,
+                  'Cloud Type',
+                  'assets/icons/svg/cloud.svg',
+                  RoundedCorner.topRight,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _weatherConditionButton(
+                  _onCloudCoverPressed,
+                  'Cloud Cover',
+                  'assets/icons/svg/cloud_sun.svg',
+                  RoundedCorner.bottomLeft,
+                ),
+                _weatherConditionButton(
+                  _onMoonPhasePressed,
+                  'Moon Phase',
+                  'assets/icons/svg/moon.svg',
+                  RoundedCorner.bottomRight,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _weatherConditionButton(
+    Function onTap,
+    String label,
+    String svgPath,
+    RoundedCorner roundedCorner,
+  ) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(7, 3, 7, 7),
+          margin: const EdgeInsets.all(0.5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 3,
+              color: Theme.of(context).primaryColor,
+            ),
+            borderRadius: BorderRadius.only(
+              topLeft:
+                  roundedCorner == RoundedCorner.topLeft ? const Radius.circular(15) : Radius.zero,
+              topRight:
+                  roundedCorner == RoundedCorner.topRight ? const Radius.circular(15) : Radius.zero,
+              bottomLeft: roundedCorner == RoundedCorner.bottomLeft
+                  ? const Radius.circular(15)
+                  : Radius.zero,
+              bottomRight: roundedCorner == RoundedCorner.bottomRight
+                  ? const Radius.circular(15)
+                  : Radius.zero,
+            ),
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Text(
+                  label,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(child: SvgPicture.asset(svgPath)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<Model> _seaConditionInputDialog() async {
+    final List<SeaCondition> _seaConditions = await SeaConditionRepo().all();
+    return await showDialog<Model>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return EnvironmentDialog(
+          title: 'Sea Condition',
+          models: _seaConditions,
+        );
+      },
+    );
+  }
+
+  Future<void> _onSeaConditionPressed() async {
+    _seaCondition = await _seaConditionInputDialog();
+  }
+
+  Future<Model> _cloudTypeInputDialog() async {
+    final List<CloudType> _cloudTypes = await CloudTypeRepo().all();
+    return await showDialog<Model>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return EnvironmentDialog(
+          title: 'Cloud Type',
+          models: _cloudTypes,
+        );
+      },
+    );
+  }
+
+  Future<void> _onCloudTypePressed() async {
+    _cloudType = await _cloudTypeInputDialog();
+  }
+
+  Future<Model> _cloudCoverInputDialog() async {
+    final List<CloudCover> _cloudCover = await CloudCoverRepo().all();
+    return await showDialog<Model>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return EnvironmentDialog(
+          title: 'Cloud Type',
+          models: _cloudCover,
+        );
+      },
+    );
+  }
+
+  Future<void> _onCloudCoverPressed() async {
+    _cloudCover = await _cloudCoverInputDialog();
+  }
+
+  Future<Model> _moonPhaseInputDialog() async {
+    final List<MoonPhase> _moonPhase = await MoonPhaseRepo().all();
+    return await showDialog<Model>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return EnvironmentDialog(
+          title: 'Cloud Type',
+          models: _moonPhase,
+        );
+      },
+    );
+  }
+
+  Future<void> _onMoonPhasePressed() async {
+    _moonPhase = await _moonPhaseInputDialog();
   }
 
   IconButton _nextButton() {
@@ -345,3 +540,5 @@ class _StartSetScreenState extends State<StartSetScreen> {
     );
   }
 }
+
+enum RoundedCorner { topLeft, topRight, bottomLeft, bottomRight }
