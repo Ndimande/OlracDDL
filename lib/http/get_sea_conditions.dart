@@ -10,7 +10,7 @@ Future<List<SeaCondition>>  getMoonPhase() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> seaConditionList = response.data['data'];
+  final List seaConditionList = response.data['data'];
   final  List<SeaCondition> seaConditionType = [];
 
   for(final Map seaConditionData in seaConditionList){

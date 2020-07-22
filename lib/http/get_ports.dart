@@ -10,7 +10,7 @@ Future<List<Port>>  getPort() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> portList = response.data['data'];
+  final List portList = response.data['data'];
   final  List<Port> portType = [];
 
   for(final Map portData in portList){

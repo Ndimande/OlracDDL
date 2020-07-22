@@ -86,7 +86,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
-  Migration(
+  Migration( // refers to marine life condition
     name: 'create_conditions',
     sql: 'CREATE TABLE conditions ( '
         'id INTEGER PRIMARY KEY, '
@@ -138,23 +138,23 @@ const List<Migration> appMigrations = <Migration>[
   Migration(
     name: 'create_trips',
     sql: 'CREATE TABLE trips ( '
-        //ids
+    //ids
         'id INTEGER PRIMARY KEY, '
         'uuid TEXT UNIQUE NOT NULL, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        // trip start
+    // trip start
         'started_at TIMESTAMP, '
         'start_latitude REAL, '
         'start_longitude REAL, '
-        // trip end
+    // trip end
         'ended_at TIMESTAMP, '
         'end_latitude REAL, '
         'end_longitude REAL, '
-        // other
+    // other
         'crew_members_json TEXT, '
         'notes TEXT, '
         'uploaded_at TIMESTAMP, '
-        // Foreign keys
+    // Foreign keys
         'port_id INTEGER, '
         'vessel_id INTEGER, '
         'skipper_id INTEGER, '
@@ -177,22 +177,22 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE fishing_sets ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        //  time / location
+    //  time / location
         'started_at TIMESTAMP, '
         'start_latitude REAL, '
         'start_longitude REAL, '
         'ended_at TIMESTAMP, '
         'end_latitude REAL, '
         'end_longitude REAL, '
-        // Other
+    // Other
         'sea_bottom_depth INTEGER, '
         'sea_bottom_depth_unit TEXT, '
-        'minimum_hook_size INTEGER, '
+        'minimum_hook_size TEXT, '
         'hooks INTEGER, '
         'traps INTEGER, '
         'lines_used INTEGER, '
         'notes TEXT, '
-        // Foreign keys
+    // Foreign keys
         'trip_id INTEGER, '
         'sea_bottom_type_id INTEGER, '
         'target_species_id INTEGER, '
@@ -211,34 +211,54 @@ const List<Migration> appMigrations = <Migration>[
         'FOREIGN KEY (trip_id) REFERENCES trips (id) '
         ')',
   ),
-  Migration(
-    name: 'create_fishing_set_events',
-    sql: 'CREATE TABLE fishing_set_events ( '
-        'id INTEGER PRIMARY KEY, '
-        // Measurements
-        'green_weight INTEGER, '
-        'green_weight_unit TEXT, '
-        'estimated_green_weight INTEGER, '
-        'estimated_green_weight_unit TEXT, '
-        'estimated_weight INTEGER, '
-        'estimated_weight_unit TEXT, '
-        // time / location
-        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'latitude REAL, '
-        'longitude REAL '
-        // other
-        'individuals INTEGER, '
-        'tag_number TEXT, '
-        // Foreign keys
-        'fishing_set_id INTEGER, '
-        'species_id INTEGER, '
-        'disposal_state_id INTEGER, '
-        'condition_id INTEGER,'
-        'FOREIGN KEY (condition_id) REFERENCES conditions (id), '
-        'FOREIGN KEY (species_id) REFERENCES species (id), '
-        'FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id) '
-        ')',
-  ),
+  Migration(name: 'create_retained_catch', sql: '''
+    CREATE TABLE retained_catch (
+    id INTEGER PRIMARY KEY,
+    green_weight INTEGER, 
+    green_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+    species_id INTEGER,
+    fishing_set_id INTEGER, 
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
+  Migration(name: 'create_disposals', sql: '''
+    CREATE TABLE disposals (
+    id INTEGER PRIMARY KEY,
+    estimated_green_weight INTEGER, 
+    estimated_green_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    species_id INTEGER,
+    disposal_state_id INTEGER,
+    fishing_set_id INTEGER, 
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
+  Migration(name: 'create_marine_life', sql: '''
+    CREATE TABLE marine_life (
+    id INTEGER PRIMARY KEY,
+    estimated_weight INTEGER, 
+    estimated_weight_unit TEXT, 
+    individuals INTEGER,
+    latitude REAL,
+    longitude REAL, 
+    tagNumber TEXT,
+    species_id INTEGER,
+    fishing_set_id INTEGER, 
+    condition_id INTEGER,
+    FOREIGN KEY (condition_id) REFERENCES conditions (id),
+    FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
+    FOREIGN KEY (species_id) REFERENCES species (id)
+    )
+    '''),
   Migration(name: 'populate_sea_conditions', sql: '''
     INSERT INTO sea_conditions (id, image_string,name) VALUES
     (1, "assets/images/b1.png", "00-02 Calm/Still"),
@@ -308,4 +328,20 @@ const List<Migration> appMigrations = <Migration>[
     (1, "Pier Pressure", "00123456"),
     (2, "Knot Shore", "00987654")
   '''),
+  Migration(
+    name: 'populate_sea_bottom_types',
+    sql: '''
+    INSERT INTO sea_bottom_types (id, name) VALUES
+    (1, "Type 1"),
+    (2, "Type 2")
+  ''',
+  ),
+  Migration(
+    name: 'populate_species',
+    sql: '''
+    INSERT INTO species (id, common_name, scientific_name) VALUES
+    (1, "Species 1", "Sci 1"),
+    (2, "Species 2", "Sci 2")
+  ''',
+  ),
 ];

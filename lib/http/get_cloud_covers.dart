@@ -11,7 +11,7 @@ Future<List<CloudCover>> getCloudCovers() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> cloudCoverList = response.data['data'];
+  final List cloudCoverList = response.data['data'];
   final  List<CloudCover> CloudCovers = [];
 
   for(final Map CloudCoverData in cloudCoverList){

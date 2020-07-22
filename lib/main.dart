@@ -15,6 +15,8 @@ import 'package:olracddl/widgets/end_trip_dialogbox.dart';
 import 'package:olracddl/widgets/end_trip_information_dialog.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'get_lookup_data.dart';
+
 final DatabaseProvider _databaseProvider = DatabaseProvider();
 Database _database;
 
@@ -25,7 +27,8 @@ Future<void> main() async {
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
   DioProvider().init();
-  await getVessels();
+   storeVesselNames();
+ // storePorts();
 
   runApp(MyApp());
 }

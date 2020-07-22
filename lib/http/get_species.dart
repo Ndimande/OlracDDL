@@ -10,7 +10,7 @@ Future<List<Species>>  getMoonPhase() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> speciesList = response.data['data'];
+  final List speciesList = response.data['data'];
   final  List<Species> speciesType = [];
 
   for(final Map speciesData in speciesList){

@@ -10,7 +10,7 @@ Future<List<SeaBottomType>>  getSeaBottomTypes() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
- final List<Map> seaBottomList = response.data['data'];
+ final List seaBottomList = response.data['data'];
  final  List<SeaBottomType> seaBottomType = [];
 
   for(final Map SeaBottomTypeData in seaBottomList){

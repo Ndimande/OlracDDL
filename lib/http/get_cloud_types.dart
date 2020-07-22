@@ -10,7 +10,7 @@ Future<List<CloudType>>  getCloudTypes() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> cloudTypeList = response.data['data'];
+  final List cloudTypeList = response.data['data'];
   final  List<CloudType> cloudType = [];
 
   for(final Map cloudTypeData in cloudTypeList){

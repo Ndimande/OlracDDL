@@ -10,7 +10,7 @@ Future<List<MoonPhase>>  getMoonPhase() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
-  final List<Map> moonPhaseList = response.data['data'];
+  final List moonPhaseList = response.data['data'];
   final  List<MoonPhase> moonPhaseType = [];
 
   for(final Map moonPhaseData in moonPhaseList){
