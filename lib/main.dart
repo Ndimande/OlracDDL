@@ -28,6 +28,7 @@ Future<void> main() async {
   await migrator.run(AppConfig.RESET_DATABASE);
   DioProvider().init();
    storeVesselNames();
+  storeSeaBottomTypes();
  // storePorts();
 
   runApp(MyApp());

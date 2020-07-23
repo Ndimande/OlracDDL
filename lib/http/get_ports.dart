@@ -4,9 +4,9 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/port.dart';
 
-const String _baseUrl = AppConfig.DDM_URL + 'api/ports';
+const String _baseUrl = AppConfig.DDM_URL + '/api/ports';
 final Dio _dio = DioProvider().dio;
-Future<List<Port>>  getPort() async{
+Future<List<Port>>  getPorts() async{
   Response response;
   response = await _dio.get(_baseUrl);
 

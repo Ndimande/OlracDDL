@@ -4,9 +4,9 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/moon_phase.dart';
 
-const String _baseUrl = AppConfig.DDM_URL + 'api/moon_phases';
+const String _baseUrl = AppConfig.DDM_URL + '/api/moon_phases';
 final Dio _dio = DioProvider().dio;
-Future<List<MoonPhase>>  getMoonPhase() async{
+Future<List<MoonPhase>>  getMoonPhases() async{
   Response response;
   response = await _dio.get(_baseUrl);
 

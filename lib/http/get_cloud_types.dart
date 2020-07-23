@@ -4,7 +4,7 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/cloud_type.dart';
 
-const String _baseUrl = AppConfig.DDM_URL + 'api/cloud_types';
+const String _baseUrl = AppConfig.DDM_URL + '/api/cloud_types';
 final Dio _dio = DioProvider().dio;
 Future<List<CloudType>>  getCloudTypes() async{
   Response response;

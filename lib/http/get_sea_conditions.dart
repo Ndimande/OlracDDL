@@ -4,9 +4,9 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/sea_condition.dart';
 
-const String _baseUrl = AppConfig.DDM_URL + 'api/conditions';
+const String _baseUrl = AppConfig.DDM_URL + '/api/conditions';
 final Dio _dio = DioProvider().dio;
-Future<List<SeaCondition>>  getMoonPhase() async{
+Future<List<SeaCondition>>  getSeaConditions() async{
   Response response;
   response = await _dio.get(_baseUrl);
 
