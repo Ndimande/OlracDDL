@@ -8,15 +8,32 @@ import 'package:olracddl/theme.dart';
 class TripTile extends StatelessWidget {
   final Trip trip;
   final VoidCallback onPressed;
-  final int index;
+  final int listIndex;
 
   const TripTile({
     this.trip,
     this.onPressed,
-    this.index,
+    this.listIndex,
   });
 
-  Widget imageButton(String imagePath) {
+  String get _tripDurationString {
+    Duration tripDuration;
+
+    if (trip.isActive) {
+      tripDuration = DateTime.now().difference(trip.startedAt);
+    } else {
+      tripDuration = trip.endedAt.difference(trip.startedAt);
+    }
+
+    final String hours = tripDuration.inHours.toString();
+    final String minutes = tripDuration.inMinutes.toString();
+
+    return '${hours}h${minutes}m';
+  }
+
+  Widget _uploadIcon() {
+    final String imagePath =
+    trip.isUploaded ? 'assets/images/successful_upload_icon.png' : 'assets/images/upload_required_icon.png';
     return Container(
       margin: const EdgeInsets.all(25),
       height: 45,
@@ -28,6 +45,11 @@ class TripTile extends StatelessWidget {
   }
 
   Widget _details() {
+    final Widget startDateTime = Text(
+      DateFormat('yyyy/MMM/dd, kk:mm').format(trip.startedAt).toString(),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: OlracColoursLight.olspsDarkBlue),
+    );
+
     return Builder(builder: (context) {
       return Container(
         padding: const EdgeInsets.all(5),
@@ -36,17 +58,23 @@ class TripTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              DateFormat('yyyy/MMM/dd, kk:mm').format(DateTime.now()).toString(),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: OlracColoursLight.olspsDarkBlue,
-              ),
-            ),
+            startDateTime,
             Text('${trip.fishingSets.length} Sets', style: Theme.of(context).textTheme.headline3),
-            Text('Xkg, X', style: Theme.of(context).textTheme.headline3),
+            Text('Xkg, $_tripDurationString', style: Theme.of(context).textTheme.headline3),
           ],
+        ),
+      );
+    });
+  }
+
+
+  Widget _indexNumber() {
+    return Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          listIndex.toString(),
+          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 50),
         ),
       );
     });
@@ -55,33 +83,41 @@ class TripTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(0),
+      margin: const EdgeInsets.only(right: 15),
       elevation: 3,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
-      ),
+      shape: _cardShape(),
       child: FlatButton(
         onPressed: onPressed,
-        child: Container(
-          height: 120,
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  '1',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
+        child: Stack(
+          children: [
+            if(trip.isActive) _activeStar(),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      _indexNumber(),
+                      _details(),
+                    ]
+                  ),
+                  _uploadIcon(),
+                ],
               ),
-              _details(),
-              trip.isUploaded
-                  ? imageButton('assets/images/successful_upload_icon.png')
-                  : imageButton('assets/images/upload_required_icon.png'),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+ShapeBorder _cardShape() {
+  return const RoundedRectangleBorder(
+    borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+  );
+}
+
+Widget _activeStar() {
+  return const Icon(Icons.star, color: Colors.amber, size: 20);
 }

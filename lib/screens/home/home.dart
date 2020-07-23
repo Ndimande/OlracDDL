@@ -22,16 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Trip _activeTrip;
 
   Future<void> _onPressStartTripButton() async {
-    final FishingMethod method =
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+    final FishingMethod method = await Navigator.of(context).push(MaterialPageRoute(builder:(_) => FishingMethodScreen()));
+
     await CurrentFishingMethod.set(method);
-    await Navigator.push(context, MaterialPageRoute(builder: (_) => StartTripScreen()));
+    await Navigator.push(context, MaterialPageRoute(builder:(_) => const StartTripScreen()));
     setState(() {});
   }
 
   Future<void> _onPressActiveTripButton() async {
-    await Navigator.of(context)
-        .push(MaterialPageRoute(maintainState: false, builder: (_) => TripScreen(_activeTrip.id)));
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
+    setState(() {});
   }
 
   Widget _trips() {
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_activeTrip != null) {
       allTrips.add(_activeTrip);
     }
-    allTrips.addAll(_completedTrips);
+    allTrips.addAll(_completedTrips.reversed);
 
     if (allTrips.isEmpty) {
       return Center(
@@ -47,17 +47,22 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     return ListView.builder(
-        itemCount: allTrips.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Trip trip = allTrips[index];
-          return TripTile(
+      itemCount: allTrips.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Trip trip = allTrips[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: TripTile(
             trip: trip,
             onPressed: () async {
               await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(trip.id)));
+              setState(() {});
             },
-            index: index,
-          );
-        });
+            listIndex: trip.id,
+          ),
+        );
+      },
+    );
   }
 
   Widget _body() {

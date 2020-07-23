@@ -3,7 +3,7 @@ import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/providers/database.dart';
 
 class CrewMemberRepo extends DatabaseRepo<CrewMember> {
-  CrewMemberRepo() : super(tableName: 'skippers', database: DatabaseProvider().database);
+  CrewMemberRepo() : super(tableName: 'crew_members', database: DatabaseProvider().database);
 
   @override
   Future<CrewMember> fromDatabaseResult(Map<String, dynamic> result) async {

@@ -10,12 +10,16 @@ class CatchCondition extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
+      'createdAt': createdAt == null ? null : createdAt.toIso8601String(),
     };
   }
 
   @override
   Map<String, dynamic> toMap() {
-    // TODO: implement toMap
-    throw UnimplementedError();
+    return {
+      'id': id,
+      'name': name,
+      'createdAt': createdAt.toIso8601String(),
+    };
   }
 }

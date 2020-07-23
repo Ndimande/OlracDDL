@@ -1,17 +1,20 @@
-import 'dart:convert';
-
 import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/models/vessel.dart';
 import 'package:olracddl/providers/database.dart';
+import 'package:olracddl/repos/crew_member.dart';
 import 'package:olracddl/repos/fishing_set.dart';
 import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/vessel.dart';
+import 'package:sqflite/sqflite.dart';
+
+const _TRIP_HAS_CREW_MEMBERS = 'trip_has_crew_members';
 
 class TripRepo extends DatabaseRepo<Trip> {
   TripRepo() : super(tableName: 'trips', database: DatabaseProvider().database);
@@ -21,6 +24,33 @@ class TripRepo extends DatabaseRepo<Trip> {
     final List<Map<String, dynamic>> results = await database.query(tableName, where: 'id = $id');
 
     return results.isNotEmpty ? await fromDatabaseResult(results.first) : null;
+  }
+
+  @override
+  Future<int> store(Trip trip) async {
+    // if no id create a new record
+    if (trip.id == null) {
+      final int id = await database.insert(tableName, await trip.toDatabaseMap());
+      trip.id = id;
+      await _storeCrewMembers(trip);
+      return id;
+    }
+    // We remove the id completely or sqlite will try to set id = null
+    final Map<String, dynamic> dbMap = await trip.toDatabaseMap();
+    dbMap.remove('id');
+    await _removeCrewMembers(trip);
+    await _storeCrewMembers(trip);
+    return await database.update(tableName, dbMap, where: 'id = ${trip.id}');
+  }
+
+  Future<void> _storeCrewMembers(Trip trip) async {
+    for (final CrewMember crewMember in trip.crewMembers) {
+      await database.insert(_TRIP_HAS_CREW_MEMBERS, {'trip_id': trip.id, 'crew_member_id': crewMember.id});
+    }
+  }
+  
+  Future<void> _removeCrewMembers(Trip trip) async {
+    await database.delete(_TRIP_HAS_CREW_MEMBERS,where: 'trip_id = ${trip.id}');
   }
 
   @override
@@ -38,6 +68,14 @@ class TripRepo extends DatabaseRepo<Trip> {
     final Vessel vessel = await VesselRepo().find(result['vessel_id']);
 
     final List<FishingSet> fishingSets = await FishingSetRepo().all(where: 'trip_id = ${result['id']}');
+    final Database db = DatabaseProvider().database;
+
+    final List<Map> results = await db.query('trip_has_crew_members', where: 'trip_id = ${result['id']}');
+    final List<CrewMember> crewMembers = [];
+    for(final Map result in results) {
+      final CrewMember crewMember = await CrewMemberRepo().find(result['crew_member_id']);
+      crewMembers.add(crewMember);
+    }
 
     return Trip(
       id: result['id'],
@@ -47,7 +85,7 @@ class TripRepo extends DatabaseRepo<Trip> {
       endedAt: result['ended_at'] == null ? null : DateTime.parse(result['ended_at']),
       endLocation: endLocation,
       skipper: skipper,
-      crewMembers: (jsonDecode(result['crew_members_json']) as List<dynamic>).map((name) => name.toString()).toList(),
+      crewMembers: crewMembers,
       notes: result['notes'],
       port: port,
       vessel: vessel,

@@ -1,249 +1,144 @@
-//import 'dart:html';
-import 'package:flutter_svg/svg.dart';
-import 'package:olrac_utils/olrac_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import '../widgets/weather_condition_button.dart';
-import 'home/home.dart';
+import 'package:olracddl/models/disposal.dart';
+import 'package:olracddl/models/retained_catch.dart';
+import 'package:olracddl/repos/disposal.dart';
+import 'package:olracddl/repos/retained_catch.dart';
+import 'package:olracddl/screens/add_disposal.dart';
+import 'package:olracddl/widgets/bread_crumb.dart';
+import 'package:olracddl/widgets/circle_button.dart';
 
+class DisposalsScreen extends StatefulWidget {
+  final int fishingSetID, tripID;
 
+  const DisposalsScreen({this.fishingSetID, this.tripID});
 
-class DisposalScreen extends StatefulWidget {
   @override
-  _DisposalScreenState createState() =>  _DisposalScreenState();
+  _DisposalsScreenState createState() => _DisposalsScreenState();
 }
 
-class  _DisposalScreenState extends State<DisposalScreen> {
-  final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  int _numberOfIndividuals;
-  String _date;
-  String _species;
-  String _disposal;
-  //LengthUnit _estimatedGreenWeight;
-  String _estimatedGreenWeight;
-
-
-  bool _allValid() {
-    if (_species == null) {
-      return false;
-    } else {
-      return true;
-    }
+class _DisposalsScreenState extends State<DisposalsScreen> {
+  Widget _breadcrumb() {
+    return Breadcrumb(
+      elements: [
+        BreadcrumbElement(
+          label: 'Trip ${widget.tripID}',
+          onPressed: () {
+            // magnitude
+            Navigator.pop(context);
+          },
+        ),
+        BreadcrumbElement(
+          label: 'Set ${widget.fishingSetID}',
+        ),
+        BreadcrumbElement(label: 'Disposals', onPressed: () {}),
+      ],
+    );
   }
-  Widget _dateInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Date, Time and Location',
-              style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                flex: 5,
-                child: TextField(
-                  //onChanged: (String name) => setState(() => _name = name),
-                  //keyboardType: TextInputType.text,
-                ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Container(
-                height: 40,
-                width: 40,
-                child: SvgPicture.asset(
-                  'assets/icons/image/location_icon.svg',
-                ),
-                padding: const EdgeInsets.all(1.0),
-              )
-            ],
-          )
-        ],
+
+  Widget _noDisposals() {
+    return Expanded(
+      child: Center(
+        child: Text(
+          'No Disposals Recorded',
+          style: Theme.of(context).textTheme.headline2,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
 
-  Widget _speciesInput() {
+  Widget _disposalsList(List<Disposal> disposalList) {
+    final headerStyle = Theme.of(context).textTheme.headline3;
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Species',
-              style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
-                ),
-              ),
+    final List<DataColumn> columns = [
+      DataColumn(label: Text('', style: headerStyle)),
+      DataColumn(label: Text('Species', style: headerStyle)),
+      DataColumn(label: Text('Dis.', style: headerStyle), numeric: true),
+      DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
+      DataColumn(label: Text('#', style: headerStyle), numeric: true),
+    ];
 
+    int i = 1;
+    final List<DataRow> rows = disposalList.map((Disposal disposal) {
+      final button = CircleButton(
+        text: (i).toString(),
+        onTap: () async {
+//          await Navigator.push(
+//            context,
+//            MaterialPageRoute(builder: (_) => RetainedInfoScreen(retainedCatchID: rc.id, indexID: i)),
+//          );
+          setState(() {});
+        },
+      );
 
-            ],
-          )
-        ],
-      ),
-    );
-  }
-  Widget _disposalInput() {
+      // increment list index
+      i++;
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Disposal State',
-              style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
-                ),
-              ),
+      return DataRow(cells: [
+        DataCell(button),
+        DataCell(Text(disposal.species.commonName)),
+        DataCell(Text(disposal.disposalState.name.substring(0, 1).toUpperCase())),
+        DataCell(Text((disposal.estimatedGreenWeight / 1000).toString())),
+        DataCell(Text(disposal.individuals.toString())),
+      ]);
+    }).toList();
 
-
-            ],
-          )
-        ],
+    return Expanded(
+      child: SingleChildScrollView(
+        child: DataTable(
+          columns: columns,
+          rows: rows,
+        ),
       ),
     );
   }
 
-  Widget _estimatedGreenWeightsInput() {
-    return Container(
-      width: 150,
-      //margin: const EdgeInsets.all(15),
-
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Text('Green Weight',
-              style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-
-
-          TextField(
-            onChanged: ( String name) => setState(() => _estimatedGreenWeight = (name)),
-            keyboardType: TextInputType.text,
-
-          )
-        ],
-      ),
+  Widget _bottomButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        StripButton(
+          labelText: 'Add Disposal',
+          onPressed: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (_) => AddDisposalScreen(widget.fishingSetID)));
+            setState(() {});
+          },
+        )
+      ],
     );
   }
-
-  Widget _numberOfIndividualInput() {
-    return Container(
-      width: 150,
-      //margin: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Number of Individuals',
-              style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          TextField(
-           // onChanged: (String name) => setState(() => _numberOfIndividuals = name),
-            keyboardType: TextInputType.text,
-
-
-
-          ),
-
-        ],
-      ),
-    );
-  }
-
 
   Widget _body() {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      child: Stack(
-        children: [
-          Container(
-              margin: const EdgeInsets.only(right: 12),
+    return FutureBuilder(
+      future: DisposalRepo().all(where: 'fishing_set_id = ${widget.fishingSetID}'),
+      builder: (context, AsyncSnapshot<List<Disposal>> snapshot) {
+        if (snapshot.hasError) {
+          throw snapshot.error;
+        }
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _dateInput(),
-                  _speciesInput(),
-                  _disposalInput(),
-                  _estimatedGreenWeightsInput(),
-                  _numberOfIndividualInput(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _saveButton(),
-                    ],
-                  ),
-                ],
-              )
-          ),
-        ],
-      ),
+        if (snapshot.data.isEmpty) {
+          return _noDisposals();
+        }
+
+        return _disposalsList(snapshot.data);
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      scaffoldKey: _scaffoldKey,
-      body: _body(),
-      actions: [
-        Expanded(child:
-        Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              BackButton(),
-              Text(
-                '       Disposals',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ]
-
-
-        ),)
-
-
-
-      ],
+      body: Column(
+        children: [
+          _breadcrumb(),
+          _body(),
+          _bottomButtons(),
+        ],
+      ),
     );
-  }
-  StripButton _saveButton() {
-    return StripButton(
-      color: _allValid() ? Theme.of(context).accentColor : Colors.lightBlue,
-      labelText: 'Save',
-      onPressed: () => _onPressSaveButton,
-    );
-  }
-
-  Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 }

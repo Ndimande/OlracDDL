@@ -75,10 +75,12 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(_currentModel.toMap()['image_string']),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        child: Image.asset(
+                          _currentModel.toMap()['imageString'],
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

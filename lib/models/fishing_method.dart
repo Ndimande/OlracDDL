@@ -19,6 +19,7 @@ class FishingMethod extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
+      'svgPath': svgPath,
       'abbreviation': abbreviation,
     };
   }

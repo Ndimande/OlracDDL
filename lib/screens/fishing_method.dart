@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:olrac_themes/olrac_themes.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import 'package:olracddl/data/fishing_methods.dart';
 import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/repos/fishing_method.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/svg_icon.dart';
 
@@ -61,33 +61,50 @@ class FishingMethodScreen extends StatelessWidget {
   dynamic chunk(list, int perChunk) =>
       list.isEmpty ? list : ([list.take(perChunk), ...chunk(list.skip(perChunk), perChunk)]);
 
+  Widget _fishingMethodGrid(List<FishingMethod> fishingMethods) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          final int columnCount = orientation == Orientation.portrait ? 2 : 4;
+          final rows = chunk(fishingMethods, columnCount);
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: rows.map<Widget>((fms) {
+              return Expanded(
+                child: Row(
+                  children: fms.map<Widget>((FishingMethod fm) {
+                    return Expanded(
+                      child: _buildFishingMethodCard(fm),
+                    );
+                  }).toList(),
+                ),
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<List<FishingMethod>> _getFishingMethods() async {
+    return await FishingMethodRepo().all();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       title: 'Fishing Method',
-      body: Container(
-        padding: const EdgeInsets.all(2),
-        child: OrientationBuilder(
-          builder: (context, orientation) {
-            final int columnCount = orientation == Orientation.portrait ? 2 : 4;
-            final rows = chunk(defaultFishingMethods, columnCount);
+      body: FutureBuilder(
+        future: FishingMethodRepo().all(),
+        builder: (context, AsyncSnapshot<List<FishingMethod>> snapshot) {
+          if(!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: rows.map<Widget>((fms) {
-                return Expanded(
-                  child: Row(
-                    children: fms.map<Widget>((FishingMethod fm) {
-                      return Expanded(
-                        child: _buildFishingMethodCard(fm),
-                      );
-                    }).toList(),
-                  ),
-                );
-              }).toList(),
-            );
-          },
-        ),
+          return _fishingMethodGrid(snapshot.data);
+        }
       ),
     );
   }

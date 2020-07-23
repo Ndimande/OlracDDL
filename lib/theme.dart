@@ -185,6 +185,12 @@ class OlracThemesLight {
         fontWeight: FontWeight.w900,
         color: OlracColoursLight.olspsDarkBlue,
       ),
+      //Table Heading
+      subtitle2: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w900,
+        color: OlracColoursLight.olspsDarkBlue,
+      ),
     ),
     appBarTheme: const AppBarTheme(
       color: OlracColoursLight.olspsTopGradientLight,

@@ -60,7 +60,7 @@ class FishingSetRepo extends DatabaseRepo<FishingSet> {
       linesUsed: result['lines_used'],
       notes: result['notes'],
       // related
-      tripId: result['trip_id'],
+      tripID: result['trip_id'],
       seaBottomType: seaBottomType,
       moonPhase: moonPhase,
       cloudType: cloudType,

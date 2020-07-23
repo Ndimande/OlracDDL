@@ -4,7 +4,6 @@ import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/cloud_cover.dart';
 import 'package:olracddl/models/cloud_type.dart';
 import 'package:olracddl/models/fishing_method.dart';
-import 'package:olracddl/models/fishing_set_event.dart';
 import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/models/sea_condition.dart';
 import 'package:olracddl/models/species.dart';
@@ -46,7 +45,7 @@ class FishingSet extends Model {
   String notes;
 
   /// The parent trip's ID
-  int tripId;
+  int tripID;
 
   /// The species targeted
   Species targetSpecies;
@@ -66,9 +65,6 @@ class FishingSet extends Model {
   /// The fishing method used
   FishingMethod fishingMethod;
 
-  /// The [FishingSetEvent]s that have this as a parent
-  List<FishingSetEvent> fishingSetEvents;
-
   /// The set creation time
   DateTime createdAt;
 
@@ -78,26 +74,37 @@ class FishingSet extends Model {
     this.endedAt,
     @required this.startLocation,
     this.endLocation,
-    this.seaBottomDepth,
-    this.seaBottomDepthUnit,
-    this.seaBottomType,
-    this.minimumHookSize,
+    @required this.seaBottomDepth,
+    @required this.seaBottomDepthUnit,
+    @required this.seaBottomType,
+    @required this.minimumHookSize,
     this.hooks,
     this.traps,
     this.linesUsed,
     this.notes,
-    this.tripId,
-    this.targetSpecies,
-    this.moonPhase,
-    this.cloudType,
-    this.cloudCover,
-    this.seaCondition,
+    @required this.tripID,
+    @required this.targetSpecies,
+    @required this.moonPhase,
+    @required this.cloudType,
+    @required this.cloudCover,
+    @required this.seaCondition,
     @required this.fishingMethod,
     this.createdAt,
-    this.fishingSetEvents,
   })  : assert(startedAt != null),
+        assert(startLocation != null),
+        assert(seaBottomDepth != null),
+        assert(seaBottomDepthUnit != null),
+        assert(seaBottomType != null),
+        assert(targetSpecies != null),
+        assert(moonPhase != null),
+        assert(cloudType != null),
+        assert(cloudCover != null),
+        assert(seaCondition != null),
+        assert(fishingMethod != null),
+
         super(id: id);
 
+  bool get isActive => endedAt == null;
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
@@ -118,14 +125,14 @@ class FishingSet extends Model {
       'lines_used': linesUsed,
       'notes': notes,
       // Related
-      'trip_id': tripId,
-      'sea_bottom_type_id': null,//seaBottomType.id,
-      'target_species_id': null,//targetSpecies.id,
-      'moon_phase_id': null,//moonPhase.id,
-      'cloud_type_id': null,//cloudType.id,
-      'cloud_cover_id': null,//cloudCover.id,
-      'sea_condition_id': null,//seaCondition.id,
-      'fishing_method_id': null,//fishingMethod.id,
+      'trip_id': tripID,
+      'sea_bottom_type_id': seaBottomType.id,
+      'target_species_id': targetSpecies.id,
+      'moon_phase_id': moonPhase.id,
+      'cloud_type_id': cloudType.id,
+      'cloud_cover_id': cloudCover.id,
+      'sea_condition_id': seaCondition.id,
+      'fishing_method_id': fishingMethod.id,
     };
   }
 
@@ -145,7 +152,7 @@ class FishingSet extends Model {
       'traps': traps,
       'lines_used': linesUsed,
       'notes': notes,
-      'tripID': tripId,
+      'tripID': tripID,
       'targetSpeciesID': targetSpecies.id,
       'moonPhaseID': moonPhase.id,
       'cloudTypeID': cloudType.id,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:database_repo/database_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/skipper.dart';
@@ -20,7 +21,7 @@ class Trip extends Model {
   Location endLocation;
 
   Skipper skipper;
-  List<String> crewMembers;
+  List<CrewMember> crewMembers;
   String notes;
 
   DateTime uploadedAt;
@@ -61,8 +62,10 @@ class Trip extends Model {
         assert(startLocation != null),
         super(id: id);
 
+
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
+
     return {
       'uuid': uuid,
       'started_at': startedAt.toIso8601String(),
@@ -72,7 +75,6 @@ class Trip extends Model {
       'end_latitude': endLocation != null ? endLocation.latitude : null,
       'end_longitude': endLocation != null ? endLocation.longitude : null,
       'skipper_id': skipper.id,
-      'crew_members_json': jsonEncode(crewMembers),
       'notes': notes,
       'uploaded_at': uploadedAt == null ? null : uploadedAt.toIso8601String(),
       'port_id': port.id,

@@ -15,7 +15,7 @@ class AppConfig {
   static final bool RESET_DATABASE = debugMode ? _DEV_RESET_DB : true;
 
   /// The title of the app
-  static const String APP_TITLE = 'OlracDDL';
+  static const String APP_TITLE = 'OlracMDDL';
 
   /// The sqlite database filename
   static const String DATABASE_FILENAME = 'olracddl.db';

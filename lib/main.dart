@@ -43,11 +43,11 @@ class _MyAppState extends State<MyApp> {
 
     _onAppRunning().then((_) async {
       // Delay to show logos
-      if (!AppConfig.debugMode) await Future.delayed(const Duration(seconds: 5));
+//      if (!AppConfig.debugMode)
+        await Future.delayed(const Duration(seconds: 5));
 
       if (AppData.profile != null) {
-        await _navigatorKey.currentState
-            .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => HomeScreen()));
+        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
       } else {
         await _navigatorKey.currentState
             .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => SignUpScreen()));
@@ -60,7 +60,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-          maintainState: false,
           builder: (_) {
             return SplashScreen();
           },
