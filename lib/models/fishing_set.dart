@@ -45,7 +45,7 @@ class FishingSet extends Model {
   String notes;
 
   /// The parent trip's ID
-  int tripId;
+  int tripID;
 
   /// The species targeted
   Species targetSpecies;
@@ -82,7 +82,7 @@ class FishingSet extends Model {
     this.traps,
     this.linesUsed,
     this.notes,
-    @required this.tripId,
+    @required this.tripID,
     @required this.targetSpecies,
     @required this.moonPhase,
     @required this.cloudType,
@@ -125,7 +125,7 @@ class FishingSet extends Model {
       'lines_used': linesUsed,
       'notes': notes,
       // Related
-      'trip_id': tripId,
+      'trip_id': tripID,
       'sea_bottom_type_id': seaBottomType.id,
       'target_species_id': targetSpecies.id,
       'moon_phase_id': moonPhase.id,
@@ -152,7 +152,7 @@ class FishingSet extends Model {
       'traps': traps,
       'lines_used': linesUsed,
       'notes': notes,
-      'tripID': tripId,
+      'tripID': tripID,
       'targetSpeciesID': targetSpecies.id,
       'moonPhaseID': moonPhase.id,
       'cloudTypeID': cloudType.id,

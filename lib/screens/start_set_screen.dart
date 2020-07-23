@@ -116,7 +116,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       fishingMethod: currentFishingMethod,
       notes: _notes,
       minimumHookSize: _minimumHookSize,
-      tripId: widget._tripID,
+      tripID: widget._tripID,
       cloudCover: _cloudCover,
       cloudType: _cloudType,
       seaBottomDepth: int.parse(_seaBottomDepth),

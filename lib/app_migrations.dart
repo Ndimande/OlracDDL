@@ -79,14 +79,6 @@ const List<Migration> appMigrations = <Migration>[
         ')',
   ),
   Migration(
-    name: 'create_disposal_states',
-    sql: 'CREATE TABLE disposal_states ( '
-        'id INTEGER PRIMARY KEY, '
-        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL '
-        ')',
-  ),
-  Migration(
     // refers to marine life condition
     name: 'create_conditions',
     sql: 'CREATE TABLE conditions ( '
@@ -154,7 +146,6 @@ const List<Migration> appMigrations = <Migration>[
         'end_latitude REAL, '
         'end_longitude REAL, '
         // other
-        'crew_members_json TEXT, '
         'notes TEXT, '
         'uploaded_at TIMESTAMP, '
         // Foreign keys
@@ -237,11 +228,12 @@ const List<Migration> appMigrations = <Migration>[
     individuals INTEGER,
     latitude REAL,
     longitude REAL, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
     species_id INTEGER,
     disposal_state_id INTEGER,
     fishing_set_id INTEGER, 
     FOREIGN KEY (fishing_set_id) REFERENCES fishing_sets (id),
-    FOREIGN KEY (disposal_state_id) REFERENCES disposal_states (id),
+    FOREIGN KEY (disposal_state_id) REFERENCES conditions (id),
     FOREIGN KEY (species_id) REFERENCES species (id)
     )
     '''),

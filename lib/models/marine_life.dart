@@ -44,7 +44,15 @@ class MarineLife extends Model {
 
   @override
   Map<String, dynamic> toMap() {
-    // TODO: implement toMap
-    throw UnimplementedError();
+    return <String, dynamic>{
+      'estimatedWeight': estimatedWeight,
+      'estimatedWeightUnit': estimatedWeightUnit.toString(),
+      'individuals': individuals,
+      'location': location.toMap(),
+      'tagNumber': tagNumber,
+      'species': species.toMap(),
+      'fishingSetID': fishingSetID,
+      'conditionID': condition.toMap()
+    };
   }
 }

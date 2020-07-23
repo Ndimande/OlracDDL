@@ -3,8 +3,10 @@ import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/repos/retained_catch.dart';
 import 'package:olracddl/screens/add_retained.dart';
+import 'package:olracddl/screens/retained_info_screen.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
+import 'package:olracddl/widgets/circle_button.dart';
 
 class RetainedScreen extends StatefulWidget {
   final int tripID, setID;
@@ -22,17 +24,10 @@ class _RetainedScreenState extends State<RetainedScreen> {
         BreadcrumbElement(
           label: 'Trip ${widget.tripID}',
           onPressed: () {
-            // magnitude
-            Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(
-          label: 'Set ${widget.setID}',
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        BreadcrumbElement(label: 'Set ${widget.setID}'),
         BreadcrumbElement(label: 'Retained'),
       ],
     );
@@ -62,11 +57,22 @@ class _RetainedScreenState extends State<RetainedScreen> {
 
     int i = 1;
     final List<DataRow> rows = retainedCatchList.map((RetainedCatch rc) {
+      final button = CircleButton(
+        text: (i).toString(),
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => RetainedInfoScreen(retainedCatchID: rc.id, indexID: i)),
+          );
+          setState(() {});
+        },
+      );
+
+      // increment list index
+      i++;
+
       return DataRow(cells: [
-        DataCell(CircleButton(
-          text: (i++).toString(),
-          onTap: () {print('test');},
-        )),
+        DataCell(button),
         DataCell(Text(rc.species.commonName)),
         DataCell(Text((rc.greenWeight / 1000).toString())),
         DataCell(Text(rc.individuals.toString())),
@@ -134,27 +140,4 @@ class _RetainedScreenState extends State<RetainedScreen> {
   }
 }
 
-class CircleButton extends StatelessWidget {
-  final GestureTapCallback onTap;
-  final String text;
 
-  const CircleButton({Key key, this.onTap, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    const double size = 35.0;
-
-    return InkResponse(
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: const BoxDecoration(color: OlracColoursLight.olspsDarkBlue, shape: BoxShape.circle),
-        child: Padding(
-          padding: const EdgeInsets.only(top:6,left:12),
-          child: Text(text,style: Theme.of(context).primaryTextTheme.headline6),
-        ),
-      ),
-    );
-  }
-}
