@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/port.dart';
@@ -16,6 +18,7 @@ import 'package:olracddl/repos/vessel.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/trip/trip_screen.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/add_crew_dialogbox.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
@@ -31,12 +34,13 @@ class StartTripScreen extends StatefulWidget {
 
 class _StartTripScreenState extends State<StartTripScreen> {
   _StartTripScreenState({this.startDatetime});
+
   DateTime startDatetime;
 
   Port _port;
   Vessel _vessel;
   Skipper _skipper;
-  List<String> _crewMembers = [];
+  List<CrewMember> _crewMembers = [];
   String _notes;
   Page _page = Page.One;
 
@@ -52,14 +56,19 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   bool _page2Valid() {
-    if(_skipper == null) {
+    if (_skipper == null) {
       return false;
     }
+
+    if(_crewMembers.isEmpty) {
+      return false;
+    }
+
     return true;
   }
 
   Future<void> _onPressSave() async {
-    if(!_page2Valid()) {
+    if (!_page2Valid()) {
       return;
     }
 
@@ -78,7 +87,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
 
     final int tripID = await TripRepo().store(newTrip);
 
-    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(_) => TripScreen(tripID)));
+    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
   }
 
   Widget _fishingMethodButton() {
@@ -94,7 +103,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
           color: OlracColoursLight.olspsDarkBlue,
           child: Text(snapshot.hasData ? snapshot.data.name : '', style: Theme.of(context).primaryTextTheme.headline5),
           onPressed: () async {
-            final FishingMethod fm = await Navigator.push(context,MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            final FishingMethod fm =
+                await Navigator.push(context, MaterialPageRoute(builder: (_) => FishingMethodScreen()));
             await CurrentFishingMethod.set(fm);
             setState(() {});
           },
@@ -144,9 +154,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           _notesInput(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _saveButton()
-            ],
+            children: [_saveButton()],
           ),
         ],
       ),
@@ -289,35 +297,107 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
-  Widget _crew() {
-    final title = Row(
-      children: [
-        Text('Crew', style: Theme.of(context).textTheme.headline3),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            setState(() {
-              _crewMembers.add('');
-            });
-          },
+  Widget _columnHeader(int flex, String header) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        margin: const EdgeInsets.only(right: 10),
+        child: Text(
+          header,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
+      ),
+    );
+  }
+
+  Widget _rowLayout(int flex, String info) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        margin: const EdgeInsets.only(right: 10),
+        child: Text(
+          info,
+          style: Theme.of(context).textTheme.headline3,
+        ),
+      ),
+    );
+  }
+
+  Widget _crewMemberRow(
+    int index,
+    String shortName,
+    String seamanId,
+    int mainRole,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _rowLayout(1, index.toString()),
+        _rowLayout(3, shortName),
+        _rowLayout(3, seamanId),
+        _rowLayout(2, mainRole.toString()),
       ],
     );
+  }
 
-    final textInputs = Column(
-      children: _crewMembers.map(
-        (String crewMember) {
-          return const Padding(
-            child: TextField(),
-            padding: EdgeInsets.symmetric(vertical: 3),
-          );
-        },
-      ).toList(),
+  Widget _noCrewMembersAdded() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 30),
+      child: Text(
+        'No Crew Members Added',
+        style: Theme.of(context).textTheme.headline3,
+      ),
     );
+  }
+
+  Widget _crewList() {
+    return Column(
+      children: _crewMembers.map((CrewMember cm) {
+        return _crewMemberRow(1, cm.name, '123', 2);
+      }).toList(),
+    );
+  }
+
+  Widget _crew() {
     return Column(
       children: [
-        title,
-        textInputs,
+        Row(
+          children: [
+            Text('Crew', style: Theme.of(context).textTheme.headline3),
+            InkWell(
+              onTap: () async {
+                final List<CrewMember> crewMembers = await showDialog<List<CrewMember>>(
+                  builder: (_) => AddCrewDialog(),
+                  context: context,
+                );
+                if (crewMembers != null) {
+                  setState(() {
+                    _crewMembers = crewMembers;
+                  });
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                child: SvgPicture.asset('assets/icons/image/add_icon.svg', height: 20, width: 20),
+              ),
+            ),
+          ],
+        ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _columnHeader(1, '#'),
+              _columnHeader(3, 'Name'),
+              _columnHeader(3, 'Seaman ID'),
+              _columnHeader(2, 'Role'),
+            ],
+          ),
+        ),
+        Container(
+          child: _crewMembers.isEmpty ? _noCrewMembersAdded() : _crewList(),
+        ),
       ],
     );
   }
@@ -326,14 +406,17 @@ class _StartTripScreenState extends State<StartTripScreen> {
     final title = Row(
       children: [
         Text('Notes', style: Theme.of(context).textTheme.headline3),
-        IconButton(icon: Icon(Icons.camera_alt),onPressed: (){},),
+        IconButton(
+          icon: const Icon(Icons.camera_alt),
+          onPressed: () {},
+        ),
       ],
     );
 
     return Column(
       children: [
         title,
-       const TextField(minLines: 2, maxLines: 4),
+        TextField(onChanged: (String text) => _notes = text, minLines: 2, maxLines: 4),
       ],
     );
   }

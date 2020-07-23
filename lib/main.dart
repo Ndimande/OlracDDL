@@ -43,7 +43,8 @@ class _MyAppState extends State<MyApp> {
 
     _onAppRunning().then((_) async {
       // Delay to show logos
-      if (!AppConfig.debugMode) await Future.delayed(const Duration(seconds: 5));
+//      if (!AppConfig.debugMode)
+        await Future.delayed(const Duration(seconds: 5));
 
       if (AppData.profile != null) {
         await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));

@@ -11,18 +11,21 @@ class DDLModelDropdown<T> extends StatelessWidget {
 
   final String hint;
 
+  final Color fieldColor;
+
   final TextStyle labelStyle;
 
   final bool labelTheme;
 
-  const DDLModelDropdown({
-    @required this.label,
+ DDLModelDropdown({
+    this.label,
     this.labelStyle,
     this.hint,
+    this.fieldColor,
     @required this.selected,
     @required this.onChanged,
     @required this.items,
-    @required this.labelTheme,
+    this.labelTheme = false,
   });
 
   @override
@@ -31,7 +34,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
+          if(label != null)Container(
             margin: const EdgeInsets.symmetric(
               vertical: 15,
             ),
@@ -43,9 +46,9 @@ class DDLModelDropdown<T> extends StatelessWidget {
             ),
           ),
           Container(
-            decoration: const ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
+            decoration: ShapeDecoration(
+              color: fieldColor?? Colors.white,
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
             ),
@@ -54,7 +57,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
                 alignedDropdown: true,
                   child: DropdownButton<T>(
                   hint: Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(0),
                     child: Text(
                       hint ?? 'Tap to select',
                       style: Theme.of(context).textTheme.bodyText2,

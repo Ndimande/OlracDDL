@@ -61,26 +61,21 @@ class FishingSetTile extends StatelessWidget {
   }
 
   Widget _indexNumber() {
-    return Builder(builder: (context){
-      return Column(children: [
-        Container(height: 20, child: fishingSet.isActive ? Icon(Icons.star,color: Colors.amber,size: 20) : Container()),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            fishingSet.id.toString(),
-            style: Theme.of(context).textTheme.headline1,
-          ),
-        )
-      ],);
-//      return Padding(
-//        padding: const EdgeInsets.all(8),
-//        child: Text(
-//          fishingSet.id.toString(),
-//          style: Theme.of(context).textTheme.headline1,
-//        ),
-//      );
+    return Builder(builder: (context) {
+      return Column(
+        children: [
+          Container(
+              height: 20, child: fishingSet.isActive ? const Icon(Icons.star, color: Colors.amber, size: 20) : Container()),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              fishingSet.id.toString(),
+              style: Theme.of(context).textTheme.headline1,
+            ),
+          )
+        ],
+      );
     });
-
   }
 
   @override

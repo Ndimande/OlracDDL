@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import 'package:olracddl/disposals.dart';
+import 'package:olracddl/screens/disposals.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/trip.dart';
+import 'package:olracddl/repos/fishing_set.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/marine_life.dart';
 import 'package:olracddl/screens/retained.dart';
 import 'package:olracddl/screens/start_set_screen.dart';
 import 'package:olracddl/screens/trip/trip_section.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/end_set_information_dialog.dart';
 import 'package:olracddl/widgets/end_trip_information_dialog.dart';
 import 'package:olracddl/widgets/fishing_set_tile.dart';
 
@@ -25,6 +28,10 @@ class TripScreen extends StatefulWidget {
 
 class _TripScreenState extends State<TripScreen> {
   Trip _trip;
+
+  FishingSet get activeSet {
+    return _trip.fishingSets.firstWhere((FishingSet fs) => fs.isActive, orElse: () => null);
+}
 
   Future<void> _onPressEndTrip() async {
     final Trip trip = await TripRepo().find(widget.tripID);
@@ -45,6 +52,27 @@ class _TripScreenState extends State<TripScreen> {
     setState(() {});
   }
 
+  Future<void> _onPressEndFishingSet() async {
+    // End set
+    final Map result = await showDialog(context: context,builder: (_){
+      return EndSetInformationDialog();
+    });
+    final DateTime endedAt = result['endedAt'];
+    final Location endLocation = result['endLocation'];
+    final int hooks = result['hooks'];
+    final int traps = result['traps'];
+    final int linesUsed = result['linesUsed'];
+
+    final FishingSet updatedSet = activeSet;
+    updatedSet.endedAt = endedAt;
+    updatedSet.endLocation = endLocation;
+    updatedSet.hooks = hooks;
+    updatedSet.traps = traps;
+    updatedSet.linesUsed = linesUsed;
+    await FishingSetRepo().store(updatedSet);
+    setState(() {});
+  }
+
   Widget _endTripButton() {
     return StripButton(
       color: OlracColoursLight.olspsRed,
@@ -53,7 +81,13 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  Widget _startFishingSet() {
+  Widget _fishingSetButton() {
+    if(activeSet != null) {
+      return StripButton(
+        labelText: 'End Set',
+        onPressed: _onPressEndFishingSet,
+      );
+    }
     return StripButton(
       labelText: 'Start Set',
       onPressed: _onPressStartFishingSet,
@@ -92,7 +126,8 @@ class _TripScreenState extends State<TripScreen> {
               );
             },
           );
-        });
+        },
+    );
   }
 
   Widget _body() {
@@ -108,7 +143,7 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Widget _bottomButtons() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [_startFishingSet(), _endTripButton()]);
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [_fishingSetButton(), _endTripButton()]);
   }
 
   @override

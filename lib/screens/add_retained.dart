@@ -1,7 +1,6 @@
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/models/retained_catch.dart';
@@ -10,8 +9,6 @@ import 'package:olracddl/repos/retained_catch.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
-import '../widgets/weather_condition_button.dart';
-import 'home/home.dart';
 
 class AddRetainedScreen extends StatefulWidget {
   final int fishingSetID;

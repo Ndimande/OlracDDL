@@ -4,7 +4,6 @@ import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/cloud_cover.dart';
 import 'package:olracddl/models/cloud_type.dart';
 import 'package:olracddl/models/fishing_method.dart';
-import 'package:olracddl/models/fishing_set_event.dart';
 import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/models/sea_condition.dart';
 import 'package:olracddl/models/species.dart';

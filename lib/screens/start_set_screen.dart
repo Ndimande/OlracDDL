@@ -1,32 +1,33 @@
 //import 'dart:html';
+import 'package:database_repo/database_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
-import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import 'package:olracddl/models/current_fishing_method.dart';
-import 'package:olracddl/models/fishing_method.dart';
-import 'package:olracddl/models/fishing_set.dart';
-import 'package:olracddl/models/sea_bottom_type.dart';
-import 'package:olracddl/models/species.dart';
 import 'package:olracddl/models/cloud_cover.dart';
 import 'package:olracddl/models/cloud_type.dart';
-import 'package:olracddl/models/sea_condition.dart';
+import 'package:olracddl/models/current_fishing_method.dart';
+import 'package:olracddl/models/fishing_area.dart';
+import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/moon_phase.dart';
-import 'package:olracddl/repos/fishing_set.dart';
-import 'package:olracddl/repos/sea_bottom_type.dart';
-import 'package:olracddl/repos/species.dart';
-import 'package:olracddl/repos/sea_condition.dart';
-import 'package:olracddl/repos/moon_phase.dart';
+import 'package:olracddl/models/sea_bottom_type.dart';
+import 'package:olracddl/models/sea_condition.dart';
+import 'package:olracddl/models/species.dart';
 import 'package:olracddl/repos/cloud_cover.dart';
 import 'package:olracddl/repos/cloud_type.dart';
+import 'package:olracddl/repos/fishing_area.dart';
+import 'package:olracddl/repos/fishing_set.dart';
+import 'package:olracddl/repos/moon_phase.dart';
+import 'package:olracddl/repos/sea_bottom_type.dart';
+import 'package:olracddl/repos/sea_condition.dart';
+import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/datetime_editor.dart';
 import 'package:olracddl/widgets/environment_dialog.dart';
 import 'package:olracddl/widgets/model_dropdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../widgets/weather_condition_button.dart';
 
 enum Page {
   One,
@@ -35,7 +36,9 @@ enum Page {
 
 class StartSetScreen extends StatefulWidget {
   final int _tripID;
+
   const StartSetScreen(this._tripID);
+
   @override
   _StartSetScreenState createState() => _StartSetScreenState();
 }
@@ -46,10 +49,10 @@ class _StartSetScreenState extends State<StartSetScreen> {
   /// When the set started
   DateTime _startedAt = DateTime.now();
 
-  String _fishingArea;
+  FishingArea _fishingArea;
 
   /// Sea bottom depth and unit
-  String _seaBottomDepth; //************ needs to be changed
+  String _seaBottomDepth;
 
   String _minimumHookSize;
 
@@ -165,21 +168,29 @@ class _StartSetScreenState extends State<StartSetScreen> {
     );
   }
 
-  Widget _fishingAreaInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Fishing Area (Statistical Rectangle)',
-              style: Theme.of(context).textTheme.headline3),
-          const SizedBox(height: 15),
-          TextField(
-            onChanged: (String name) => setState(() => _fishingArea = name),
-            keyboardType: TextInputType.text,
-          )
-        ],
-      ),
+  Widget _fishingAreaDropdown() {
+    return FutureBuilder(
+      future: FishingAreaRepo().all(),
+      builder: (context, AsyncSnapshot snapshot) {
+        if(snapshot.hasError) {
+          throw snapshot.error;
+        }
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+        return DDLModelDropdown<FishingArea>(
+          label: 'Fishing Area (Statistical Rectangle)',
+          items: snapshot.data.map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
+            return DropdownMenuItem<FishingArea>(value: fa, child: Text(fa.name));
+          }).toList(),
+          onChanged: (FishingArea fa) {
+            setState(() {
+              _fishingArea = fa;
+            });
+          },
+          selected: _fishingArea,
+        );
+      },
     );
   }
 
@@ -201,11 +212,13 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   Widget _seaBottomTypeDropdown() {
-    Future<List<SeaBottomType>> _getSeaBottomType() async => await SeaBottomTypeRepo().all();
 
     return FutureBuilder(
-      future: _getSeaBottomType(),
+      future: SeaBottomTypeRepo().all(),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          throw snapshot.error;
+        }
         if (!snapshot.hasData) {
           return Container();
         }
@@ -214,8 +227,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           labelTheme: false,
           selected: _seaBottomType,
           label: 'Sea Bottom Type',
-          onChanged: (SeaBottomType seaBottomType) =>
-              setState(() => _seaBottomType = seaBottomType),
+          onChanged: (SeaBottomType seaBottomType) => setState(() => _seaBottomType = seaBottomType),
           items: snapshot.data.map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
             return DropdownMenuItem<SeaBottomType>(value: sbt, child: Text(sbt.name));
           }).toList(),
@@ -256,8 +268,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
-            onChanged: (String minimumHookSize) =>
-                setState(() => _minimumHookSize = minimumHookSize),
+            onChanged: (String minimumHookSize) => setState(() => _minimumHookSize = minimumHookSize),
             keyboardType: TextInputType.text,
           )
         ],
@@ -272,9 +283,25 @@ class _StartSetScreenState extends State<StartSetScreen> {
         Text('Notes', style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         TextField(
-          onChanged: (String text ) => setState(()=> _notes),
+          onChanged: (String text) => setState(() => _notes = text),
         ),
       ],
+    );
+  }
+
+  Widget _paginator() {
+    return Container(
+      constraints: const BoxConstraints.expand(height: 38),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            '1/2',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          Positioned(child: _nextButton(), right: 0),
+        ],
+      ),
     );
   }
 
@@ -293,24 +320,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
             ),
           ),
           const SizedBox(height: 15),
-          _fishingAreaInput(),
+          _fishingAreaDropdown(),
           _seaBottomDepthInput(),
           _seaBottomTypeDropdown(),
           _minimumHookSizeInput(),
           const SizedBox(height: 15),
-          Container(
-            constraints: const BoxConstraints.expand(height: 38),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Text(
-                  '1/2',
-                  style: Theme.of(context).textTheme.headline2,
-                ),
-                Positioned(child: _nextButton(), right: 0),
-              ],
-            ),
-          ),
+          _paginator(),
         ],
       ),
     );
@@ -412,16 +427,10 @@ class _StartSetScreenState extends State<StartSetScreen> {
               color: Theme.of(context).primaryColor,
             ),
             borderRadius: BorderRadius.only(
-              topLeft:
-                  roundedCorner == RoundedCorner.topLeft ? const Radius.circular(15) : Radius.zero,
-              topRight:
-                  roundedCorner == RoundedCorner.topRight ? const Radius.circular(15) : Radius.zero,
-              bottomLeft: roundedCorner == RoundedCorner.bottomLeft
-                  ? const Radius.circular(15)
-                  : Radius.zero,
-              bottomRight: roundedCorner == RoundedCorner.bottomRight
-                  ? const Radius.circular(15)
-                  : Radius.zero,
+              topLeft: roundedCorner == RoundedCorner.topLeft ? const Radius.circular(15) : Radius.zero,
+              topRight: roundedCorner == RoundedCorner.topRight ? const Radius.circular(15) : Radius.zero,
+              bottomLeft: roundedCorner == RoundedCorner.bottomLeft ? const Radius.circular(15) : Radius.zero,
+              bottomRight: roundedCorner == RoundedCorner.bottomRight ? const Radius.circular(15) : Radius.zero,
             ),
             color: Colors.white,
           ),

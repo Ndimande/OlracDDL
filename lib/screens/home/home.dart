@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onPressActiveTripButton() async {
     await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
+    setState(() {});
   }
 
   Widget _trips() {
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_activeTrip != null) {
       allTrips.add(_activeTrip);
     }
-    allTrips.addAll(_completedTrips);
+    allTrips.addAll(_completedTrips.reversed);
 
     if (allTrips.isEmpty) {
       return Center(

@@ -3,6 +3,7 @@ import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/repos/retained_catch.dart';
 import 'package:olracddl/screens/add_retained.dart';
+import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
 
 class RetainedScreen extends StatefulWidget {
@@ -49,25 +50,57 @@ class _RetainedScreenState extends State<RetainedScreen> {
     );
   }
 
-  Widget _catchListItem(RetainedCatch rc) {
-    return Text(rc.species.commonName, style: Theme.of(context).textTheme.headline3);
+  Widget _catchList(List<RetainedCatch> retainedCatchList) {
+    final headerStyle = Theme.of(context).textTheme.headline3;
+
+    final List<DataColumn> columns = [
+      DataColumn(label: Text('', style: headerStyle)),
+      DataColumn(label: Text('Species', style: headerStyle)),
+      DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
+      DataColumn(label: Text('#', style: headerStyle), numeric: true),
+    ];
+
+    int i = 1;
+    final List<DataRow> rows = retainedCatchList.map((RetainedCatch rc) {
+      return DataRow(cells: [
+        DataCell(CircleButton(
+          text: (i++).toString(),
+          onTap: () {print('test');},
+        )),
+        DataCell(Text(rc.species.commonName)),
+        DataCell(Text((rc.greenWeight / 1000).toString())),
+        DataCell(Text(rc.individuals.toString())),
+      ]);
+    }).toList();
+
+    return Expanded(
+      child: SingleChildScrollView(
+        child: DataTable(
+          columns: columns,
+          rows: rows,
+        ),
+      ),
+    );
   }
 
-  Widget _catchList() {
-    Future<List<RetainedCatch>> getRetainedCatch() async {
-      return await RetainedCatchRepo().all(where: 'fishing_set_id = ${widget.setID}');
-    }
-
+  Widget _body() {
     return FutureBuilder(
-      future: getRetainedCatch(),
+      future: RetainedCatchRepo().all(where: 'fishing_set_id = ${widget.setID}'),
       builder: (context, AsyncSnapshot<List<RetainedCatch>> snapshot) {
-        if (!snapshot.hasData || snapshot.data.isEmpty) {
+        if (snapshot.hasError) {
+          throw snapshot.error;
+        }
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+
+        if (snapshot.data.isEmpty) {
           return _noRetainedCatch();
         }
 
         final List<RetainedCatch> retainedCatchList = snapshot.data;
 
-        return Column(children: retainedCatchList.map((RetainedCatch rc) => _catchListItem(rc)).toList());
+        return _catchList(retainedCatchList);
       },
     );
   }
@@ -80,19 +113,9 @@ class _RetainedScreenState extends State<RetainedScreen> {
           labelText: 'Add Retained Catch',
           onPressed: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (_) => AddRetainedScreen(widget.setID)));
+            setState(() {});
           },
         )
-      ],
-    );
-  }
-
-  Widget _body() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _breadcrumb(),
-        Expanded(child: SingleChildScrollView(child: _catchList())),
-        _bottomButtons(),
       ],
     );
   }
@@ -100,7 +123,38 @@ class _RetainedScreenState extends State<RetainedScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      body: _body(),
+      body: Column(
+        children: [
+          _breadcrumb(),
+          _body(),
+          _bottomButtons(),
+        ],
+      ),
+    );
+  }
+}
+
+class CircleButton extends StatelessWidget {
+  final GestureTapCallback onTap;
+  final String text;
+
+  const CircleButton({Key key, this.onTap, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const double size = 35.0;
+
+    return InkResponse(
+      onTap: onTap,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: const BoxDecoration(color: OlracColoursLight.olspsDarkBlue, shape: BoxShape.circle),
+        child: Padding(
+          padding: const EdgeInsets.only(top:6,left:12),
+          child: Text(text,style: Theme.of(context).primaryTextTheme.headline6),
+        ),
+      ),
     );
   }
 }

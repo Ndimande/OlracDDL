@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:olrac_themes/olrac_themes.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import 'package:olracddl/data/fishing_methods.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/repos/fishing_method.dart';
 import 'package:olracddl/theme.dart';

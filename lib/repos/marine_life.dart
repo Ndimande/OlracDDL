@@ -1,8 +1,6 @@
 import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/catch_condition.dart';
-import 'package:olracddl/models/crew_member.dart';
-import 'package:olracddl/models/marine_life.dart';
 import 'package:olracddl/models/marine_life.dart';
 import 'package:olracddl/models/species.dart';
 import 'package:olracddl/providers/database.dart';

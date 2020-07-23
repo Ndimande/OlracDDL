@@ -18,10 +18,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// First and last name
-  String _username = AppConfig.debugMode ? 'debugMode': '';
+  String _username = AppConfig.debugMode ? 'debugmode': '';
 
   /// Email address
-  String _email = AppConfig.debugMode ? 'debug@mode': '';
+  String _email = AppConfig.debugMode ? 'debugmode': '';
 
   Country _country;
 
