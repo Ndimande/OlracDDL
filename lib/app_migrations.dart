@@ -124,7 +124,9 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE skippers ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL '
+        'short_name TEXT UNIQUE NOT NULL, '
+        'name TEXT UNIQUE NOT NULL, '
+        'seaman_id TEXT UNIQUE NOT NULL '
         ')',
   ),
   Migration(
@@ -301,19 +303,19 @@ const List<Migration> appMigrations = <Migration>[
     (9, 'Terceira')
   '''),
   Migration(name: 'populate_skippers', sql: '''
-    INSERT INTO skippers (id, name) VALUES
-    (1, 'José Mourinho'),
-    (2, 'Cristiano Ronaldo')
+    INSERT INTO skippers (id, short_name, name, seaman_id) VALUES
+    (1,'Lázaro Silva','Lázaro Miguel Lima Pires da Silva','1322'),
+    (2,'Hélio Leonardo','Hélio Miguel Bettencourt Leonardo','4761'),
+    (3,'José Pacheco','José Leonardo Pacheco','4077')
   '''),
     Migration(name: 'populate_crew_members', sql: '''
     INSERT INTO crew_members (id, short_name, name, seaman_id) VALUES
     (1,'Lázaro Silva','Lázaro Miguel Lima Pires da Silva','1322'),
     (2,'Hélio Leonardo','Hélio Miguel Bettencourt Leonardo','4761'),
     (3,'José Vieira','José António Correia Vieira','11565'),
-    (4,'José Pacheco','José Leonardo Pacheco','4077'),
-    (5,'Paulo Leal','Paulo Alexandre da Silva Leal','4512'),
-    (6,'Durval Costa','Durval Manuel Ferreira Costa','219'),
-    (7,'Rogério Silva','Rogério Miguel Espinola Silva','???')
+    (4,'Paulo Leal','Paulo Alexandre da Silva Leal','4512'),
+    (5,'Durval Costa','Durval Manuel Ferreira Costa','219'),
+    (6,'Rogério Silva','Rogério Miguel Espinola Silva','???')
   '''),
   Migration(name: 'populate_countries', sql: '''
     INSERT INTO countries (id, name) VALUES
