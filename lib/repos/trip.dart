@@ -48,9 +48,9 @@ class TripRepo extends DatabaseRepo<Trip> {
       await database.insert(_TRIP_HAS_CREW_MEMBERS, {'trip_id': trip.id, 'crew_member_id': crewMember.id});
     }
   }
-  
+
   Future<void> _removeCrewMembers(Trip trip) async {
-    await database.delete(_TRIP_HAS_CREW_MEMBERS,where: 'trip_id = ${trip.id}');
+    await database.delete(_TRIP_HAS_CREW_MEMBERS, where: 'trip_id = ${trip.id}');
   }
 
   @override
@@ -72,7 +72,7 @@ class TripRepo extends DatabaseRepo<Trip> {
 
     final List<Map> results = await db.query('trip_has_crew_members', where: 'trip_id = ${result['id']}');
     final List<CrewMember> crewMembers = [];
-    for(final Map result in results) {
+    for (final Map result in results) {
       final CrewMember crewMember = await CrewMemberRepo().find(result['crew_member_id']);
       crewMembers.add(crewMember);
     }

@@ -38,11 +38,11 @@ class Profile {
     }
     final resultJson = jsonDecode(results.first['json'] as String);
 
-    return Profile(uuid: resultJson['uuid'] as String,
+    return Profile(
+        uuid: resultJson['uuid'] as String,
         username: resultJson['username'] as String,
         email: resultJson['email'] as String,
-        country: Country.fromMap(resultJson['country'] as Map)
-    );
+        country: Country.fromMap(resultJson['country'] as Map));
   }
 
   static Future<void> set(Profile profile) async {

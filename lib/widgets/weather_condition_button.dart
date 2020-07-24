@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 
-
-
-
-
 class WeatherConditionButton extends StatelessWidget {
-
-  Widget weatherConditionItem(String imagePath){
-    return
-    GestureDetector(
-          onTap: () {},
-          child: Container(
+  Widget weatherConditionItem(String imagePath) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                imagePath),
+            image: AssetImage(imagePath),
             fit: BoxFit.fill,
           ),
         ),
       ),
     );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +21,13 @@ class WeatherConditionButton extends StatelessWidget {
       height: 220, //should I use media Query for this?
       width: 300, //should I use media Query for this?
       child: GridView.count(
-        childAspectRatio: 1.4533/1,
-        crossAxisCount: 2, 
+        childAspectRatio: 1.4533 / 1,
+        crossAxisCount: 2,
         children: <Widget>[
           weatherConditionItem('assets/images/wave.png'),
-          weatherConditionItem('assets/images/cloud.png'), 
-          weatherConditionItem('assets/images/partly_clouded.png'), 
-          weatherConditionItem('assets/images/moon_phase.png'), 
+          weatherConditionItem('assets/images/cloud.png'),
+          weatherConditionItem('assets/images/partly_clouded.png'),
+          weatherConditionItem('assets/images/moon_phase.png'),
         ],
       ),
     );

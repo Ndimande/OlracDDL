@@ -101,10 +101,10 @@ class FishingSet extends Model {
         assert(cloudCover != null),
         assert(seaCondition != null),
         assert(fishingMethod != null),
-
         super(id: id);
 
   bool get isActive => endedAt == null;
+
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {

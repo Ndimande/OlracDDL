@@ -62,10 +62,8 @@ class Trip extends Model {
         assert(startLocation != null),
         super(id: id);
 
-
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
-
     return {
       'uuid': uuid,
       'started_at': startedAt.toIso8601String(),
