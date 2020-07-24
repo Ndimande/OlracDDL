@@ -864,12 +864,4 @@ const List<Migration> appMigrations = <Migration>[
     (8, "Drifting Longline", "assets/icons/fishing_methods/Oltrace_Drift_Longline.svg", "LLD")
   ''',
   ),
-  Migration(
-    name: 'populate_crew_members',
-    sql: '''
-    INSERT INTO crew_members (id, name) VALUES
-    (1, 'Crew Member 1'),
-    (2, 'Crew Member 2')
-  ''',
-  ),
 ];
