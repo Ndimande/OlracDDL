@@ -10,8 +10,8 @@ import 'package:olracddl/repos/catch_condition.dart';
 import 'package:olracddl/repos/disposal.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
-import 'package:olracddl/widgets/datetime_editor.dart';
-import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 class AddDisposalScreen extends StatefulWidget {
   final int fishingSetID;
@@ -244,7 +244,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
       fishingSetID: widget.fishingSetID,
       createdAt: _createdAt,
       disposalState: _disposalState,
-      estimatedGreenWeight: int.parse(_estimatedGreenWeight),
+      estimatedGreenWeight: int.parse(_estimatedGreenWeight) * 1000,
       estimatedGreenWeightUnit: WeightUnit.GRAMS,
     );
 

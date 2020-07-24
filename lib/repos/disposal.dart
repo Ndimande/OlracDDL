@@ -12,28 +12,14 @@ class DisposalRepo extends DatabaseRepo<Disposal> {
 
   @override
   Future<Disposal> fromDatabaseResult(Map<String, dynamic> result) async {
-    print('a');
     final Species species = await SpeciesRepo().find(result['species_id']);
-    print('b');
+
     final CatchCondition catchCondition = await CatchConditionRepo().find(result['disposal_state_id']);
-    print('c');
+
     assert(species != null);
     assert(catchCondition != null);
-    print('L');
-    print([
-      result['id'],
-      result['estimated_green_weight'],
-      result['estimated_green_weight_unit'],
-      result['individuals'],
-      result['latitude'],
-      result['longitude'],
-      result['created_at'],
-      result['fishing_set_id'],
-      species,
-      catchCondition,
-    ].toString());
-    print('asd');
-    var x=  Disposal(
+
+    return Disposal(
       id: result['id'] as int,
       estimatedGreenWeight: result['estimated_green_weight'] as int,
       estimatedGreenWeightUnit: weightUnitFromString(result['estimated_green_weight_unit']),
@@ -44,8 +30,5 @@ class DisposalRepo extends DatabaseRepo<Disposal> {
       disposalState: catchCondition,
       fishingSetID: result['fishing_set_id'],
     );
-    print('d');
-    print(x);
-    return x;
   }
 }

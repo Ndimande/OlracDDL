@@ -27,7 +27,7 @@ class FishingMethod extends Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'id':id,
+      'id': id,
       'name': name,
       'abbreviation': abbreviation,
       'svgPath': svgPath,

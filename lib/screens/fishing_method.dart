@@ -97,15 +97,14 @@ class FishingMethodScreen extends StatelessWidget {
     return WestlakeScaffold(
       title: 'Fishing Method',
       body: FutureBuilder(
-        future: FishingMethodRepo().all(),
-        builder: (context, AsyncSnapshot<List<FishingMethod>> snapshot) {
-          if(!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
+          future: FishingMethodRepo().all(),
+          builder: (context, AsyncSnapshot<List<FishingMethod>> snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            }
 
-          return _fishingMethodGrid(snapshot.data);
-        }
-      ),
+            return _fishingMethodGrid(snapshot.data);
+          }),
     );
   }
 }

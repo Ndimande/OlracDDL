@@ -25,9 +25,9 @@ import 'package:olracddl/repos/sea_bottom_type.dart';
 import 'package:olracddl/repos/sea_condition.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
-import 'package:olracddl/widgets/datetime_editor.dart';
-import 'package:olracddl/widgets/environment_dialog.dart';
-import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:olracddl/widgets/dialogs/environment_dialog.dart';
+import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 enum Page {
   One,
@@ -172,7 +172,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
     return FutureBuilder(
       future: FishingAreaRepo().all(),
       builder: (context, AsyncSnapshot snapshot) {
-        if(snapshot.hasError) {
+        if (snapshot.hasError) {
           throw snapshot.error;
         }
         if (!snapshot.hasData) {
@@ -212,7 +212,6 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   Widget _seaBottomTypeDropdown() {
-
     return FutureBuilder(
       future: SeaBottomTypeRepo().all(),
       builder: (context, snapshot) {

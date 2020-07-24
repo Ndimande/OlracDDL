@@ -5,9 +5,9 @@ import 'package:olracddl/app_data.dart';
 import 'package:olracddl/app_migrations.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/database.dart';
-import 'package:olracddl/screens/home/home.dart';
-import 'package:olracddl/screens/sign_up/sign_up.dart';
-import 'package:olracddl/screens/splash_screen.dart';
+import 'package:olracddl/screens/home.dart';
+import 'package:olracddl/screens/sign_up.dart';
+import 'package:olracddl/screens/splash.dart';
 import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -44,10 +44,11 @@ class _MyAppState extends State<MyApp> {
     _onAppRunning().then((_) async {
       // Delay to show logos
 //      if (!AppConfig.debugMode)
-        await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
 
       if (AppData.profile != null) {
-        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
+        await _navigatorKey.currentState
+            .pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
       } else {
         await _navigatorKey.currentState
             .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => SignUpScreen()));

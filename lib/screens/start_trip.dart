@@ -16,11 +16,11 @@ import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/repos/vessel.dart';
 import 'package:olracddl/screens/fishing_method.dart';
-import 'package:olracddl/screens/trip/trip_screen.dart';
+import 'package:olracddl/screens/trip.dart';
 import 'package:olracddl/theme.dart';
-import 'package:olracddl/widgets/add_crew_dialogbox.dart';
-import 'package:olracddl/widgets/datetime_editor.dart';
-import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:olracddl/widgets/dialogs/add_crew_dialogbox.dart';
+import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
 
 enum Page { One, Two }
@@ -60,7 +60,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
       return false;
     }
 
-    if(_crewMembers.isEmpty) {
+    if (_crewMembers.isEmpty) {
       return false;
     }
 
@@ -105,7 +105,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
           onPressed: () async {
             final FishingMethod fm =
                 await Navigator.push(context, MaterialPageRoute(builder: (_) => FishingMethodScreen()));
-            await CurrentFishingMethod.set(fm);
+            if (fm != null) {
+              await CurrentFishingMethod.set(fm);
+            }
             setState(() {});
           },
         );

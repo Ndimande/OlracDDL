@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 
-import 'home/home.dart';
-
-
+import '../home.dart';
 
 class AddMarineLifeScreen extends StatefulWidget {
   @override
-  _AddMarineLifeScreenState createState() =>  _AddMarineLifeScreenState();
+  _AddMarineLifeScreenState createState() => _AddMarineLifeScreenState();
 }
 
 class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
@@ -18,11 +16,10 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   String _date;
   String _species;
   String _condition;
+
   //LengthUnit _estimatedGreenWeight;
   String _estimatedGreenWeight;
   String _tagNumber;
-
-
 
   bool _allValid() {
     if (_species == null) {
@@ -31,23 +28,22 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
       return true;
     }
   }
+
   Widget _dateInput() {
     return Container(
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date, Time and Location',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Date, Time and Location', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
                 flex: 5,
                 child: TextField(
-                  //onChanged: (String name) => setState(() => _name = name),
-                  //keyboardType: TextInputType.text,
-                ),
+                    //onChanged: (String name) => setState(() => _name = name),
+                    //keyboardType: TextInputType.text,
+                    ),
               ),
               SizedBox(
                 width: 5,
@@ -68,14 +64,12 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   }
 
   Widget _speciesInput() {
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Species',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Species', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
@@ -90,23 +84,20 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
                   ),
                 ),
               ),
-
-
             ],
           )
         ],
       ),
     );
   }
-  Widget _conditionInput() {
 
+  Widget _conditionInput() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Condition',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Condition', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
           Row(
             children: <Widget>[
@@ -121,8 +112,6 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
                   ),
                 ),
               ),
-
-
             ],
           )
         ],
@@ -134,20 +123,14 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     return Container(
       width: 150,
       margin: const EdgeInsets.all(10),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Text('Estimated Weight',
-              style: Theme.of(context).textTheme.headline2),
+          Text('Estimated Weight', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 15),
-
-
           TextField(
-            onChanged: ( String name) => setState(() => _estimatedGreenWeight = (name)),
+            onChanged: (String name) => setState(() => _estimatedGreenWeight = (name)),
             keyboardType: TextInputType.text,
-
           )
         ],
       ),
@@ -155,15 +138,13 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   }
 
   Widget _tagNumberInput() {
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Tag Number',
-              style: Theme.of(context).textTheme.headline2),
-        //  const SizedBox(height: 15),
+          Text('Tag Number', style: Theme.of(context).textTheme.headline2),
+          //  const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
@@ -177,15 +158,12 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
                   ),
                 ),
               ),
-
-
             ],
           )
         ],
       ),
     );
   }
-
 
   Widget _body() {
     return Container(
@@ -196,7 +174,6 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
         children: [
           Container(
               margin: const EdgeInsets.only(right: 12),
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,8 +190,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
                     ],
                   ),
                 ],
-              )
-          ),
+              )),
         ],
       ),
     );
@@ -226,24 +202,19 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
       scaffoldKey: _scaffoldKey,
       body: _body(),
       actions: [
-        Expanded(child:
-        Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              BackButton(),
-              Text(
-                '      Marine Life',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ]
-
-
-        ),)
-
-
-
+        Expanded(
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            BackButton(),
+            Text(
+              '      Marine Life',
+              style: Theme.of(context).textTheme.headline1,
+            ),
+          ]),
+        )
       ],
     );
   }
+
   StripButton _saveButton() {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : Colors.lightBlue,
@@ -253,7 +224,6 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   }
 
   Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 }

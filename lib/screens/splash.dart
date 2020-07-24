@@ -112,16 +112,17 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(height: _screenHeight * 0.03),
             _customisedFor(),
             SizedBox(height: _screenHeight * 0.02),
-            Column(children: [
-              Image.asset(
-                      'assets/images/sponsor_logo1.png',
-                      height: 50,
-                      width: 150,
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
+            Column(
+              children: [
                 Image.asset(
+                  'assets/images/sponsor_logo1.png',
+                  height: 50,
+                  width: 150,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
                       'assets/images/sponsor_logo2.png',
                       height: 100,
                       width: 100,
@@ -131,8 +132,10 @@ class _SplashScreenState extends State<SplashScreen> {
                       height: 170,
                       width: 170,
                     ),
-              ],),
-            ],),
+                  ],
+                ),
+              ],
+            ),
             SizedBox(height: _screenHeight * 0.02),
           ],
         ),

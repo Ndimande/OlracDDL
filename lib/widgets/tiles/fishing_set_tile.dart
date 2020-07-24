@@ -65,7 +65,8 @@ class FishingSetTile extends StatelessWidget {
       return Column(
         children: [
           Container(
-              height: 20, child: fishingSet.isActive ? const Icon(Icons.star, color: Colors.amber, size: 20) : Container()),
+              height: 20,
+              child: fishingSet.isActive ? const Icon(Icons.star, color: Colors.amber, size: 20) : Container()),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(

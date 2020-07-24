@@ -33,7 +33,7 @@ class TripTile extends StatelessWidget {
 
   Widget _uploadIcon() {
     final String imagePath =
-    trip.isUploaded ? 'assets/images/successful_upload_icon.png' : 'assets/images/upload_required_icon.png';
+        trip.isUploaded ? 'assets/images/successful_upload_icon.png' : 'assets/images/upload_required_icon.png';
     return Container(
       margin: const EdgeInsets.all(25),
       height: 45,
@@ -67,7 +67,6 @@ class TripTile extends StatelessWidget {
     });
   }
 
-
   Widget _indexNumber() {
     return Builder(builder: (context) {
       return Padding(
@@ -90,17 +89,15 @@ class TripTile extends StatelessWidget {
         onPressed: onPressed,
         child: Stack(
           children: [
-            if(trip.isActive) _activeStar(),
+            if (trip.isActive) _activeStar(),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      _indexNumber(),
-                      _details(),
-                    ]
-                  ),
+                  Row(children: [
+                    _indexNumber(),
+                    _details(),
+                  ]),
                   _uploadIcon(),
                 ],
               ),

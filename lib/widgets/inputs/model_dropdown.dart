@@ -17,7 +17,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
 
   final bool labelTheme;
 
- DDLModelDropdown({
+  DDLModelDropdown({
     this.label,
     this.labelStyle,
     this.hint,
@@ -34,20 +34,21 @@ class DDLModelDropdown<T> extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if(label != null)Container(
-            margin: const EdgeInsets.symmetric(
-              vertical: 15,
+          if (label != null)
+            Container(
+              margin: const EdgeInsets.symmetric(
+                vertical: 15,
+              ),
+              child: Text(
+                label,
+                style: labelStyle ?? labelTheme
+                    ? Theme.of(context).textTheme.headline2
+                    : Theme.of(context).textTheme.headline3,
+              ),
             ),
-            child: Text(
-              label,
-              style: labelStyle ?? labelTheme
-                  ? Theme.of(context).textTheme.headline2
-                  : Theme.of(context).textTheme.headline3,
-            ),
-          ),
           Container(
             decoration: ShapeDecoration(
-              color: fieldColor?? Colors.white,
+              color: fieldColor ?? Colors.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
@@ -55,7 +56,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: ButtonTheme(
                 alignedDropdown: true,
-                  child: DropdownButton<T>(
+                child: DropdownButton<T>(
                   hint: Padding(
                     padding: const EdgeInsets.all(0),
                     child: Text(
@@ -78,36 +79,34 @@ class DDLModelDropdown<T> extends StatelessWidget {
   }
 }
 
-
-  //   items: <DropdownMenuItem>[
-  //     DropdownMenuItem(
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.green,
-  //           borderRadius: BorderRadius.only(
-  //             topLeft: Radius.circular(15.0),
-  //             topRight: Radius.circular(15.0),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     DropdownMenuItem(
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.green,
-  //         ),
-  //       ),
-  //     ),
-  //     DropdownMenuItem(
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //         color: Colors.green,
-  //         borderRadius: BorderRadius.only(
-  //           bottomLeft: Radius.circular(15.0),
-  //           bottomRight: Radius.circular(15.0),
-  //         ),
-  //       ),
-  //     ),
-  //   ),
-  // ],
-
+//   items: <DropdownMenuItem>[
+//     DropdownMenuItem(
+//       child: Container(
+//         decoration: BoxDecoration(
+//           color: Colors.green,
+//           borderRadius: BorderRadius.only(
+//             topLeft: Radius.circular(15.0),
+//             topRight: Radius.circular(15.0),
+//           ),
+//         ),
+//       ),
+//     ),
+//     DropdownMenuItem(
+//       child: Container(
+//         decoration: BoxDecoration(
+//           color: Colors.green,
+//         ),
+//       ),
+//     ),
+//     DropdownMenuItem(
+//       child: Container(
+//         decoration: BoxDecoration(
+//         color: Colors.green,
+//         borderRadius: BorderRadius.only(
+//           bottomLeft: Radius.circular(15.0),
+//           bottomRight: Radius.circular(15.0),
+//         ),
+//       ),
+//     ),
+//   ),
+// ],

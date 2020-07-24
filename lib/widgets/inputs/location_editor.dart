@@ -85,10 +85,10 @@ class _CoordinatePicker extends StatelessWidget {
 
   const _CoordinatePicker(
       {@required this.orientation,
-        @required this.onPressConfirm,
-        @required this.decimalValue,
-        this.fieldColor,
-        this.subTitleStyle})
+      @required this.onPressConfirm,
+      @required this.decimalValue,
+      this.fieldColor,
+      this.subTitleStyle})
       : assert(orientation != null),
         assert(onPressConfirm != null),
         assert(decimalValue != null);
@@ -97,8 +97,7 @@ class _CoordinatePicker extends StatelessWidget {
     final int degrees = _degreesRange(orientation)[value[0]];
     final int minutes = _minutesRange[value[1]];
     final double seconds = _secondsRange[value[2]];
-    final CompassDirection compassDirection =
-    CoordinateOrientation.Latitude == orientation
+    final CompassDirection compassDirection = CoordinateOrientation.Latitude == orientation
         ? _LATITUDE_COMPASS_DIRECTION_INDEXES[value[3]]
         : _LONGITUDE_DIRECTION_INDEXES[value[3]];
 
@@ -118,10 +117,8 @@ class _CoordinatePicker extends StatelessWidget {
       builder: (BuildContext context) {
         return Container(
           child: Text(
-            orientation == CoordinateOrientation.Latitude
-                ? 'Latitude'
-                : 'Longitude',
-            style: subTitleStyle?? Theme.of(context).textTheme.headline3,
+            orientation == CoordinateOrientation.Latitude ? 'Latitude' : 'Longitude',
+            style: subTitleStyle ?? Theme.of(context).textTheme.headline3,
           ),
         );
       },
@@ -129,15 +126,13 @@ class _CoordinatePicker extends StatelessWidget {
   }
 
   Picker _picker() {
-    final coordinate = Coordinate.fromDecimal(
-        decimalValue: decimalValue, coordinateOrientation: orientation);
+    final coordinate = Coordinate.fromDecimal(decimalValue: decimalValue, coordinateOrientation: orientation);
 
     final List<int> degreesRange = _degreesRange(orientation);
 
     final int degreeIndex = degreesRange.indexOf(coordinate.degrees);
     final int minuteIndex = _minutesRange.indexOf(coordinate.minutes);
-    final int secondsIndex =
-    _secondsRange.indexOf(roundDouble(coordinate.seconds, decimals: 1));
+    final int secondsIndex = _secondsRange.indexOf(roundDouble(coordinate.seconds, decimals: 1));
 
     assert(degreeIndex != -1);
     assert(minuteIndex != -1);
@@ -152,22 +147,25 @@ class _CoordinatePicker extends StatelessWidget {
 
     return Picker(
       selecteds: selectedIndexes,
-      adapter: PickerDataAdapter<String>(
-          pickerdata: _pickerData(orientation), isArray: true),
+      adapter: PickerDataAdapter<String>(pickerdata: _pickerData(orientation), isArray: true),
       title: _title(),
       onConfirm: _onConfirm,
     );
   }
 
   @override
-  Widget build(BuildContext context,) {
+  Widget build(
+    BuildContext context,
+  ) {
     final Coordinate coordinate = Coordinate.fromDecimal(
       decimalValue: decimalValue,
       coordinateOrientation: orientation,
     );
 
     return Builder(
-      builder: (BuildContext context, ) {
+      builder: (
+        BuildContext context,
+      ) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -182,12 +180,10 @@ class _CoordinatePicker extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
-                      color: fieldColor?? Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      color: fieldColor ?? Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: Container(
                     margin: const EdgeInsets.only(left: 10),
-                    child: Text(coordinate.sexagesimalString,
-                        style: Theme.of(context).textTheme.headline3),
+                    child: Text(coordinate.sexagesimalString, style: Theme.of(context).textTheme.headline3),
                   )),
             ),
           ],
@@ -206,8 +202,7 @@ List<int> _degreesRange(CoordinateOrientation orientation) {
   return degrees;
 }
 
-List<String> _addSymbol(List<dynamic> numbers, String symbol) =>
-    numbers.map((e) => '${e.toString()} $symbol').toList();
+List<String> _addSymbol(List<dynamic> numbers, String symbol) => numbers.map((e) => '${e.toString()} $symbol').toList();
 
 List<int> get _minutesRange {
   final List<int> minutes = [];
@@ -236,11 +231,8 @@ const _LATITUDE_COMPASS_DIRECTION_INDEXES = <CompassDirection>[
 ];
 
 List<List<String>> _pickerData(CoordinateOrientation orientation) => [
-  _addSymbol(_degreesRange(orientation), '°'),
-  _addSymbol(_minutesRange, "'"),
-  _addSymbol(_secondsRange, "''"),
-  if (orientation == CoordinateOrientation.Latitude)
-    ['N', 'S']
-  else
-    ['E', 'W']
-];
+      _addSymbol(_degreesRange(orientation), '°'),
+      _addSymbol(_minutesRange, "'"),
+      _addSymbol(_secondsRange, "''"),
+      if (orientation == CoordinateOrientation.Latitude) ['N', 'S'] else ['E', 'W']
+    ];

@@ -34,12 +34,12 @@ class FishingSetRepo extends DatabaseRepo<FishingSet> {
     final Location startLocation = Location(latitude: result['start_latitude'], longitude: result['start_longitude']);
 
     Location endLocation;
-    if(result['end_latitude'] != null) {
+    if (result['end_latitude'] != null) {
       endLocation = Location(latitude: result['end_latitude'], longitude: result['end_longitude']);
     }
 
     DateTime endedAt;
-    if(result['ended_at'] != null) {
+    if (result['ended_at'] != null) {
       endedAt = DateTime.parse(result['ended_at']);
     }
     return FishingSet(

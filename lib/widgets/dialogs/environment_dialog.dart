@@ -20,6 +20,7 @@ class EnvironmentDialog extends StatefulWidget {
 
 class _EnvironmentDialogState extends State<EnvironmentDialog> {
   String get _title => widget.title;
+
   List<Model> get _models => widget.models;
 
   Model _currentModel;

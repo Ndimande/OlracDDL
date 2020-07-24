@@ -5,8 +5,8 @@ import 'package:olracddl/app_data.dart';
 import 'package:olracddl/models/country.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/repos/country.dart';
-import 'package:olracddl/screens/home/home.dart';
-import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:olracddl/screens/home.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -18,10 +18,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// First and last name
-  String _username = AppConfig.debugMode ? 'debugmode': '';
+  String _username = AppConfig.debugMode ? 'debugmode' : '';
 
   /// Email address
-  String _email = AppConfig.debugMode ? 'debugmode': '';
+  String _email = AppConfig.debugMode ? 'debugmode' : '';
 
   Country _country;
 
@@ -103,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return FutureBuilder(
       future: getCountries(),
       builder: (context, snapshot) {
-        if(!snapshot.hasData) {
+        if (!snapshot.hasData) {
           return const TextField();
         }
         final List<Country> countries = snapshot.data;
@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
       labelText: 'Save',
-      onPressed: _allValid() ?_onPressSaveButton:null,
+      onPressed: _allValid() ? _onPressSaveButton : null,
     );
   }
 

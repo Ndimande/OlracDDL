@@ -8,7 +8,7 @@ import 'package:olracddl/models/species.dart';
 import 'package:olracddl/repos/retained_catch.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
-import 'package:olracddl/widgets/model_dropdown.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 class AddRetainedScreen extends StatefulWidget {
   final int fishingSetID;
@@ -136,12 +136,12 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
       labelText: 'Save',
-      onPressed:_onPressSaveButton,
+      onPressed: _onPressSaveButton,
     );
   }
 
   Future<void> _onPressSaveButton() async {
-    if(!_allValid()) {
+    if (!_allValid()) {
       return;
     }
 

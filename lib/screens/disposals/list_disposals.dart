@@ -1,43 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
-import 'package:olracddl/models/retained_catch.dart';
-import 'package:olracddl/repos/retained_catch.dart';
-import 'package:olracddl/screens/add_retained.dart';
-import 'package:olracddl/screens/retained_info_screen.dart';
-import 'package:olracddl/theme.dart';
+import 'package:olracddl/models/disposal.dart';
+import 'package:olracddl/repos/disposal.dart';
+import 'package:olracddl/screens/disposals/add_disposal.dart';
+import 'package:olracddl/screens/disposals/show_disposal.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
 import 'package:olracddl/widgets/circle_button.dart';
 
-class RetainedScreen extends StatefulWidget {
-  final int tripID, setID;
+class ListDisposalsScreen extends StatefulWidget {
+  final int fishingSetID, tripID;
 
-  const RetainedScreen({this.tripID, this.setID});
+  const ListDisposalsScreen({this.fishingSetID, this.tripID});
 
   @override
-  _RetainedScreenState createState() => _RetainedScreenState();
+  _ListDisposalsScreenState createState() => _ListDisposalsScreenState();
 }
 
-class _RetainedScreenState extends State<RetainedScreen> {
+class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
   Widget _breadcrumb() {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
           label: 'Trip ${widget.tripID}',
           onPressed: () {
+            // magnitude
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: 'Set ${widget.setID}'),
-        BreadcrumbElement(label: 'Retained'),
+        BreadcrumbElement(
+          label: 'Set ${widget.fishingSetID}',
+        ),
+        BreadcrumbElement(label: 'Disposals', onPressed: () {}),
       ],
     );
   }
 
-  Widget _noRetainedCatch() {
+  Widget _noDisposals() {
     return Expanded(
       child: Center(
         child: Text(
-          'No Retained Catch\nRecorded',
+          'No Disposals Recorded',
           style: Theme.of(context).textTheme.headline2,
           textAlign: TextAlign.center,
         ),
@@ -45,24 +47,25 @@ class _RetainedScreenState extends State<RetainedScreen> {
     );
   }
 
-  Widget _catchList(List<RetainedCatch> retainedCatchList) {
+  Widget _disposalsList(List<Disposal> disposalList) {
     final headerStyle = Theme.of(context).textTheme.headline3;
 
     final List<DataColumn> columns = [
       DataColumn(label: Text('', style: headerStyle)),
       DataColumn(label: Text('Species', style: headerStyle)),
+      DataColumn(label: Text('Dis.', style: headerStyle), numeric: true),
       DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
       DataColumn(label: Text('#', style: headerStyle), numeric: true),
     ];
 
     int i = 1;
-    final List<DataRow> rows = retainedCatchList.map((RetainedCatch rc) {
+    final List<DataRow> rows = disposalList.map((Disposal disposal) {
       final button = CircleButton(
         text: (i).toString(),
         onTap: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => RetainedInfoScreen(retainedCatchID: rc.id, indexID: i)),
+            MaterialPageRoute(builder: (_) => ShowDisposalScreen(disposalID: disposal.id, indexID: i)),
           );
           setState(() {});
         },
@@ -73,9 +76,10 @@ class _RetainedScreenState extends State<RetainedScreen> {
 
       return DataRow(cells: [
         DataCell(button),
-        DataCell(Text(rc.species.commonName)),
-        DataCell(Text((rc.greenWeight / 1000).toString())),
-        DataCell(Text(rc.individuals.toString())),
+        DataCell(Text(disposal.species.commonName)),
+        DataCell(Text(disposal.disposalState.name.substring(0, 1).toUpperCase())),
+        DataCell(Text((disposal.estimatedGreenWeight / 1000).toString())),
+        DataCell(Text(disposal.individuals.toString())),
       ]);
     }).toList();
 
@@ -89,10 +93,25 @@ class _RetainedScreenState extends State<RetainedScreen> {
     );
   }
 
+  Widget _bottomButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        StripButton(
+          labelText: 'Add Disposal',
+          onPressed: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (_) => AddDisposalScreen(widget.fishingSetID)));
+            setState(() {});
+          },
+        )
+      ],
+    );
+  }
+
   Widget _body() {
     return FutureBuilder(
-      future: RetainedCatchRepo().all(where: 'fishing_set_id = ${widget.setID}'),
-      builder: (context, AsyncSnapshot<List<RetainedCatch>> snapshot) {
+      future: DisposalRepo().all(where: 'fishing_set_id = ${widget.fishingSetID}'),
+      builder: (context, AsyncSnapshot<List<Disposal>> snapshot) {
         if (snapshot.hasError) {
           throw snapshot.error;
         }
@@ -101,28 +120,11 @@ class _RetainedScreenState extends State<RetainedScreen> {
         }
 
         if (snapshot.data.isEmpty) {
-          return _noRetainedCatch();
+          return _noDisposals();
         }
 
-        final List<RetainedCatch> retainedCatchList = snapshot.data;
-
-        return _catchList(retainedCatchList);
+        return _disposalsList(snapshot.data);
       },
-    );
-  }
-
-  Widget _bottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        StripButton(
-          labelText: 'Add Retained Catch',
-          onPressed: () async {
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => AddRetainedScreen(widget.setID)));
-            setState(() {});
-          },
-        )
-      ],
     );
   }
 
@@ -139,5 +141,3 @@ class _RetainedScreenState extends State<RetainedScreen> {
     );
   }
 }
-
-

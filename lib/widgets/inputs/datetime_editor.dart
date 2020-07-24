@@ -36,8 +36,7 @@ class DateTimeEditor extends StatelessWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
       ),
-      onConfirm: (Picker picker, List<int> selectedIndices) =>
-          onChanged(picker, selectedIndices),
+      onConfirm: (Picker picker, List<int> selectedIndices) => onChanged(picker, selectedIndices),
     ).showModal(context);
   }
 
@@ -58,8 +57,7 @@ class DateTimeEditor extends StatelessWidget {
         Container(
           height: 50,
           decoration: BoxDecoration(
-              color: fieldColor?? Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(20))),
+              color: fieldColor ?? Colors.white, borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: FlatButton(
             padding: const EdgeInsets.all(0),
             onPressed: () => _onPressEditStartDateTime(context),

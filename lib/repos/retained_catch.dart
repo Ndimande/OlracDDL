@@ -13,14 +13,13 @@ class RetainedCatchRepo extends DatabaseRepo<RetainedCatch> {
     final WeightUnit greenWeightUnit = weightUnitFromString(result['green_weight_unit']);
     final Species species = await SpeciesRepo().find(result['species_id']);
     return RetainedCatch(
-      id: result['id'],
-      greenWeight: result['green_weight'],
-      greenWeightUnit: greenWeightUnit,
-      individuals: result['individuals'],
-      createdAt: DateTime.parse(result['created_at']),
-      location: Location(latitude: result['latitude'], longitude: result['longitude']),
-      species: species,
-      fishingSetID: result['fishing_set_id']
-    );
+        id: result['id'],
+        greenWeight: result['green_weight'],
+        greenWeightUnit: greenWeightUnit,
+        individuals: result['individuals'],
+        createdAt: DateTime.parse(result['created_at']),
+        location: Location(latitude: result['latitude'], longitude: result['longitude']),
+        species: species,
+        fishingSetID: result['fishing_set_id']);
   }
 }
