@@ -10,6 +10,8 @@ class CrewMemberRepo extends DatabaseRepo<CrewMember> {
     return CrewMember(
       id: result['id'],
       name: result['name'],
+      shortName: result['short_name'],
+      seamanId: result['seaman_id'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }
