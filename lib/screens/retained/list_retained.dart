@@ -80,9 +80,13 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
 
     return Expanded(
       child: SingleChildScrollView(
-        child: DataTable(
-          columns: columns,
-          rows: rows,
+        scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+                  child: DataTable(
+            columns: columns,
+            rows: rows,
+          ),
         ),
       ),
     );

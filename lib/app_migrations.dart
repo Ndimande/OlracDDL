@@ -244,12 +244,12 @@ const List<Migration> appMigrations = <Migration>[
   Migration(name: 'create_marine_life', sql: '''
     CREATE TABLE marine_life (
     id INTEGER PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
     estimated_weight INTEGER, 
     estimated_weight_unit TEXT, 
-    individuals INTEGER,
     latitude REAL,
     longitude REAL, 
-    tagNumber TEXT,
+    tag_number TEXT,
     species_id INTEGER,
     fishing_set_id INTEGER, 
     condition_id INTEGER,

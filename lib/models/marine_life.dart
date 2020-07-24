@@ -8,7 +8,7 @@ class MarineLife extends Model {
     int id,
     this.estimatedWeight,
     this.estimatedWeightUnit,
-    this.individuals,
+    //this.individuals,
     this.location,
     this.tagNumber,
     this.species,
@@ -19,7 +19,7 @@ class MarineLife extends Model {
 
   int estimatedWeight;
   WeightUnit estimatedWeightUnit;
-  int individuals;
+  //int individuals;
   Location location;
   String tagNumber;
   Species species;
@@ -32,7 +32,7 @@ class MarineLife extends Model {
     return <String, dynamic>{
       'estimated_weight': estimatedWeight,
       'estimated_weight_unit': estimatedWeightUnit.toString(),
-      'individuals': individuals,
+      //'individuals': individuals,
       'latitude': location.latitude,
       'longitude': location.longitude,
       'tag_number': tagNumber,
@@ -47,7 +47,7 @@ class MarineLife extends Model {
     return <String, dynamic>{
       'estimatedWeight': estimatedWeight,
       'estimatedWeightUnit': estimatedWeightUnit.toString(),
-      'individuals': individuals,
+      //'individuals': individuals,
       'location': location.toMap(),
       'tagNumber': tagNumber,
       'species': species.toMap(),

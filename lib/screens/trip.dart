@@ -131,7 +131,7 @@ class _TripScreenState extends State<TripScreen> {
           },
           onPressMarineLife: () async {
             await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => MarineLifeScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
+                MaterialPageRoute(builder: (_) => ListMarineLifeScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
           },
           onPressRetained: () async {
             await Navigator.push(

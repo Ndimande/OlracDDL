@@ -14,11 +14,14 @@ class MarineLifeRepo extends DatabaseRepo<MarineLife> {
   Future<MarineLife> fromDatabaseResult(Map<String, dynamic> result) async {
     final Species species = await SpeciesRepo().find(result['species_id']);
     final CatchCondition condition = await CatchConditionRepo().find(result['condition_id']);
+    print('test');
+
+
     return MarineLife(
       id: result['id'],
       estimatedWeight: result['estimated_weight'],
       estimatedWeightUnit: weightUnitFromString(result['estimated_weight_unit']),
-      individuals: result['individuals'],
+      //individuals: result['individuals'],
       location: Location(latitude: result['latitude'], longitude: result['longitude']),
       tagNumber: result['tag_number'],
       species: species,

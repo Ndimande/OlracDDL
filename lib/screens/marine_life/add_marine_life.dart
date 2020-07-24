@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:olrac_utils/olrac_utils.dart';
 
-import '../home.dart';
+import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/models/catch_condition.dart';
+import 'package:olracddl/models/marine_life.dart';
+import 'package:olracddl/models/species.dart';
+import 'package:olracddl/repos/catch_condition.dart';
+import 'package:olracddl/repos/marine_life.dart';
+import 'package:olracddl/repos/species.dart';
+import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
+
+import '../../theme.dart';
+
 
 class AddMarineLifeScreen extends StatefulWidget {
+
+  final int fishingSetID;
+
+    const AddMarineLifeScreen(this.fishingSetID);
+
   @override
   _AddMarineLifeScreenState createState() => _AddMarineLifeScreenState();
 }
@@ -12,76 +28,78 @@ class AddMarineLifeScreen extends StatefulWidget {
 class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int _numberOfIndividuals;
-  String _date;
-  String _species;
-  String _condition;
-
-  //LengthUnit _estimatedGreenWeight;
-  String _estimatedGreenWeight;
+  DateTime _createdAt = DateTime.now();
+  Species _species;
+  CatchCondition _condition;
+  String _estimatedWeight;
   String _tagNumber;
+  Location _location;
+
+  @override
+  void initState() {
+    super.initState();
+    Geolocator().getCurrentPosition().then((Position p) {
+      setState(() {
+        _location = Location(latitude: p.latitude, longitude: p.longitude);
+      });
+    });
+  }
 
   bool _allValid() {
     if (_species == null) {
       return false;
-    } else {
-      return true;
     }
+
+    if (_createdAt == null) {
+      return false;
+    }
+
+    if (_condition == null) {
+      return false;
+    }
+
+    if (_estimatedWeight == null) {
+      return false;
+    }
+
+    if (_tagNumber == null) {
+      return false;
+    }
+
+    if (_location == null) {
+      return false;
+    }
+
+    return true;
   }
 
-  Widget _dateInput() {
+  Widget _dateTimeInput() {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date, Time and Location', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
           Row(
             children: <Widget>[
               Flexible(
                 flex: 5,
-                child: TextField(
-                    //onChanged: (String name) => setState(() => _name = name),
-                    //keyboardType: TextInputType.text,
-                    ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Container(
-                height: 40,
-                width: 40,
-                child: SvgPicture.asset(
-                  'assets/icons/image/location_icon.svg',
+                child: DateTimeEditor(
+                  titleStyle: Theme.of(context).textTheme.headline2,
+                  initialDateTime: _createdAt,
+                  title: 'Date, Time and Location',
+                  onChanged: (picker, indices) {
+                    setState(() {
+                      _createdAt = DateTime.parse(picker.adapter.toString());
+                    });
+                  },
                 ),
-                padding: const EdgeInsets.all(1.0),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _speciesInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Species', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
+              ),
+              const SizedBox(width: 5),
               Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
+                flex: 1,
+                child: IconButton(
+                  icon: Image.asset('assets/images/location_icon.png'),
+                  onPressed: () {},
                 ),
               ),
             ],
@@ -91,139 +109,157 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     );
   }
 
-  Widget _conditionInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Condition', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+  Widget _speciesDropdown() {
+    Future<List<Species>> _getSpecies() async => await SpeciesRepo().all();
+
+    return FutureBuilder(
+      future: _getSpecies(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return DDLModelDropdown<Species>(
+          labelTheme: true,
+          selected: _species,
+          label: 'Species',
+          onChanged: (Species species) => setState(() => _species = species),
+          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _conditionDropdown() {
+    return FutureBuilder(
+      future: CatchConditionRepo().all(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+
+        return DDLModelDropdown<CatchCondition>(
+          labelTheme: true,
+          selected: _condition,
+          label: 'Condition',
+          onChanged: (CatchCondition condition) => setState(() => _condition = condition),
+          items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition condition) {
+            return DropdownMenuItem<CatchCondition>(value: condition, child: Text(condition.name));
+          }).toList(),
+        );
+      },
     );
   }
 
   Widget _estimatedWeightsInput() {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Estimated Weight', style: Theme.of(context).textTheme.headline2),
-          const SizedBox(height: 15),
-          TextField(
-            onChanged: (String name) => setState(() => _estimatedGreenWeight = (name)),
-            keyboardType: TextInputType.text,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _tagNumberInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Tag Number', style: Theme.of(context).textTheme.headline2),
-          //  const SizedBox(height: 15),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.left,
-                  //Dropdown
-                  decoration: InputDecoration(
-                    labelText: 'Tap to Select',
-                    // contentPadding: EdgeInsets.all(8),  // Added this
-                  ),
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Estimated Weight', style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              width: 150,
+              child: TextField(
+                onChanged: (String text) => setState(() => _estimatedWeight = text),
+                keyboardType: TextInputType.number,
               ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _body() {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-      ),
-      child: Stack(
-        children: [
-          Container(
-              margin: const EdgeInsets.only(right: 12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _dateInput(),
-                  _speciesInput(),
-                  _conditionInput(),
-                  _estimatedWeightsInput(),
-                  _tagNumberInput(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _saveButton(),
-                    ],
-                  ),
-                ],
-              )),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WestlakeScaffold(
-      scaffoldKey: _scaffoldKey,
-      body: _body(),
-      actions: [
-        Expanded(
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            BackButton(),
-            Text(
-              '      Marine Life',
-              style: Theme.of(context).textTheme.headline1,
             ),
-          ]),
+            const SizedBox(width: 10),
+            Text('Kg', style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
+          ],
         )
       ],
     );
   }
 
+  Widget _tagNumberInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Tag Number', style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              width: 150,
+              child: TextField(
+                onChanged: (String text) => setState(() => _tagNumber = text),
+                keyboardType: TextInputType.text,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _body() {
+    return SingleChildScrollView(
+      child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _dateTimeInput(),
+              _speciesDropdown(),
+              _conditionDropdown(),
+              const SizedBox(height: 10),
+              _estimatedWeightsInput(),
+              const SizedBox(height: 10),
+              _tagNumberInput(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _saveButton(),
+                ],
+              ),
+            ],
+          )),
+    );
+  }
+
   StripButton _saveButton() {
     return StripButton(
-      color: _allValid() ? Theme.of(context).accentColor : Colors.lightBlue,
+      color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
       labelText: 'Save',
-      onPressed: () => _onPressSaveButton,
+      onPressed: _onPressSaveButton,
     );
   }
 
   Future<void> _onPressSaveButton() async {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    if (!_allValid()) {
+      return;
+    }
+
+    final marineLife = MarineLife(
+      location: _location,
+      species: _species,
+      tagNumber: _tagNumber,
+      fishingSetID: widget.fishingSetID,
+      createdAt: _createdAt,
+      condition: _condition,
+      estimatedWeight: int.parse(_estimatedWeight) * 1000,
+      estimatedWeightUnit: WeightUnit.GRAMS,
+    );
+
+    await MarineLifeRepo().store(marineLife);
+
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WestlakeScaffold(
+      title: 'Marine Life',
+      scaffoldKey: _scaffoldKey,
+      body: _body(),
+    );
   }
 }
