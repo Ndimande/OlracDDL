@@ -29,7 +29,8 @@ class StartTripScreen extends StatefulWidget {
   const StartTripScreen();
 
   @override
-  _StartTripScreenState createState() => _StartTripScreenState(startDatetime: DateTime.now());
+  _StartTripScreenState createState() =>
+      _StartTripScreenState(startDatetime: DateTime.now());
 }
 
 class _StartTripScreenState extends State<StartTripScreen> {
@@ -87,7 +88,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
 
     final int tripID = await TripRepo().store(newTrip);
 
-    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
+    await Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => TripScreen(tripID)));
   }
 
   Widget _fishingMethodButton() {
@@ -101,10 +103,11 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
           color: OlracColoursLight.olspsDarkBlue,
-          child: Text(snapshot.hasData ? snapshot.data.name : '', style: Theme.of(context).primaryTextTheme.headline5),
+          child: Text(snapshot.hasData ? snapshot.data.name : '',
+              style: Theme.of(context).primaryTextTheme.headline5),
           onPressed: () async {
-            final FishingMethod fm =
-                await Navigator.push(context, MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            final FishingMethod fm = await Navigator.push(context,
+                MaterialPageRoute(builder: (_) => FishingMethodScreen()));
             if (fm != null) {
               await CurrentFishingMethod.set(fm);
             }
@@ -125,7 +128,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           const SizedBox(height: 15),
           _departureDetails(),
           _operational(),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
           Container(
             constraints: const BoxConstraints.expand(height: 38),
             child: Stack(
@@ -154,9 +157,12 @@ class _StartTripScreenState extends State<StartTripScreen> {
           _skipperDropdown(),
           _crew(),
           _notesInput(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [_saveButton()],
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [_saveButton()],
+            ),
           ),
         ],
       ),
@@ -167,7 +173,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return StripButton(
       labelText: 'Save',
       onPressed: _onPressSave,
-      color: _page2Valid() ? OlracColoursLight.olspsHighlightBlue : OlracColoursLight.olspsGrey,
+      color: _page2Valid()
+          ? OlracColoursLight.olspsHighlightBlue
+          : OlracColoursLight.olspsGrey,
     );
   }
 
@@ -353,54 +361,62 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   Widget _crewList() {
+    int index = 0; 
     return Column(
       children: _crewMembers.map((CrewMember cm) {
-        return _crewMemberRow(1, cm.name, '123', 2);
+        index ++; 
+        return _crewMemberRow(index, cm.shortName, cm.seamanId, 2); //role needs to be changed here from being static 
       }).toList(),
     );
   }
 
   Widget _crew() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text('Crew', style: Theme.of(context).textTheme.headline3),
-            InkWell(
-              onTap: () async {
-                final List<CrewMember> crewMembers = await showDialog<List<CrewMember>>(
-                  builder: (_) => AddCrewDialog(),
-                  context: context,
-                );
-                if (crewMembers != null) {
-                  setState(() {
-                    _crewMembers = crewMembers;
-                  });
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                child: SvgPicture.asset('assets/icons/image/add_icon.svg', height: 20, width: 20),
-              ),
-            ),
-          ],
-        ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15,),
+      child: Column(
+        children: [
+          Row(
             children: [
-              _columnHeader(1, '#'),
-              _columnHeader(3, 'Name'),
-              _columnHeader(3, 'Seaman ID'),
-              _columnHeader(2, 'Role'),
+              Text('Crew', style: Theme.of(context).textTheme.headline3),
+              InkWell(
+                onTap: () async {
+                  final List<CrewMember> crewMembers =
+                      await showDialog<List<CrewMember>>(
+                    builder: (_) => AddCrewDialog(),
+                    context: context,
+                  );
+                  if (crewMembers != null) {
+                    setState(() {
+                      _crewMembers = crewMembers;
+                    });
+                  }
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  child: SvgPicture.asset('assets/icons/image/add_icon.svg',
+                      height: 20, width: 20),
+                ),
+              ),
             ],
           ),
-        ),
-        Container(
-          child: _crewMembers.isEmpty ? _noCrewMembersAdded() : _crewList(),
-        ),
-      ],
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _columnHeader(1, '#'),
+                _columnHeader(3, 'Name'),
+                _columnHeader(3, 'Seaman ID'),
+                _columnHeader(2, 'Role'),
+              ],
+            ),
+          ),
+          Container(
+            child: _crewMembers.isEmpty ? _noCrewMembersAdded() : _crewList(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -418,7 +434,12 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Column(
       children: [
         title,
-        TextField(onChanged: (String text) => _notes = text, minLines: 2, maxLines: 4),
+        TextField(
+          onChanged: (String text) => _notes = text,
+          minLines: 2,
+          maxLines: 4,
+          style: Theme.of(context).textTheme.headline3,
+        ),
       ],
     );
   }

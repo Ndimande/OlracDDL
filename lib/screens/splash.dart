@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   double _scaleImage(double imageSize) {
-    return _scale(imageSize, 600);
+    return _scale(imageSize, 500);
   }
 
   TextStyle _fontStyle(double fontSize, FontWeight fontWeight) => TextStyle(
@@ -63,11 +63,18 @@ class _SplashScreenState extends State<SplashScreen> {
         margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: Column(
           children: <Widget>[
-            _olracLogo(300),
+            Container(
+              margin: const EdgeInsets.only(top: 40),
+              child: _olracLogo(275),
+            ),
             const Divider(color: Colors.transparent, thickness: 1),
-            Text('Dynamic Data Logger', style: _fontStyle(16, FontWeight.w700), textAlign: TextAlign.center),
+            Text('Dynamic Data Logger',
+                style: _fontStyle(16, FontWeight.w700),
+                textAlign: TextAlign.center),
             //Text(AppData.packageInfo?.version, style: _fontStyle(10)),
-            Text('Mobile Application', style: _fontStyle(16, FontWeight.normal), textAlign: TextAlign.center),
+            Text('Mobile Application',
+                style: _fontStyle(16, FontWeight.normal),
+                textAlign: TextAlign.center),
           ],
         ),
       );
@@ -105,34 +112,31 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(height: _screenHeight * 0.1),
             _appInfo(),
-            SizedBox(height: _screenHeight * 0.03),
             _developedBy(),
-            SizedBox(height: _screenHeight * 0.03),
             _customisedFor(),
-            SizedBox(height: _screenHeight * 0.02),
             Column(
               children: [
                 Image.asset(
                   'assets/images/sponsor_logo1.png',
                   height: 50,
-                  width: 150,
+                  width: _scaleImage(150),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      'assets/images/sponsor_logo2.png',
-                      height: 100,
-                      width: 100,
-                    ),
-                    Image.asset(
-                      'assets/images/sponsor_logo3.png',
-                      height: 170,
-                      width: 170,
-                    ),
-                  ],
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset(
+                        'assets/images/sponsor_logo2.png',
+                        width: _scaleImage(100),
+                      ),
+                      Image.asset(
+                        'assets/images/sponsor_logo3.png',
+                        width: _scaleImage(170),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

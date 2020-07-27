@@ -51,13 +51,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _nameTextInput() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Username', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
+            style: Theme.of(context).textTheme.headline3,
             initialValue: _username,
             textInputAction: TextInputAction.next,
             focusNode: _nameFocusNode,
@@ -77,13 +78,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _emailTextInput() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Email', style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
+            style: Theme.of(context).textTheme.headline3,
             initialValue: _email,
             textInputAction: TextInputAction.done,
             focusNode: _emailFocusNode,
@@ -116,7 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           items: countries.map<DropdownMenuItem<Country>>((Country country) {
             return DropdownMenuItem<Country>(
               value: country,
-              child: Text(country.name),
+              child: Text(country.name,),
             );
           }).toList(),
         );
@@ -154,11 +156,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  StripButton _saveButton() {
-    return StripButton(
-      color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
-      labelText: 'Save',
-      onPressed: _allValid() ? _onPressSaveButton : null,
+  Widget _saveButton() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15,),
+      child: StripButton(
+        color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
+        labelText: 'Save',
+        onPressed: _allValid() ? _onPressSaveButton : null,
+      ),
     );
   }
 

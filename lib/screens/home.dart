@@ -12,10 +12,13 @@ import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/tiles/trip_tile.dart';
 
 Future<Map<String, dynamic>> _load() async {
-  final List<Trip> completedTrips = await TripRepo().all(where: 'ended_at IS NOT NULL');
-  final List<Trip> incompleteTrips = await TripRepo().all(where: 'ended_at IS NULL');
+  final List<Trip> completedTrips =
+      await TripRepo().all(where: 'ended_at IS NOT NULL');
+  final List<Trip> incompleteTrips =
+      await TripRepo().all(where: 'ended_at IS NULL');
   assert(incompleteTrips.length <= 1);
-  final Trip activeTrip = incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
+  final Trip activeTrip =
+      incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
   return {'completedTrips': completedTrips, 'activeTrip': activeTrip};
 }
 
@@ -29,18 +32,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Trip _activeTrip;
 
   Future<void> _onPressStartTripButton() async {
-    final FishingMethod method =
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+    final FishingMethod method = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
     if (method != null) {
       await CurrentFishingMethod.set(method);
-      await Navigator.push(context, MaterialPageRoute(builder: (_) => const StartTripScreen()));
+      await Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const StartTripScreen()));
     }
 
     setState(() {});
   }
 
   Future<void> _onPressActiveTripButton() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
     setState(() {});
   }
 
@@ -53,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (allTrips.isEmpty) {
       return Center(
-        child: Text('No Trips Recorded', style: Theme.of(context).textTheme.headline2),
+        child: Text('No Trips Recorded',
+            style: Theme.of(context).textTheme.headline2),
       );
     }
     return ListView.builder(
@@ -65,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: TripTile(
             trip: trip,
             onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (_) => TripScreen(trip.id)));
+              await Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => TripScreen(trip.id)));
               setState(() {});
             },
             listIndex: trip.id,
@@ -82,9 +89,17 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Expanded(child: _trips()),
           if (_activeTrip == null)
-            StripButton(labelText: 'Start New Trip', onPressed: _onPressStartTripButton)
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 15),
+                child: StripButton(
+                    labelText: 'Start New Trip',
+                    onPressed: _onPressStartTripButton))
           else
-            StripButton(labelText: 'Active Trip', onPressed: _onPressActiveTripButton),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15),
+              child: StripButton(
+                  labelText: 'Active Trip', onPressed: _onPressActiveTripButton),
+            ),
         ],
       ),
     );
@@ -115,47 +130,49 @@ Widget _drawerHeader() {
     final username = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        const Text(
           'Username',
-          style: Theme.of(context).textTheme.headline2,
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
+        const SizedBox(height: 10,),
         Text(
           AppData.profile.username,
-          style: Theme.of(context).textTheme.headline1,
+          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w400),
           overflow: TextOverflow.ellipsis,
         ),
       ],
     );
 
-    return DrawerHeader(
-      padding: const EdgeInsets.all(0),
-      margin: const EdgeInsets.all(0),
-      child: Container(
-        color: const Color.fromRGBO(255, 255, 255, 0.5),
+    return Container(
+      height: 150,
+      child: DrawerHeader(
+        padding: const EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          color: const Color.fromRGBO(122, 157, 224, 0.25),
-          child: Stack(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      username,
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  BackButton(color: Theme.of(context).primaryColor),
-                ],
-              )
-            ],
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        username,
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    BackButton(color: Theme.of(context).primaryColor),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -168,7 +185,8 @@ class _HomeDrawer extends StatelessWidget {
     return Builder(
       builder: (BuildContext context) {
         return ListTile(
-          leading: Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
+          leading:
+              Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
           title: Text(text, style: Theme.of(context).textTheme.headline2),
           onTap: onTap,
         );
@@ -188,7 +206,9 @@ class _HomeDrawer extends StatelessWidget {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
-              _drawerHeader(),
+              Container(color: const Color.fromRGBO(255, 255, 255, 0.5),
+              margin: const EdgeInsets.only(bottom: 20),
+                child: _drawerHeader()),
               Column(
                 children: [
                   _listTile(

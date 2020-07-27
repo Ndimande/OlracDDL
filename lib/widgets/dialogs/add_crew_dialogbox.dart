@@ -50,8 +50,8 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
         itemBuilder: (BuildContext context, int index) {
           final CrewMember crewMember = _chosenCrewMembers[index];
           return CrewTile(
-              crewMemberName: crewMember.name,
-              seamanId: 12123,
+              crewMemberName: crewMember.shortName,
+              seamanId: int.parse(crewMember.seamanId),
               onPressDelete: () {
                 setState(() {
                   _chosenCrewMembers.removeAt(index);

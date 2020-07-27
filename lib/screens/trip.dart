@@ -40,12 +40,14 @@ class _TripScreenState extends State<TripScreen> {
   Trip _trip;
 
   FishingSet get activeSet {
-    return _trip.fishingSets.firstWhere((FishingSet fs) => fs.isActive, orElse: () => null);
+    return _trip.fishingSets
+        .firstWhere((FishingSet fs) => fs.isActive, orElse: () => null);
   }
 
   Future<void> _onPressEndTrip() async {
     final Trip trip = await TripRepo().find(widget.tripID);
-    final Map result = await showDialog(context: context, builder: (_) => EndTripInformationDialog());
+    final Map result = await showDialog(
+        context: context, builder: (_) => EndTripInformationDialog());
 
     if (result == null) {
       return;
@@ -58,7 +60,8 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Future<void> _onPressStartFishingSet() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (_) => StartSetScreen(_trip.id)));
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (_) => StartSetScreen(_trip.id)));
     setState(() {});
   }
 
@@ -126,17 +129,25 @@ class _TripScreenState extends State<TripScreen> {
           fishingSet: fishingSet,
           indexNumber: index,
           onPressDisposal: () async {
-            await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => ListDisposalsScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ListDisposalsScreen(
+                        tripID: _trip.id, fishingSetID: fishingSet.id)));
           },
           onPressMarineLife: () async {
-            await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => MarineLifeScreen(tripID: _trip.id, fishingSetID: fishingSet.id)));
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ListMarineLifeScreen(
+                        tripID: _trip.id, fishingSetID: fishingSet.id)));
           },
           onPressRetained: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => ListRetainedScreen(tripID: _trip.id, setID: fishingSet.id)),
+              MaterialPageRoute(
+                  builder: (_) => ListRetainedScreen(
+                      tripID: _trip.id, setID: fishingSet.id)),
             );
           },
         );
@@ -149,7 +160,9 @@ class _TripScreenState extends State<TripScreen> {
       children: [
         _TripDetails(trip: _trip),
         Expanded(
-          child: _trip.fishingSets.isEmpty ? _noFishingActivities() : _fishingSetList(),
+          child: _trip.fishingSets.isEmpty
+              ? _noFishingActivities()
+              : _fishingSetList(),
         ),
         if (_trip.isActive) _bottomButtons(),
       ],
@@ -157,7 +170,11 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Widget _bottomButtons() {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [_fishingSetButton(), _endTripButton()]);
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15,),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [_fishingSetButton(), _endTripButton()]));
   }
 
   @override
@@ -196,7 +213,8 @@ class _TripDetails extends StatelessWidget {
       return Row(
         children: [
           Text('Started: ', style: Theme.of(context).textTheme.headline6),
-          Text(friendlyDateTime(trip.startedAt), style: Theme.of(context).textTheme.headline6)
+          Text(friendlyDateTime(trip.startedAt),
+              style: Theme.of(context).textTheme.headline6)
         ],
       );
     });
@@ -207,7 +225,8 @@ class _TripDetails extends StatelessWidget {
       return Row(
         children: [
           Text('Ended: ', style: Theme.of(context).textTheme.headline6),
-          Text(friendlyDateTime(trip.startedAt), style: Theme.of(context).textTheme.headline6)
+          Text(friendlyDateTime(trip.startedAt),
+              style: Theme.of(context).textTheme.headline6)
         ],
       );
     });
@@ -219,16 +238,21 @@ class _TripDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Duration: ', style: Theme.of(context).textTheme.headline6),
-          ElapsedCounter(style: Theme.of(context).textTheme.headline6, startedDateTime: trip.startedAt),
+          ElapsedCounter(
+              style: Theme.of(context).textTheme.headline6,
+              startedDateTime: trip.startedAt),
         ],
       );
     });
   }
 
   Widget _locationButton() {
-    return IconButton(
-      icon: Image.asset('assets/images/location_icon.png'),
-      onPressed: () {},
+    return Container(
+      margin: const EdgeInsets.only(left: 20),
+      child: IconButton(
+        icon: Image.asset('assets/images/location_icon.png'),
+        onPressed: () {},
+      ),
     );
   }
 
@@ -245,10 +269,11 @@ class _TripDetails extends StatelessWidget {
         }
         final FishingMethod fm = snapshot.data;
         return IconButton(
-          icon: SvgIcon(assetPath: fm.svgPath, color: OlracColoursLight.olspsDarkBlue),
+          icon: SvgIcon(
+              assetPath: fm.svgPath, color: OlracColoursLight.olspsDarkBlue),
           onPressed: () async {
-            final FishingMethod method =
-                await Navigator.push(context, MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            final FishingMethod method = await Navigator.push(context,
+                MaterialPageRoute(builder: (_) => FishingMethodScreen()));
             if (method != null) {
               CurrentFishingMethod.set(method);
             }
@@ -260,19 +285,22 @@ class _TripDetails extends StatelessWidget {
 
   Widget tripInfo() {
     return Builder(builder: (BuildContext context) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _started(),
-              if (trip.isActive) _duration() else _ended(),
-            ],
-          ),
-          _locationButton(),
-          _fishingMethodButton(),
-        ],
+      return Container(
+        margin: const EdgeInsets.only(left: 5),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _started(),
+                if (trip.isActive) _duration() else _ended(),
+              ],
+            ),
+            _locationButton(),
+            _fishingMethodButton(),
+          ],
+        ),
       );
     });
   }
@@ -280,9 +308,9 @@ class _TripDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(15),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Row(
             children: <Widget>[
