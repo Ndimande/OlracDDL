@@ -10,8 +10,8 @@ class Species extends Model {
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
-      'commonName': commonName,
-      'scientificName': scientificName,
+      'common_name': commonName,
+      'scientific_name': scientificName,
     };
   }
 

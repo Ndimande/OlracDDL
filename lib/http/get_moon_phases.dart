@@ -15,7 +15,6 @@ Future<List<MoonPhase>>  getMoonPhases() async{
 
   for(final Map moonPhaseData in moonPhaseList){
     moonPhaseType.add(MoonPhase(name: moonPhaseData['displayname']));
-
   }
   return moonPhaseType;
 }

@@ -5,6 +5,7 @@ import 'package:olracddl/app_data.dart';
 import 'package:olracddl/app_migrations.dart';
 import 'package:olracddl/http/get_vessels.dart';
 import 'package:olracddl/models/profile.dart';
+import 'package:olracddl/post_data.dart';
 import 'package:olracddl/providers/database.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/screens/home/home.dart';
@@ -28,8 +29,14 @@ Future<void> main() async {
   await migrator.run(AppConfig.RESET_DATABASE);
   DioProvider().init();
    storeVesselNames();
-  storeSeaBottomTypes();
- // storePorts();
+  /// storeSeaBottomTypes();
+   //storeSeaConditions();
+  /// storePorts();
+  await storeSpecies();
+   storeMoonPhases();
+   storeCloudCovers();
+   storeCloudTypes();
+ // postTrip();
 
   runApp(MyApp());
 }

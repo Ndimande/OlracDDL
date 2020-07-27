@@ -71,10 +71,10 @@ class Trip extends Model {
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,
-      'createdAt': createdAt,
-      'startedAt': startedAt,
+      'createdAt': createdAt.toIso8601String(),
+      'startedAt': startedAt.toIso8601String(),
       'startLocation': startLocation.toMap(),
-      'endedAt': endedAt,
+      'endedAt': endedAt == null ? null : endedAt.toIso8601String(),
       'endLocation': endLocation.toMap(),
       'skipper': skipper.toMap(),
       'crewMembersJson': jsonEncode(crewMembers),

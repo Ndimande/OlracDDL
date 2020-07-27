@@ -14,7 +14,7 @@ Future<List<CloudType>>  getCloudTypes() async{
   final  List<CloudType> cloudType = [];
 
   for(final Map cloudTypeData in cloudTypeList){
-    cloudType.add(CloudType(name: cloudTypeData['displayname']));
+    cloudType.add(CloudType(name: cloudTypeData['displayname'], imageString: null));
 
   }
   return cloudType;
