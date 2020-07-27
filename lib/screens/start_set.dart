@@ -203,6 +203,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Text('Sea Bottom Depth (m)', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
+            style: Theme.of(context).textTheme.headline3,
             onChanged: (String name) => setState(() => _seaBottomDepth = name),
             keyboardType: TextInputType.number,
           )
@@ -267,6 +268,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
+            style: Theme.of(context).textTheme.headline3,
             onChanged: (String minimumHookSize) => setState(() => _minimumHookSize = minimumHookSize),
             keyboardType: TextInputType.text,
           )
@@ -290,6 +292,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Widget _paginator() {
     return Container(
+      margin: const EdgeInsets.only(bottom: 15),
       constraints: const BoxConstraints.expand(height: 38),
       child: Stack(
         alignment: Alignment.center,
@@ -350,9 +353,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
           //WeatherConditionButton(),
           const SizedBox(height: 15),
           _notesInput(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [_saveButton()],
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [_saveButton()],
+            ),
           ),
         ],
       ),
