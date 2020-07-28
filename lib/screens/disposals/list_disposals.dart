@@ -65,7 +65,7 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
         onTap: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ShowDisposalScreen(disposalID: disposal.id, indexID: i)),
+            MaterialPageRoute(builder: (_) => ShowDisposalScreen(disposalID: disposal.id, indexID: i-1)),
           );
           setState(() {});
         },

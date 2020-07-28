@@ -91,6 +91,7 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
 
   Widget _miniTextInput({String labelText, Function(String) onChanged}) {
     return TextField(
+      style: Theme.of(context).textTheme.headline3,
       keyboardType: TextInputType.number,
       onChanged: onChanged,
       decoration: InputDecoration(
