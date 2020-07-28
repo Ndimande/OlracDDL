@@ -92,11 +92,12 @@ class Trip extends Model {
       'endedAt': endedAt == null ? null : endedAt.toIso8601String(),
       'endLocation': endLocation.toMap(),
       'skipper': skipper.toMap(),
-      'crewMembersJson': jsonEncode(crewMembers),
       'notes': notes,
       'uploadedAt': uploadedAt == null ? null : uploadedAt.toIso8601String(),
       'portID': port.id,
       'vesselID': vessel.id,
     };
   }
+
+
 }

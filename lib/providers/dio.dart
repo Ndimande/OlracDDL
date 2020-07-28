@@ -23,8 +23,19 @@ class DioProvider {
 
   Dio init() {
     _dio = Dio();
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (RequestOptions options) async {
+        options.headers.addAll({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        });
+        return options;
+      },
+    ));
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       return client;
     };
     return _dio;

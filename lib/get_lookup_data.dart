@@ -33,7 +33,7 @@ import 'repos/port.dart';
 
 }
 
-// ignore: avoid_void_async
+
 Future<void> storePorts() async{
  final List<Port>  portNames = await getPorts();
  for(final Port portName in portNames){
@@ -42,16 +42,16 @@ Future<void> storePorts() async{
 
 }
 
-// ignore: avoid_void_async
-void storeCloudCovers() async{
+
+Future<void> storeCloudCovers() async{
  final List<CloudCover>  cloudCoversNames = await getCloudCovers();
  for(final CloudCover cloudCoverName in cloudCoversNames){
   await CloudCoverRepo().store(cloudCoverName);
  }
 }
 
-// ignore: avoid_void_async
-void storeCloudTypes() async{
+
+Future<void> storeCloudTypes() async{
  final List<CloudType>  cloudTypesNames = await getCloudTypes();
  for(final CloudType cloudTypesName in cloudTypesNames){
   await CloudTypeRepo().store(cloudTypesName);

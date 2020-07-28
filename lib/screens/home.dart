@@ -4,33 +4,30 @@ import 'package:olracddl/app_data.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/trip.dart';
+import 'package:olracddl/post_data.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/start_trip.dart';
 import 'package:olracddl/screens/trip.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/tiles/trip_tile.dart';
-
 Future<Map<String, dynamic>> _load() async {
   final List<Trip> completedTrips =
-      await TripRepo().all(where: 'ended_at IS NOT NULL');
+  await TripRepo().all(where: 'ended_at IS NOT NULL');
   final List<Trip> incompleteTrips =
-      await TripRepo().all(where: 'ended_at IS NULL');
+  await TripRepo().all(where: 'ended_at IS NULL');
   assert(incompleteTrips.length <= 1);
   final Trip activeTrip =
-      incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
+  incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
   return {'completedTrips': completedTrips, 'activeTrip': activeTrip};
 }
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
-
 class _HomeScreenState extends State<HomeScreen> {
   List<Trip> _completedTrips = [];
   Trip _activeTrip;
-
   Future<void> _onPressStartTripButton() async {
     final FishingMethod method = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
@@ -39,23 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
       await Navigator.push(
           context, MaterialPageRoute(builder: (_) => const StartTripScreen()));
     }
-
     setState(() {});
   }
-
   Future<void> _onPressActiveTripButton() async {
     await Navigator.push(
         context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
     setState(() {});
   }
-
   Widget _trips() {
     final List<Trip> allTrips = [];
     if (_activeTrip != null) {
       allTrips.add(_activeTrip);
     }
     allTrips.addAll(_completedTrips.reversed);
-
     if (allTrips.isEmpty) {
       return Center(
         child: Text('No Trips Recorded',
@@ -81,30 +74,48 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
   Widget _body() {
     return WestlakeScaffold(
       drawer: _HomeDrawer(),
       body: Column(
         children: [
           Expanded(child: _trips()),
-          if (_activeTrip == null)
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 15),
-                child: StripButton(
-                    labelText: 'Start New Trip',
-                    onPressed: _onPressStartTripButton))
-          else
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              child: StripButton(
-                  labelText: 'Active Trip', onPressed: _onPressActiveTripButton),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              if (_activeTrip == null)
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 15),
+                    child: StripButton(
+                        labelText: 'Start New Trip',
+                        onPressed: _onPressStartTripButton))
+              else
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: StripButton(
+                      labelText: 'Active Trip',
+                      onPressed: _onPressActiveTripButton),
+                ),
+
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: StripButton(
+                      color: OlracColoursLight.olspsHighlightBlue,
+                      labelText: 'Upload',
+                      onPressed: uploadTrip,disabled: _completedTrips.isEmpty? true : false,
+                  )
+                ),
+            ],
+          ),
         ],
       ),
     );
   }
-
+  Future<void> uploadTrip()async{
+    for(final Trip trip in _completedTrips){
+      await postTrip( trip);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -116,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!snapshot.hasData) {
           return const Scaffold();
         }
-
         _completedTrips = snapshot.data['completedTrips'] as List<Trip>;
         _activeTrip = snapshot.data['activeTrip'];
         return _body();
@@ -124,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
 Widget _drawerHeader() {
   return Builder(builder: (context) {
     final username = Column(
@@ -134,7 +143,9 @@ Widget _drawerHeader() {
           'Username',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         Text(
           AppData.profile.username,
           style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w400),
@@ -142,7 +153,6 @@ Widget _drawerHeader() {
         ),
       ],
     );
-
     return Container(
       height: 150,
       child: DrawerHeader(
@@ -179,21 +189,19 @@ Widget _drawerHeader() {
     );
   });
 }
-
 class _HomeDrawer extends StatelessWidget {
   Widget _listTile({IconData iconData, String text, Function onTap}) {
     return Builder(
       builder: (BuildContext context) {
         return ListTile(
           leading:
-              Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
+          Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
           title: Text(text, style: Theme.of(context).textTheme.headline2),
           onTap: onTap,
         );
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -206,9 +214,10 @@ class _HomeDrawer extends StatelessWidget {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
-              Container(color: const Color.fromRGBO(255, 255, 255, 0.5),
-              margin: const EdgeInsets.only(bottom: 20),
-                child: _drawerHeader()),
+              Container(
+                  color: const Color.fromRGBO(255, 255, 255, 0.5),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: _drawerHeader()),
               Column(
                 children: [
                   _listTile(

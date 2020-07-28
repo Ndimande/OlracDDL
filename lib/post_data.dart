@@ -2,8 +2,13 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:imei_plugin/imei_plugin.dart';
+import 'package:intl/intl.dart';
+import 'package:olracddl/models/crew_member.dart';
+import 'package:olracddl/models/current_fishing_method.dart';
+import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/app_config.dart';
+import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/moon_phase.dart';
 
@@ -13,65 +18,36 @@ import 'models/trip.dart';
 const String _baseUrl = AppConfig.DDM_URL;
 final Dio _dio = DioProvider().dio;
 
-Future<void>  postTrip(Trip data) async {
-  final String json = jsonEncode(data.toMap());
+Future<Map<String, dynamic>> _formatTrip(Trip data) async {
+  final FishingMethod fishingMethod = await CurrentFishingMethod.get();
+  print(data.startedAt);
+  return {
+    'start_datetime': DateFormat('yyyy-MM-dd HH:mm:ss').format(data.startedAt.toUtc()),
+    'start_latitude': data.startLocation.latitude,
+    'start_longitude': data.startLocation.longitude,
+    'end_datetime': DateFormat('yyyy-MM-dd HH:mm:ss').format(data.endedAt.toUtc()),
+    'end_latitude': data.endLocation.latitude,
+    'end_longitude': data.endLocation.longitude,
+    'vessel_id': data.vessel.id,
+    'gear_id': fishingMethod.id,
+    'user_id': 1
+  };
+}
+
+Future<void> postTrip(Trip data) async {
+  final Map<String, dynamic> formatted = await _formatTrip(data);
+  final String json = jsonEncode(formatted);
   const String post = _baseUrl + '/api/trips';
-  final Response response = await _dio.post(
-//        post, data: {
-//        'start_datetime': '2020-07-01 01:00:00',
-//        'start_latitude' : 20,
-//        'start_longitude' : 30,
-//        'vessel_id' : 1,
-//        'gear_id' : 1,
-//        'user_id': 1,
-//        'end_datetime': '2020-07-10 01:00:00',
-//        'end_latitude' :25,
-//        'end_longitude':35,
-//      }
-         post, data: json
-  );
-  //print(response.data.toString());
+  try {
+    final Response response = await _dio.post(post, data: json);
+    print(response.data.toString());
+  } on DioError catch (e) {
+    print(e.response.data);
+  }
 }
-Future<void>  postCrewMembers() async {
+
+Future<void> postCrewMembers(CrewMember data) async {
   const String post = _baseUrl + '/api/trips/';
-  final Response response = await _dio.post(
-      post, data: {
-      'trip_id' : 1,
-      'crew_id': 1,
-  }
-  );
+  final String json = jsonEncode(data.toMap());
+  final Response response = await _dio.post(post, data: json);
 }
-
-Future<void>  postHauls() async {
-  const String post = _baseUrl + '/api/hauls';
-  final Response response = await _dio.post(
-      post, data: {
-    'start_datetime': 'rerum',
-    'start_latitude': 12.9,
-    'start_longitude': 9412.39,
-    'target_species_id': 3,
-    'fishing_depth': 6,
-    'sea_bottom_depth': 9,
-    'sea_bottom_type_id': 11,
-    'stat_rectangle_id': 5,
-    'min_hook_size': 16,
-    'max_number_hooks': 1,
-    'max_number_lines': 6,
-    'sea_condition_id': 19,
-    'cloud_cover_id': 1,
-    'cloud_type_id': 16,
-    'moon_phase_id': 18,
-    'gear_id': 16,
-    'end_datetime': 'libero',
-    'end_latitude': 120331.53418,
-    'end_longitude': 34902470.38,
-    'trip_id': 12
-  }
-  );
-}
-
-
-
-
-
-
