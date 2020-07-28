@@ -66,7 +66,7 @@ class _ListMarineLifeScreenState extends State<ListMarineLifeScreen> {
         onTap: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ShowMarineLifeScreen(marineLifeID: marineLife.id, indexID: i)),
+            MaterialPageRoute(builder: (_) => ShowMarineLifeScreen(marineLifeID: marineLife.id, indexID: i-1)),
           );
           setState(() {});
         },

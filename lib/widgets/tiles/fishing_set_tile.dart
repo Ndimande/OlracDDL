@@ -65,10 +65,11 @@ class FishingSetTile extends StatelessWidget {
       return Column(
         children: [
           Container(
-              height: 20,
+            margin: const EdgeInsets.only(top: 7),
+              height: 13,
               child: fishingSet.isActive ? const Icon(Icons.star, color: Colors.amber, size: 20) : Container()),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: fishingSet.isActive ? const EdgeInsets.all(8) : const EdgeInsets.all(0),
             child: Text(
               fishingSet.id.toString(),
               style: Theme.of(context).textTheme.headline1,
@@ -90,6 +91,7 @@ class FishingSetTile extends StatelessWidget {
         height: 80,
         width: MediaQuery.of(context).size.width * 0.9,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _indexNumber(),
             Container(

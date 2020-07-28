@@ -61,7 +61,7 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
         onTap: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ShowRetainedScreen(retainedCatchID: rc.id, indexID: i)),
+            MaterialPageRoute(builder: (_) => ShowRetainedScreen(retainedCatchID: rc.id, indexID: i-1)),
           );
           setState(() {});
         },

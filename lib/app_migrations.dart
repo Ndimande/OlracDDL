@@ -330,7 +330,7 @@ const List<Migration> appMigrations = <Migration>[
     (3,'José Vieira','José António Correia Vieira','11565'),
     (4,'Paulo Leal','Paulo Alexandre da Silva Leal','4512'),
     (5,'Durval Costa','Durval Manuel Ferreira Costa','219'),
-    (6,'Rogério Silva','Rogério Miguel Espinola Silva','???')
+    (6,'Rogério Silva','Rogério Miguel Espinola Silva','-1')
   '''),
   Migration(name: 'populate_countries', sql: '''
     INSERT INTO countries (id, name) VALUES

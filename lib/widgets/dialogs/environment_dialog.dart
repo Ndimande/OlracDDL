@@ -104,6 +104,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
         ),
       ),
       actions: <Widget>[
+        
         StripButton(
           labelText: ' Confirm ',
           color: Theme.of(context).accentColor,
@@ -118,6 +119,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
             Navigator.of(context).pop(null);
           },
         ),
+       const SizedBox(width: 18),
       ],
     );
   }

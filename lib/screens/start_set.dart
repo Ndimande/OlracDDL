@@ -97,7 +97,11 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   bool _page2Valid() {
-    if (_targetSpecies == null) {
+    if (_targetSpecies == null ||
+        _seaCondition == null ||
+        _cloudType == null ||
+        _cloudCover == null ||
+        _moonPhase == null) {
       return false;
     }
 
@@ -106,7 +110,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Future<void> _onPressSaveButton() async {
     final Position p = await Geolocator().getCurrentPosition();
-    final Location location = Location(longitude: p.longitude, latitude: p.latitude);
+    final Location location =
+        Location(longitude: p.longitude, latitude: p.latitude);
 
     final FishingMethod currentFishingMethod = await CurrentFishingMethod.get();
     assert(currentFishingMethod != null);
@@ -180,8 +185,10 @@ class _StartSetScreenState extends State<StartSetScreen> {
         }
         return DDLModelDropdown<FishingArea>(
           label: 'Fishing Area (Statistical Rectangle)',
-          items: snapshot.data.map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
-            return DropdownMenuItem<FishingArea>(value: fa, child: Text(fa.name));
+          items: snapshot.data
+              .map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
+            return DropdownMenuItem<FishingArea>(
+                value: fa, child: Text(fa.name));
           }).toList(),
           onChanged: (FishingArea fa) {
             setState(() {
@@ -200,7 +207,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sea Bottom Depth (m)', style: Theme.of(context).textTheme.headline3),
+          Text('Sea Bottom Depth (m)',
+              style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             style: Theme.of(context).textTheme.headline3,
@@ -222,14 +230,16 @@ class _StartSetScreenState extends State<StartSetScreen> {
         if (!snapshot.hasData) {
           return Container();
         }
-
         return DDLModelDropdown<SeaBottomType>(
           labelTheme: false,
           selected: _seaBottomType,
           label: 'Sea Bottom Type',
-          onChanged: (SeaBottomType seaBottomType) => setState(() => _seaBottomType = seaBottomType),
-          items: snapshot.data.map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
-            return DropdownMenuItem<SeaBottomType>(value: sbt, child: Text(sbt.name));
+          onChanged: (SeaBottomType seaBottomType) =>
+              setState(() => _seaBottomType = seaBottomType),
+          items: snapshot.data
+              .map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
+            return DropdownMenuItem<SeaBottomType>(
+                value: sbt, child: Text(sbt.name));
           }).toList(),
         );
       },
@@ -250,9 +260,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
           labelTheme: true,
           selected: _targetSpecies,
           label: 'Target Species',
-          onChanged: (Species species) => setState(() => _targetSpecies = species),
-          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+          onChanged: (Species species) =>
+              setState(() => _targetSpecies = species),
+          items:
+              snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+            return DropdownMenuItem<Species>(
+                value: species, child: Text(species.commonName));
           }).toList(),
         );
       },
@@ -265,11 +278,13 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Minimum Hook Size', style: Theme.of(context).textTheme.headline3),
+          Text('Minimum Hook Size',
+              style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
             style: Theme.of(context).textTheme.headline3,
-            onChanged: (String minimumHookSize) => setState(() => _minimumHookSize = minimumHookSize),
+            onChanged: (String minimumHookSize) =>
+                setState(() => _minimumHookSize = minimumHookSize),
             keyboardType: TextInputType.text,
           )
         ],
@@ -376,12 +391,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _weatherConditionButton(
+                  _seaCondition != null,
                   _onSeaConditionPressed,
                   'Sea Condition',
                   'assets/icons/svg/wave.svg',
                   RoundedCorner.topLeft,
                 ),
                 _weatherConditionButton(
+                  _cloudType != null,
                   _onCloudTypePressed,
                   'Cloud Type',
                   'assets/icons/svg/cloud.svg',
@@ -395,12 +412,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _weatherConditionButton(
+                  _cloudCover != null,
                   _onCloudCoverPressed,
                   'Cloud Cover',
                   'assets/icons/svg/cloud_sun.svg',
                   RoundedCorner.bottomLeft,
                 ),
                 _weatherConditionButton(
+                  _moonPhase != null,
                   _onMoonPhasePressed,
                   'Moon Phase',
                   'assets/icons/svg/moon.svg',
@@ -415,6 +434,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   Widget _weatherConditionButton(
+    bool confirmed,
     Function onTap,
     String label,
     String svgPath,
@@ -432,10 +452,18 @@ class _StartSetScreenState extends State<StartSetScreen> {
               color: Theme.of(context).primaryColor,
             ),
             borderRadius: BorderRadius.only(
-              topLeft: roundedCorner == RoundedCorner.topLeft ? const Radius.circular(15) : Radius.zero,
-              topRight: roundedCorner == RoundedCorner.topRight ? const Radius.circular(15) : Radius.zero,
-              bottomLeft: roundedCorner == RoundedCorner.bottomLeft ? const Radius.circular(15) : Radius.zero,
-              bottomRight: roundedCorner == RoundedCorner.bottomRight ? const Radius.circular(15) : Radius.zero,
+              topLeft: roundedCorner == RoundedCorner.topLeft
+                  ? const Radius.circular(15)
+                  : Radius.zero,
+              topRight: roundedCorner == RoundedCorner.topRight
+                  ? const Radius.circular(15)
+                  : Radius.zero,
+              bottomLeft: roundedCorner == RoundedCorner.bottomLeft
+                  ? const Radius.circular(15)
+                  : Radius.zero,
+              bottomRight: roundedCorner == RoundedCorner.bottomRight
+                  ? const Radius.circular(15)
+                  : Radius.zero,
             ),
             color: Colors.white,
           ),
@@ -449,7 +477,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
                 ),
               ),
               const SizedBox(height: 4),
-              Expanded(child: SvgPicture.asset(svgPath)),
+              Expanded(
+                child: confirmed
+                    ? SvgPicture.asset(
+                        svgPath,
+                        color: OlracColoursLight.olspsHighlightBlue,
+                      )
+                    : SvgPicture.asset(svgPath),
+              ),
             ],
           ),
         ),
@@ -473,6 +508,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Future<void> _onSeaConditionPressed() async {
     _seaCondition = await _seaConditionInputDialog();
+    if (_seaCondition != null) {
+      setState(() {});
+    }
   }
 
   Future<Model> _cloudTypeInputDialog() async {
@@ -491,6 +529,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Future<void> _onCloudTypePressed() async {
     _cloudType = await _cloudTypeInputDialog();
+    if (_cloudType != null) {
+      setState(() {});
+    }
   }
 
   Future<Model> _cloudCoverInputDialog() async {
@@ -509,6 +550,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Future<void> _onCloudCoverPressed() async {
     _cloudCover = await _cloudCoverInputDialog();
+    if (_cloudCover != null) {
+      setState(() {});
+    }
   }
 
   Future<Model> _moonPhaseInputDialog() async {
@@ -527,6 +571,9 @@ class _StartSetScreenState extends State<StartSetScreen> {
 
   Future<void> _onMoonPhasePressed() async {
     _moonPhase = await _moonPhaseInputDialog();
+    if (_moonPhase != null) {
+      setState(() {});
+    }
   }
 
   IconButton _nextButton() {
@@ -534,16 +581,20 @@ class _StartSetScreenState extends State<StartSetScreen> {
         icon: _page1Valid()
             ? Image.asset('assets/images/arrow_highlighterBlue.png')
             : Image.asset('assets/images/arrow_grey.png'),
-        onPressed: () {
-          setState(() {
-            _page = Page.Two;
-          });
-        });
+        onPressed: _page1Valid()
+            ? () {
+                setState(() {
+                  _page = Page.Two;
+                });
+              }
+            : () {});
   }
 
   StripButton _saveButton() {
     return StripButton(
-      color: _page2Valid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
+      color: _page2Valid()
+          ? Theme.of(context).accentColor
+          : OlracColoursLight.olspsGrey,
       onPressed: _page2Valid() ? _onPressSaveButton : () {},
       labelText: 'Save',
     );
