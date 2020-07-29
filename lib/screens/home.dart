@@ -11,20 +11,23 @@ import 'package:olracddl/screens/start_trip.dart';
 import 'package:olracddl/screens/trip.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/tiles/trip_tile.dart';
+
 Future<Map<String, dynamic>> _load() async {
   final List<Trip> completedTrips =
-  await TripRepo().all(where: 'ended_at IS NOT NULL');
+      await TripRepo().all(where: 'ended_at IS NOT NULL');
   final List<Trip> incompleteTrips =
-  await TripRepo().all(where: 'ended_at IS NULL');
+      await TripRepo().all(where: 'ended_at IS NULL');
   assert(incompleteTrips.length <= 1);
   final Trip activeTrip =
-  incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
+      incompleteTrips.isNotEmpty ? incompleteTrips.first : null;
   return {'completedTrips': completedTrips, 'activeTrip': activeTrip};
 }
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends State<HomeScreen> {
   List<Trip> _completedTrips = [];
   Trip _activeTrip;
@@ -38,11 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {});
   }
+
   Future<void> _onPressActiveTripButton() async {
     await Navigator.push(
         context, MaterialPageRoute(builder: (_) => TripScreen(_activeTrip.id)));
     setState(() {});
   }
+
   Widget _trips() {
     final List<Trip> allTrips = [];
     if (_activeTrip != null) {
@@ -74,7 +79,23 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
+  var allUploaded = false;
+  var counter = 0;
+  Future<void> _uploadCheck() async {
+    for (final Trip trip in _completedTrips) {
+      if (trip.isUploaded == true) {
+        counter++;
+      }
+      if (counter == _completedTrips.length) {
+        allUploaded = true;
+        print(allUploaded);
+      }
+    }
+  }
+
   Widget _body() {
+    _uploadCheck();
     return WestlakeScaffold(
       drawer: _HomeDrawer(),
       body: Column(
@@ -96,26 +117,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       labelText: 'Active Trip',
                       onPressed: _onPressActiveTripButton),
                 ),
-
-                Container(
+              Container(
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: StripButton(
-                      color: OlracColoursLight.olspsHighlightBlue,
-                      labelText: 'Upload',
-                      onPressed: uploadTrip,disabled: _completedTrips.isEmpty? true : false,
-                  )
-                ),
+                    color: OlracColoursLight.olspsHighlightBlue,
+                    labelText: 'Upload',
+                    onPressed: () {
+                      uploadTrip();
+                      for(Trip trip in _completedTrips) {
+                        print('hello ${trip.uploadedAt}'); 
+                      }
+                      setState(() {
+                      });
+                      
+                    },
+                    disabled: _completedTrips.isEmpty ? true : false,
+                  )),
             ],
           ),
         ],
       ),
     );
   }
-  Future<void> uploadTrip()async{
-    for(final Trip trip in _completedTrips){
-      await postTrip( trip);
+
+  Future<void> uploadTrip() async {
+    for (final Trip trip in _completedTrips) {
+      await postTrip(trip);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -134,6 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
 Widget _drawerHeader() {
   return Builder(builder: (context) {
     final username = Column(
@@ -189,19 +220,21 @@ Widget _drawerHeader() {
     );
   });
 }
+
 class _HomeDrawer extends StatelessWidget {
   Widget _listTile({IconData iconData, String text, Function onTap}) {
     return Builder(
       builder: (BuildContext context) {
         return ListTile(
           leading:
-          Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
+              Icon(iconData, color: OlracColoursLight.olspsDarkBlue, size: 36),
           title: Text(text, style: Theme.of(context).textTheme.headline2),
           onTap: onTap,
         );
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
