@@ -34,7 +34,7 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
 
   Widget _dateAndTime() {
     return DateTimeEditor(
-      title: 'Date and Time',
+      title: AppLocalizations.of(context).getTranslatedValue('date_and_time'),
       initialDateTime: _endedAt,
       onChanged: (Picker picker, List<int> selectedIndices) {
         setState(() {

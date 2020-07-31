@@ -11,11 +11,10 @@ import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
 
-
-
 Future<Map> _load(int marineLifeID) async {
   final MarineLife marineLife = await MarineLifeRepo().find(marineLifeID);
-  final FishingSet fishingSet = await FishingSetRepo().find(marineLife.fishingSetID);
+  final FishingSet fishingSet =
+      await FishingSetRepo().find(marineLife.fishingSetID);
   final Trip trip = await TripRepo().find(fishingSet.tripID);
   return {
     'marineLife': marineLife,
@@ -30,7 +29,6 @@ class ShowMarineLifeScreen extends StatefulWidget {
 
   const ShowMarineLifeScreen({this.marineLifeID, this.indexID});
 
-
   @override
   _ShowMarineLifeScreenState createState() => _ShowMarineLifeScreenState();
 }
@@ -40,12 +38,12 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
   FishingSet _fishingSet;
   Trip _trip;
 
-
   Widget _breadcrumb() {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${_trip.id}',
+          label:
+              '${AppLocalizations.of(context).getTranslatedValue('trip')} ${_trip.id}',
           onPressed: () {
             // magnitude
             Navigator.pop(context);
@@ -54,13 +52,16 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
           },
         ),
         BreadcrumbElement(
-          label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${_fishingSet.id}',
+          label:
+              '${AppLocalizations.of(context).getTranslatedValue('set')} ${_fishingSet.id}',
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('marine_life')),
+        BreadcrumbElement(
+            label:
+                AppLocalizations.of(context).getTranslatedValue('marine_life')),
         BreadcrumbElement(label: widget.indexID.toString()),
       ],
     );
@@ -72,7 +73,8 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(variableHeader, style: Theme.of(context).textTheme.headline2),
+          child: Text(variableHeader,
+              style: Theme.of(context).textTheme.headline2),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -96,7 +98,9 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
                 style: Theme.of(context).textTheme.headline1,
               ),
               Text(
-                DateFormat('yyyy/MMM/dd, kk:mm').format(_marineLife.createdAt).toString(),
+                DateFormat('yyyy/MMM/dd, kk:mm')
+                    .format(_marineLife.createdAt)
+                    .toString(),
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
@@ -119,12 +123,25 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
 
   Widget _dataTable() {
     final details = Column(children: [
-      _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'), _marineLife.species.commonName),
-      _dataRow(AppLocalizations.of(context).getTranslatedValue('species'), _marineLife.species.scientificName),
-      _dataRow(AppLocalizations.of(context).getTranslatedValue('condition'), _marineLife.condition.name.substring(0, 1).toUpperCase()), //check if this is right
-       _dataRow(AppLocalizations.of(context).getTranslatedValue('estimated_weight'), (_marineLife.estimatedWeight / 1000).toString()),
-      _dataRow(AppLocalizations.of(context).getTranslatedValue('tag_number'), _marineLife.tagNumber),
-      _dataRow('Uploaded', _trip.isUploaded ? 'Yes' : 'No'),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'),
+          _marineLife.species.commonName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('species'),
+          _marineLife.species.scientificName),
+      _dataRow(
+          AppLocalizations.of(context).getTranslatedValue('condition'),
+          _marineLife.condition.name
+              .substring(0, 1)
+              .toUpperCase()), //check if this is right
+      _dataRow(
+          AppLocalizations.of(context).getTranslatedValue('estimated_weight'),
+          (_marineLife.estimatedWeight / 1000).toString()),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('tag_number'),
+          _marineLife.tagNumber),
+      _dataRow(
+          AppLocalizations.of(context).getTranslatedValue('uploaded'),
+          _trip.isUploaded
+              ? AppLocalizations.of(context).getTranslatedValue('yes')
+              : AppLocalizations.of(context).getTranslatedValue('no')),
     ]);
 
     return Expanded(
@@ -148,13 +165,14 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-           StripButton(
+          StripButton(
             labelText: AppLocalizations.of(context).getTranslatedValue('edit'),
             onPressed: null,
             color: OlracColoursLight.olspsGrey,
           ),
           StripButton(
-            labelText: AppLocalizations.of(context).getTranslatedValue('delete'),
+            labelText:
+                AppLocalizations.of(context).getTranslatedValue('delete'),
             onPressed: _onPressDelete,
             color: OlracColoursLight.olspsRed,
           ),

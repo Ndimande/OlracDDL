@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:database_repo/database_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/westlake.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 class EnvironmentDialog extends StatefulWidget {
   const EnvironmentDialog({
@@ -106,7 +107,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
       actions: <Widget>[
         
         StripButton(
-          labelText: ' Confirm ',
+          labelText: AppLocalizations.of(context).getTranslatedValue('confirm'),
           color: Theme.of(context).accentColor,
           onPressed: () {
             Navigator.of(context).pop(_currentModel);
@@ -114,7 +115,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
           disabled: false,
         ),
         StripButton(
-          labelText: '  Cancel  ',
+          labelText: AppLocalizations.of(context).getTranslatedValue('cancel'),
           onPressed: () {
             Navigator.of(context).pop(null);
           },

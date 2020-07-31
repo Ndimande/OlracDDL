@@ -224,7 +224,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
       children: [
         Text(AppLocalizations.of(context).getTranslatedValue('departure_details'), style: Theme.of(context).textTheme.headline2),
         DateTimeEditor(
-          title: 'Date, Time and Location',
+          title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
           onChanged: (Picker picker, List<int> selectedIndices) {
             setState(() {
               startDatetime = DateTime.parse(picker.adapter.toString());
@@ -355,7 +355,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 30),
       child: Text(
-        'No Crew Members Added',
+        AppLocalizations.of(context).getTranslatedValue('no_crew_members_added'),
         style: Theme.of(context).textTheme.headline3,
       ),
     );
@@ -378,7 +378,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
         children: [
           Row(
             children: [
-              Text('Crew', style: Theme.of(context).textTheme.headline3),
+              Text(AppLocalizations.of(context).getTranslatedValue('crew'), style: Theme.of(context).textTheme.headline3),
               GestureDetector(
                 onTap: () async {
                   final List<CrewMember> crewMembers =
@@ -407,8 +407,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _columnHeader(1, '#'),
-                _columnHeader(3, 'Name'),
-                _columnHeader(3, 'Seaman ID'),
+                _columnHeader(3, AppLocalizations.of(context).getTranslatedValue('name')),
+                _columnHeader(3, AppLocalizations.of(context).getTranslatedValue('seaman_id')),
                 _columnHeader(2, 'Role'),
               ],
             ),

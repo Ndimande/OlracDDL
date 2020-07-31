@@ -119,8 +119,8 @@ class _ShowRetainedScreenState extends State<ShowRetainedScreen> {
       _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'), _retainedCatch.species.commonName),
       _dataRow(AppLocalizations.of(context).getTranslatedValue('species'), _retainedCatch.species.scientificName),
       _dataRow(AppLocalizations.of(context).getTranslatedValue('green_weight'), (_retainedCatch.greenWeight / 1000).toString()),
-      _dataRow('# ${AppLocalizations.of(context).getTranslatedValue('individuals')}', _retainedCatch.individuals.toString()),
-      _dataRow('Uploaded', _trip.isUploaded ? 'Yes' : 'No'),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('no_of_individuals'), _retainedCatch.individuals.toString()),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('uploaded'), _trip.isUploaded ? AppLocalizations.of(context).getTranslatedValue('yes') : AppLocalizations.of(context).getTranslatedValue('no')),
     ]);
 
     return Expanded(

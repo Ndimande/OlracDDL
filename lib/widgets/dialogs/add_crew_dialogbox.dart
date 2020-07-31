@@ -70,7 +70,7 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
   Widget _addCrewButton() {
     return RaisedButton(
       child: Text(
-        'Add Crew',
+        AppLocalizations.of(context).getTranslatedValue('add_crew'),
         style: Theme.of(context).textTheme.headline4,
       ),
       onPressed: onPressAddCrew,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -68,11 +69,11 @@ class _SplashScreenState extends State<SplashScreen> {
               child: _olracLogo(275),
             ),
             const Divider(color: Colors.transparent, thickness: 1),
-            Text('Dynamic Data Logger',
+            Text(AppLocalizations.of(context).getTranslatedValue('dynamic_data_logger'),
                 style: _fontStyle(16, FontWeight.w700),
                 textAlign: TextAlign.center),
             //Text(AppData.packageInfo?.version, style: _fontStyle(10)),
-            Text('Mobile Application',
+            Text(AppLocalizations.of(context).getTranslatedValue('mobile_application'),
                 style: _fontStyle(16, FontWeight.normal),
                 textAlign: TextAlign.center),
           ],
@@ -83,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
         margin: const EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
-            Text('Developed By:', style: _fontStyle(14, FontWeight.w600)),
+            Text(AppLocalizations.of(context).getTranslatedValue('developed_by'), style: _fontStyle(14, FontWeight.w600)),
             const SizedBox(height: 15),
             _olspsLogo(275),
           ],
@@ -95,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: <Widget>[
             Text(
-              'In co-operation with Ana Fraga',
+              AppLocalizations.of(context).getTranslatedValue('in_cooperation_with_ana_fraga'),
               style: _fontStyle(14, FontWeight.w500),
               textAlign: TextAlign.center,
             ),

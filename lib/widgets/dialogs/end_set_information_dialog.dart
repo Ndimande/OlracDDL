@@ -112,7 +112,7 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
     );
 
     final Widget dateTimeEditor = DateTimeEditor(
-      title: 'Date and Time',
+      title: AppLocalizations.of(context).getTranslatedValue('date_and_time'),
       initialDateTime: _endedAt,
       onChanged: (Picker picker, List<int> selectedIndices) {
         setState(() {

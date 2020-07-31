@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 import '../../main.dart';
 
@@ -70,7 +71,7 @@ class _LanguageDialogBoxState extends State<LanguageDialogBox> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Text('English'),
+                   Text(AppLocalizations.of(context).getTranslatedValue('english')),
                 ],
               ),
             ),
@@ -86,7 +87,7 @@ class _LanguageDialogBoxState extends State<LanguageDialogBox> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Text('Portuguese'),
+                   Text(AppLocalizations.of(context).getTranslatedValue('portuguese')),
                 ],
               ),
             ),

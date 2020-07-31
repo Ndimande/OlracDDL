@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 class DateTimeEditor extends StatelessWidget {
   final DateTime initialDateTime;
@@ -32,7 +33,7 @@ class DateTimeEditor extends StatelessWidget {
       adapter: adapter,
       title: Container(
         child: Text(
-          'Date and Time',
+          AppLocalizations.of(context).getTranslatedValue('date_and_time'),
           style: Theme.of(context).textTheme.headline2,
         ),
       ),

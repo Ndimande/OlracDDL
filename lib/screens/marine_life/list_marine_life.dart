@@ -64,9 +64,9 @@ class _ListMarineLifeScreenState extends State<ListMarineLifeScreen> {
           label: Text(
               AppLocalizations.of(context).getTranslatedValue('species'),
               style: headerStyle)),
-      DataColumn(label: Text('Cond.', style: headerStyle), numeric: false),
+      DataColumn(label: Text(AppLocalizations.of(context).getTranslatedValue('cond'), style: headerStyle), numeric: false),
       DataColumn(label: Text('Kg', style: headerStyle), numeric: false),
-      DataColumn(label: Text('${AppLocalizations.of(context).getTranslatedValue('tag_number')}', style: headerStyle), numeric: false),
+      DataColumn(label: Text('${AppLocalizations.of(context).getTranslatedValue('tag')} #', style: headerStyle), numeric: false),
     ];
 
     int i = 1;

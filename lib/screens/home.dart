@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
               child: StripButton(
-                  labelText: 'Active Trip',
+                  labelText: AppLocalizations.of(context).getTranslatedValue('active_trip'),
                   onPressed: _onPressActiveTripButton),
             ),
         ],
@@ -133,8 +133,8 @@ Widget _drawerHeader() {
     final username = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Text(
-          'Username',
+         Text(
+          AppLocalizations.of(context).getTranslatedValue('username'),
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
         const SizedBox(
@@ -219,17 +219,17 @@ class _HomeDrawer extends StatelessWidget {
                 children: [
                   _listTile(
                     iconData: Icons.history,
-                    text: 'Trip History',
+                    text: AppLocalizations.of(context).getTranslatedValue('trip_history'),
                     onTap: () => null,
                   ),
                   _listTile(
                     iconData: Icons.settings,
-                    text: 'Settings',
+                    text: AppLocalizations.of(context).getTranslatedValue('settings'),
                     onTap: () async =>  await Navigator.of(context).push(MaterialPageRoute(builder: (_) => SettingsScreen())),
                   ),
                   _listTile(
                     iconData: Icons.info,
-                    text: 'About',
+                    text: AppLocalizations.of(context).getTranslatedValue('about'),
                     onTap: () => null,
                   ),
                 ],

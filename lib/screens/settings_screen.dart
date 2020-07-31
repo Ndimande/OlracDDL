@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/westlake.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/widgets/dialogs/add_crew_dialogbox.dart';
 import 'package:olracddl/widgets/dialogs/language_dialogbox.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
@@ -28,12 +29,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      title: 'Settings',
+      title: AppLocalizations.of(context).getTranslatedValue('settings'),
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: _listTile(
             iconData: Icons.language,
-            text: 'Select Language',
+            text: AppLocalizations.of(context).getTranslatedValue('select_language'),
             onTap: () {
               showDialog(
                 builder: (_) => LanguageDialogBox(),

@@ -105,7 +105,7 @@ class _TripScreenState extends State<TripScreen> {
       );
     }
     return StripButton(
-      labelText: AppLocalizations.of(context).getTranslatedValue('start_new_set'),
+      labelText: AppLocalizations.of(context).getTranslatedValue('start_set'),
       onPressed: _onPressStartFishingSet,
     );
   }
@@ -213,7 +213,7 @@ class _TripDetails extends StatelessWidget {
     return Builder(builder: (BuildContext context) {
       return Row(
         children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('started'), style: Theme.of(context).textTheme.headline6),
+          Text('${AppLocalizations.of(context).getTranslatedValue('started')}: ', style: Theme.of(context).textTheme.headline6),
           Text(friendlyDateTime(trip.startedAt),
               style: Theme.of(context).textTheme.headline6)
         ],
@@ -225,7 +225,7 @@ class _TripDetails extends StatelessWidget {
     return Builder(builder: (BuildContext context) {
       return Row(
         children: [
-          Text('Ended: ', style: Theme.of(context).textTheme.headline6),
+          Text('${AppLocalizations.of(context).getTranslatedValue('ended')}: ', style: Theme.of(context).textTheme.headline6),
           Text(friendlyDateTime(trip.startedAt),
               style: Theme.of(context).textTheme.headline6)
         ],
@@ -238,7 +238,7 @@ class _TripDetails extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('duration'), style: Theme.of(context).textTheme.headline6),
+          Text('${AppLocalizations.of(context).getTranslatedValue('duration')} :', style: Theme.of(context).textTheme.headline6),
           ElapsedCounter(
               style: Theme.of(context).textTheme.headline6,
               startedDateTime: trip.startedAt),

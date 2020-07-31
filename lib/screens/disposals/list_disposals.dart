@@ -54,7 +54,7 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
     final List<DataColumn> columns = [
       DataColumn(label: Text('', style: headerStyle)),
       DataColumn(label: Text(AppLocalizations.of(context).getTranslatedValue('species'), style: headerStyle)),
-      DataColumn(label: Text('Dis.', style: headerStyle), numeric: true),
+      DataColumn(label: Text(AppLocalizations.of(context).getTranslatedValue('dis'), style: headerStyle), numeric: true),
       DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
       DataColumn(label: Text('#', style: headerStyle), numeric: true),
     ];

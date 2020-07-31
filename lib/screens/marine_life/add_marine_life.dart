@@ -87,7 +87,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
                 child: DateTimeEditor(
                   titleStyle: Theme.of(context).textTheme.headline2,
                   initialDateTime: _createdAt,
-                  title: 'Date, Time and Location',
+                  title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
                   onChanged: (picker, indices) {
                     setState(() {
                       _createdAt = DateTime.parse(picker.adapter.toString());
