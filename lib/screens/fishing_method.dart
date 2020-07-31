@@ -40,13 +40,13 @@ class FishingMethodScreen extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    method.name,
+                    (Localizations.localeOf(context).languageCode == 'en')? method.name : method.portugueseName,
                     style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '(${method.abbreviation})',
+                    (Localizations.localeOf(context).languageCode == 'en')? '(${method.abbreviation})' : '(${method.portugueseAbbreviation})',
                     style: Theme.of(context).textTheme.headline6.copyWith(color: OlracColours.olspsDarkBlue),
                   ),
                 ],

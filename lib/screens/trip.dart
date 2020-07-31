@@ -238,7 +238,7 @@ class _TripDetails extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${AppLocalizations.of(context).getTranslatedValue('duration')} :', style: Theme.of(context).textTheme.headline6),
+          Text('${AppLocalizations.of(context).getTranslatedValue('duration')}: ', style: Theme.of(context).textTheme.headline6),
           ElapsedCounter(
               style: Theme.of(context).textTheme.headline6,
               startedDateTime: trip.startedAt),

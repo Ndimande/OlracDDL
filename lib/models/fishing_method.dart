@@ -6,6 +6,8 @@ class FishingMethod extends Model {
   DateTime createdAt;
   String svgPath;
   String abbreviation;
+  String portugueseName;
+  String portugueseAbbreviation;
 
   FishingMethod({
     int id,
@@ -13,14 +15,18 @@ class FishingMethod extends Model {
     @required this.name,
     @required this.svgPath,
     @required this.abbreviation,
+    @required this.portugueseName,
+    @required this.portugueseAbbreviation,
   }) : super(id: id);
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      'svgPath': svgPath,
+      'svg_path': svgPath,
       'abbreviation': abbreviation,
+      'portugues_name': portugueseName,
+      'portugues_abbreviation': portugueseAbbreviation,
     };
   }
 
@@ -32,6 +38,8 @@ class FishingMethod extends Model {
       'abbreviation': abbreviation,
       'svgPath': svgPath,
       'createdAt': createdAt.toIso8601String(),
+      'portugueseName': portugueseName,
+      'portugueseAbbreviation': portugueseAbbreviation, 
     };
   }
 }

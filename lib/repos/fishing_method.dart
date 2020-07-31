@@ -12,7 +12,10 @@ class FishingMethodRepo extends DatabaseRepo<FishingMethod> {
       name: result['name'],
       createdAt: DateTime.parse(result['created_at']),
       abbreviation: result['abbreviation'],
-      svgPath: result['svgPath'],
+      svgPath: result['svg_path'],
+      portugueseName: result['portuguese_name'],
+      portugueseAbbreviation: result['portuguese_abbreviation'],
+
     );
   }
 }

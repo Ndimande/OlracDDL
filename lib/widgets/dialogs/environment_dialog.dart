@@ -51,7 +51,7 @@ class _EnvironmentDialogState extends State<EnvironmentDialog> {
             ),
             Center(
               child: Text(
-                _currentModel.toMap()['name'],
+                (Localizations.localeOf(context).languageCode == 'en') ? _currentModel.toMap()['name'] : _currentModel.toMap()['portugueseName'],
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),

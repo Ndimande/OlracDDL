@@ -12,6 +12,7 @@ class MoonPhaseRepo extends DatabaseRepo<MoonPhase> {
       name: result['name'],
       createdAt: DateTime.parse(result['created_at']),
       imageString: result['image_string'],
+      portugueseName: result['portuguese_name'],
     );
   }
 }

@@ -48,7 +48,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'image_string TEXT NOT NULL, '
-        'name TEXT NOT NULL '
+        'name TEXT NOT NULL, '
+        'portuguese_name TEXT NOT NULL '
         ')',
   ),
   Migration(
@@ -57,7 +58,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'image_string TEXT NOT NULL, '
-        'name TEXT NOT NULL '
+        'name TEXT NOT NULL, '
+        'portuguese_name TEXT NOT NULL '
         ')',
   ),
   Migration(
@@ -66,7 +68,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'image_string TEXT NOT NULL, '
-        'name TEXT NOT NULL '
+        'name TEXT NOT NULL, '
+        'portuguese_name TEXT NOT NULL '
         ')',
   ),
   Migration(
@@ -75,7 +78,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'image_string TEXT NOT NULL, '
-        'name TEXT NOT NULL '
+        'name TEXT NOT NULL, '
+        'portuguese_name TEXT NOT NULL '
         ')',
   ),
   Migration(
@@ -102,8 +106,10 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'name TEXT UNIQUE NOT NULL, '
+        'portuguese_name TEXT UNIQUE NOT NULL, '
         'abbreviation TEXT UNIQUE NOT NULL, '
-        'svgPath TEXT UNIQUE NOT NULL '
+        'portuguese_abbreviation TEXT UNIQUE NOT NULL, '
+        'svg_path TEXT UNIQUE NOT NULL '
         ')',
   ),
   Migration(
@@ -259,51 +265,51 @@ const List<Migration> appMigrations = <Migration>[
     )
     '''),
   Migration(name: 'populate_sea_conditions', sql: '''
-    INSERT INTO sea_conditions (id, image_string,name) VALUES
-    (1, 'assets/images/b1.png', '00-02 Calm/Still'),
-    (2, 'assets/images/b2.png', '03-04 Choppy'),
-    (3, 'assets/images/b3.png', '05-07 Rough'),
-    (4, 'assets/images/b4.png', '08-10 Stormy'),
-    (5, 'assets/images/b5.png', '11-12 Extreme')
+    INSERT INTO sea_conditions (id, image_string,name,portuguese_name) VALUES
+    (1, 'assets/images/b1.png', '00-02 Calm/Still', '00-02 Calma/ Ainda'),
+    (2, 'assets/images/b2.png', '03-04 Choppy', '03-04 Encrespado'),
+    (3, 'assets/images/b3.png', '05-07 Rough', '05-07 Áspero'),
+    (4, 'assets/images/b4.png', '08-10 Stormy', '08-10 tempestuoso'),
+    (5, 'assets/images/b5.png', '11-12 Extreme', '11-12 extremo')
   '''),
   Migration(name: 'populate_cloud_types', sql: '''
-    INSERT INTO cloud_types (id, image_string,name) VALUES
-    (1, 'assets/images/ct1.jpeg', 'Altocumulus'),
-    (2, 'assets/images/ct2.jpeg', 'Altostratus'),
-    (3, 'assets/images/ct3.jpeg', 'Cirrocumulus'),
-    (4, 'assets/images/ct4.jpeg', 'Cirrostratus'),
-    (5, 'assets/images/ct5.jpeg', 'Cirrus'),
-    (6, 'assets/images/ct6.jpeg', 'Cumulunimbus'),
-    (7, 'assets/images/ct7.jpeg', 'Cumulus'),
-    (8, 'assets/images/ct8.jpeg', 'Fog'),
-    (9, 'assets/images/ct9.jpeg', 'Lenticular'),
-    (10, 'assets/images/ct10.jpeg', 'Mammatus'),
-    (11, 'assets/images/ct11.jpeg', 'Nimbostratus'),
-    (12, 'assets/images/ct12.jpeg', 'Stratocumulus'),
-    (13, 'assets/images/ct13.jpeg', 'Stratus')
+    INSERT INTO cloud_types (id, image_string,name,portuguese_name) VALUES
+    (1, 'assets/images/ct1.jpeg', 'Altocumulus', 'Altocumulo'),
+    (2, 'assets/images/ct2.jpeg', 'Altostratus', 'Altrostrato'),
+    (3, 'assets/images/ct3.jpeg', 'Cirrocumulus', 'Cirrocumulo'),
+    (4, 'assets/images/ct4.jpeg', 'Cirrostratus', 'Cirrostrato'),
+    (5, 'assets/images/ct5.jpeg', 'Cirrus', 'Cirro'),
+    (6, 'assets/images/ct6.jpeg', 'Cumulunimbus', 'Cumulonimbo'),
+    (7, 'assets/images/ct7.jpeg', 'Cumulus', 'Cumulo'),
+    (8, 'assets/images/ct8.jpeg', 'Fog', 'Nevoeiro'),
+    (9, 'assets/images/ct9.jpeg', 'Lenticular', 'Nuvem Lenticular'),
+    (10, 'assets/images/ct10.jpeg', 'Mammatus', 'Mammatus'),
+    (11, 'assets/images/ct11.jpeg', 'Nimbostratus', 'Nimbostrato'),
+    (12, 'assets/images/ct12.jpeg', 'Stratocumulus', 'Estratocumulo'),
+    (13, 'assets/images/ct13.jpeg', 'Stratus', 'Estrato')
   '''),
   Migration(name: 'populate_cloud_covers', sql: '''
-    INSERT INTO cloud_covers (id, image_string,name) VALUES
-    (1, 'assets/images/cc1.jpeg', '0/8'),
-    (2, 'assets/images/cc2.jpeg', '1/8'),
-    (3, 'assets/images/cc3.jpeg', '2/8'),
-    (4, 'assets/images/cc4.jpeg', '3/8'),
-    (5, 'assets/images/cc5.jpeg', '4/8'),
-    (6, 'assets/images/cc6.jpeg', '5/8'),
-    (7, 'assets/images/cc7.jpeg', '6/8'),
-    (8, 'assets/images/cc8.jpeg', '7/8'),
-    (9, 'assets/images/cc9.jpeg', '8/8')
+    INSERT INTO cloud_covers (id, image_string,name,portuguese_name) VALUES
+    (1, 'assets/images/cc1.jpeg', '0/8', '0/8'),
+    (2, 'assets/images/cc2.jpeg', '1/8', '1/8'),
+    (3, 'assets/images/cc3.jpeg', '2/8', '2/8'),
+    (4, 'assets/images/cc4.jpeg', '3/8', '3/8'),
+    (5, 'assets/images/cc5.jpeg', '4/8', '4/8'),
+    (6, 'assets/images/cc6.jpeg', '5/8', '5/8'),
+    (7, 'assets/images/cc7.jpeg', '6/8', '6/8'),
+    (8, 'assets/images/cc8.jpeg', '7/8', '7/8'),
+    (9, 'assets/images/cc9.jpeg', '8/8', '8/8')
   '''),
   Migration(name: 'populate_moon_phases', sql: '''
-    INSERT INTO moon_phases (id, image_string,name) VALUES
-    (1, 'assets/images/mp1.jpeg', 'New moon'),
-    (2, 'assets/images/mp2.jpeg', 'Waxing crescent'),
-    (3, 'assets/images/mp3.jpeg', 'First quarter'),
-    (4, 'assets/images/mp4.jpeg', 'Waxing gibbous'),
-    (5, 'assets/images/mp5.jpeg', 'Full moon'),
-    (6, 'assets/images/mp6.jpeg', 'Waning gibbous'),
-    (7, 'assets/images/mp7.jpeg', 'Last quarter'),
-    (8, 'assets/images/mp8.jpeg', 'Waning crescent')
+    INSERT INTO moon_phases (id, image_string,name,portuguese_name) VALUES
+    (1, 'assets/images/mp1.jpeg', 'New moon', 'Lua nova'),
+    (2, 'assets/images/mp2.jpeg', 'Waxing crescent', 'Quarto crescente'),
+    (3, 'assets/images/mp3.jpeg', 'First quarter', 'Primeiro quarto'),
+    (4, 'assets/images/mp4.jpeg', 'Waxing gibbous', 'Lua crescente gibosa'),
+    (5, 'assets/images/mp5.jpeg', 'Full moon', 'Lua cheia'),
+    (6, 'assets/images/mp6.jpeg', 'Waning gibbous', 'Lua minguante gibosa'),
+    (7, 'assets/images/mp7.jpeg', 'Last quarter', 'Último quarto'),
+    (8, 'assets/images/mp8.jpeg', 'Waning crescent', 'Quarto minguante')
   '''),
   Migration(name: 'populate_ports', sql: '''
     INSERT INTO ports (id, name) VALUES
@@ -853,15 +859,15 @@ const List<Migration> appMigrations = <Migration>[
   Migration(
     name: 'populate_fishing_methods',
     sql: '''
-    INSERT INTO fishing_methods (id, name, svgPath, abbreviation) VALUES
-    (1, "Beach Seine", "assets/icons/fishing_methods/Oltrace_Beach_Seine.svg", "SB"),
-    (2, "Boat Seine", "assets/icons/fishing_methods/Oltrace_Purse_Seine.svg", "SV"),
-    (3, "Beam Trawl", "assets/icons/fishing_methods/Oltrace_Beam_Trawl.svg", "TBB"),
-    (4, "Otter Trawl", "assets/icons/fishing_methods/Oltrace_Otter_Trawl.svg", "OTB"),
-    (5, "Gillnets Anchored", "assets/icons/fishing_methods/Oltrace_Set_Gillnet.svg", "GNS"),
-    (6, "Drift Gillnet", "assets/icons/fishing_methods/Oltrace_Drift_Gillnet.svg", "GND"),
-    (7, "Handline", "assets/icons/fishing_methods/handline.svg", "HL"),
-    (8, "Drifting Longline", "assets/icons/fishing_methods/Oltrace_Drift_Longline.svg", "LLD")
+    INSERT INTO fishing_methods (id, name, svg_path, abbreviation, portuguese_name, portuguese_abbreviation) VALUES
+    (1, 'Beach Seine', 'assets/icons/fishing_methods/Oltrace_Beach_Seine.svg', 'SB', 'Xávega', 'X'),
+    (2, 'Boat Seine', 'assets/icons/fishing_methods/Oltrace_Purse_Seine.svg', 'SV', 'Cerco', 'C'),
+    (3, 'Beam Trawl', 'assets/icons/fishing_methods/Oltrace_Beam_Trawl.svg', 'TBB', 'Arrasto de Vara', 'AdV'),
+    (4, 'Otter Trawl', 'assets/icons/fishing_methods/Oltrace_Otter_Trawl.svg', 'OTB', 'Redes de Arrasto', 'RdA'),
+    (5, 'Gillnets Anchored', 'assets/icons/fishing_methods/Oltrace_Set_Gillnet.svg', 'GNS', 'Redes de Emalhar Ancoradas', 'RdEA'),
+    (6, 'Drift Gillnet', 'assets/icons/fishing_methods/Oltrace_Drift_Gillnet.svg', 'GND', 'Rede de Emalhar Derivante', 'RdED'),
+    (7, 'Handline', 'assets/icons/fishing_methods/handline.svg', 'HL', 'Linha de Mão', 'LdM'),
+    (8, 'Drifting Longline', 'assets/icons/fishing_methods/Oltrace_Drift_Longline.svg', 'LLD', 'Palangre Derivante', 'PD')
   ''',
   ),
 ];
