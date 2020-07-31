@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/cloud_cover.dart';
 import 'package:olracddl/models/cloud_type.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
@@ -184,7 +185,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           return const CircularProgressIndicator();
         }
         return DDLModelDropdown<FishingArea>(
-          label: 'Fishing Area (Statistical Rectangle)',
+          label: AppLocalizations.of(context).getTranslatedValue('fishing_area'),
           items: snapshot.data
               .map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
             return DropdownMenuItem<FishingArea>(
@@ -207,7 +208,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sea Bottom Depth (m)',
+          Text(AppLocalizations.of(context).getTranslatedValue('sea_bottom_depth'),
               style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
@@ -233,7 +234,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
         return DDLModelDropdown<SeaBottomType>(
           labelTheme: false,
           selected: _seaBottomType,
-          label: 'Sea Bottom Type',
+          label: AppLocalizations.of(context).getTranslatedValue('sea_bottom_type'),
           onChanged: (SeaBottomType seaBottomType) =>
               setState(() => _seaBottomType = seaBottomType),
           items: snapshot.data
@@ -259,7 +260,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _targetSpecies,
-          label: 'Target Species',
+          label: AppLocalizations.of(context).getTranslatedValue('target_species'),
           onChanged: (Species species) =>
               setState(() => _targetSpecies = species),
           items:
@@ -278,7 +279,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Minimum Hook Size',
+          Text(AppLocalizations.of(context).getTranslatedValue('minimum_hook_size'),
               style: Theme.of(context).textTheme.headline3),
           const SizedBox(height: 15),
           TextField(
@@ -296,7 +297,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Notes', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('notes'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         TextField(
           onChanged: (String text) => setState(() => _notes = text),
@@ -332,7 +333,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Operational',
+              AppLocalizations.of(context).getTranslatedValue('operational'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -359,13 +360,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Weather Conditions',
+              AppLocalizations.of(context).getTranslatedValue('weather_conditions'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
           const SizedBox(height: 15),
           _weatherConditions(),
-          //WeatherConditionButton(),
           const SizedBox(height: 15),
           _notesInput(),
           Container(
@@ -393,14 +393,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
                 _weatherConditionButton(
                   _seaCondition != null,
                   _onSeaConditionPressed,
-                  'Sea Condition',
+                  AppLocalizations.of(context).getTranslatedValue('sea_condition'),
                   'assets/icons/svg/wave.svg',
                   RoundedCorner.topLeft,
                 ),
                 _weatherConditionButton(
                   _cloudType != null,
                   _onCloudTypePressed,
-                  'Cloud Type',
+                  AppLocalizations.of(context).getTranslatedValue('cloud_type'),
                   'assets/icons/svg/cloud.svg',
                   RoundedCorner.topRight,
                 ),
@@ -414,14 +414,14 @@ class _StartSetScreenState extends State<StartSetScreen> {
                 _weatherConditionButton(
                   _cloudCover != null,
                   _onCloudCoverPressed,
-                  'Cloud Cover',
+                  AppLocalizations.of(context).getTranslatedValue('cloud_cover'),
                   'assets/icons/svg/cloud_sun.svg',
                   RoundedCorner.bottomLeft,
                 ),
                 _weatherConditionButton(
                   _moonPhase != null,
                   _onMoonPhasePressed,
-                  'Moon Phase',
+                  AppLocalizations.of(context).getTranslatedValue('moon_phase'),
                   'assets/icons/svg/moon.svg',
                   RoundedCorner.bottomRight,
                 ),
@@ -499,7 +499,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return EnvironmentDialog(
-          title: 'Sea Condition',
+          title: AppLocalizations.of(context).getTranslatedValue('sea_condition'),
           models: _seaConditions,
         );
       },
@@ -520,7 +520,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return EnvironmentDialog(
-          title: 'Cloud Type',
+          title: AppLocalizations.of(context).getTranslatedValue('cloud_type'),
           models: _cloudTypes,
         );
       },
@@ -541,7 +541,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return EnvironmentDialog(
-          title: 'Cloud Type',
+          title: AppLocalizations.of(context).getTranslatedValue('cloud_cover'),
           models: _cloudCover,
         );
       },
@@ -562,7 +562,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return EnvironmentDialog(
-          title: 'Cloud Type',
+          title: AppLocalizations.of(context).getTranslatedValue('moon_phase'),
           models: _moonPhase,
         );
       },
@@ -596,7 +596,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           ? Theme.of(context).accentColor
           : OlracColoursLight.olspsGrey,
       onPressed: _page2Valid() ? _onPressSaveButton : () {},
-      labelText: 'Save',
+      labelText: AppLocalizations.of(context).getTranslatedValue('save'),
     );
   }
 
@@ -604,7 +604,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
-      title: 'Start Fishing Set',
+      title: AppLocalizations.of(context).getTranslatedValue('start_fishing_set'),
       body: _page == Page.One ? _page1() : _page2(),
     );
   }

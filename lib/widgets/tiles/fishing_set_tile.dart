@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/repos/retained_catch.dart';
@@ -39,12 +40,15 @@ class FishingSetTile extends StatelessWidget {
 
   Widget _catchEntries() {
     return FutureBuilder(
-      future: RetainedCatchRepo().all(where: 'fishing_set_id = ${fishingSet.id}'),
+      future:
+          RetainedCatchRepo().all(where: 'fishing_set_id = ${fishingSet.id}'),
       builder: (context, AsyncSnapshot<List<RetainedCatch>> snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
-        return Text('${snapshot.data.length} Catch Entries', style: Theme.of(context).textTheme.headline3);
+        return Text(
+            '${snapshot.data.length} ${AppLocalizations.of(context).getTranslatedValue('catch_entries')}',
+            style: Theme.of(context).textTheme.headline3);
       },
     );
   }
@@ -65,11 +69,15 @@ class FishingSetTile extends StatelessWidget {
       return Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 7),
+              margin: const EdgeInsets.only(top: 7),
               height: 13,
-              child: fishingSet.isActive ? const Icon(Icons.star, color: Colors.amber, size: 20) : Container()),
+              child: fishingSet.isActive
+                  ? const Icon(Icons.star, color: Colors.amber, size: 20)
+                  : Container()),
           Padding(
-            padding: fishingSet.isActive ? const EdgeInsets.all(8) : const EdgeInsets.all(0),
+            padding: fishingSet.isActive
+                ? const EdgeInsets.all(8)
+                : const EdgeInsets.all(0),
             child: Text(
               fishingSet.id.toString(),
               style: Theme.of(context).textTheme.headline1,
@@ -85,7 +93,8 @@ class FishingSetTile extends StatelessWidget {
     return Card(
       elevation: 3,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
       ),
       child: Container(
         height: 80,
@@ -108,7 +117,8 @@ class FishingSetTile extends StatelessWidget {
             ),
             imageButton('assets/images/catch_icon.png', onPressRetained),
             imageButton('assets/images/disposal_icon.png', onPressDisposal),
-            imageButton('assets/images/marine_life_icon.png', onPressMarineLife),
+            imageButton(
+                'assets/images/marine_life_icon.png', onPressMarineLife),
           ],
         ),
       ),

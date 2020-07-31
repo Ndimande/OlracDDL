@@ -32,9 +32,8 @@ class TripTile extends StatelessWidget {
   }
 
   Widget _uploadIcon() {
-    final String imagePath = trip.isUploaded
-        ? 'assets/images/successful_upload_icon.png'
-        : 'assets/images/upload_required_icon.png';
+    final String imagePath =
+        trip.isUploaded ? 'assets/images/successful_upload_icon.png' : 'assets/images/upload_required_icon.png';
     return Container(
       margin: const EdgeInsets.all(25),
       height: 45,
@@ -48,10 +47,7 @@ class TripTile extends StatelessWidget {
   Widget _details() {
     final Widget startDateTime = Text(
       DateFormat('yyyy/MMM/dd, kk:mm').format(trip.startedAt).toString(),
-      style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w900,
-          color: OlracColoursLight.olspsDarkBlue),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: OlracColoursLight.olspsDarkBlue),
     );
 
     return Builder(builder: (context) {
@@ -63,10 +59,8 @@ class TripTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             startDateTime,
-            Text('${trip.fishingSets.length} Sets',
-                style: Theme.of(context).textTheme.headline3),
-            Text('Xkg, $_tripDurationString',
-                style: Theme.of(context).textTheme.headline3),
+            Text('${trip.fishingSets.length} Sets', style: Theme.of(context).textTheme.headline3),
+            Text('Xkg, $_tripDurationString', style: Theme.of(context).textTheme.headline3),
           ],
         ),
       );
@@ -117,13 +111,10 @@ class TripTile extends StatelessWidget {
 
 ShapeBorder _cardShape() {
   return const RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-        topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+    borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
   );
 }
 
 Widget _activeStar() {
-  return Container(
-    margin: const EdgeInsets.only(left: 10),
-      child: const Icon(Icons.star, color: Colors.amber, size: 20));
+  return const Icon(Icons.star, color: Colors.amber, size: 20);
 }

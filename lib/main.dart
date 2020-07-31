@@ -3,6 +3,7 @@ import 'package:migrator/migrator.dart';
 import 'package:olracddl/app_config.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/app_migrations.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/database.dart';
 import 'package:olracddl/screens/home.dart';
@@ -10,6 +11,8 @@ import 'package:olracddl/screens/sign_up.dart';
 import 'package:olracddl/screens/splash.dart';
 import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 final DatabaseProvider _databaseProvider = DatabaseProvider();
 Database _database;
@@ -30,11 +33,24 @@ Future<void> _onAppRunning() async {
 }
 
 class MyApp extends StatefulWidget {
+  static void setLocale(BuildContext context, Locale locale){
+    _MyAppState state = context.findRootAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+  }
+
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale _locale; 
+  void setLocale(Locale locale){
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -47,11 +63,11 @@ class _MyAppState extends State<MyApp> {
       await Future.delayed(const Duration(seconds: 5));
 
       if (AppData.profile != null) {
-        await _navigatorKey.currentState
-            .pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
+        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(
+            maintainState: true, builder: (_) => HomeScreen()));
       } else {
-        await _navigatorKey.currentState
-            .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => SignUpScreen()));
+        await _navigatorKey.currentState.pushReplacement(MaterialPageRoute(
+            maintainState: false, builder: (_) => SignUpScreen()));
       }
     });
   }
@@ -59,6 +75,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: _locale,
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('pt', 'PT'),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate, 
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (deviceLocale, supportedLocales){
+        for(var locale in supportedLocales){
+          if(locale.languageCode == deviceLocale.languageCode && locale.countryCode == deviceLocale.countryCode){
+            return deviceLocale; 
+          }
+        }
+          return supportedLocales.first; 
+      },
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           builder: (_) {

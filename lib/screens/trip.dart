@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/fishing_set.dart';
@@ -91,7 +92,7 @@ class _TripScreenState extends State<TripScreen> {
   Widget _endTripButton() {
     return StripButton(
       color: OlracColoursLight.olspsRed,
-      labelText: 'End Trip',
+      labelText: AppLocalizations.of(context).getTranslatedValue('end_trip'),
       onPressed: _trip.endedAt != null ? null : _onPressEndTrip,
     );
   }
@@ -99,12 +100,12 @@ class _TripScreenState extends State<TripScreen> {
   Widget _fishingSetButton() {
     if (activeSet != null) {
       return StripButton(
-        labelText: 'End Set',
+        labelText: AppLocalizations.of(context).getTranslatedValue('end_set'),
         onPressed: _onPressEndFishingSet,
       );
     }
     return StripButton(
-      labelText: 'Start Set',
+      labelText: AppLocalizations.of(context).getTranslatedValue('start_new_set'),
       onPressed: _onPressStartFishingSet,
     );
   }
@@ -112,7 +113,7 @@ class _TripScreenState extends State<TripScreen> {
   Widget _noFishingActivities() {
     return Center(
       child: Text(
-        'No Fishing Activities\nRecorded',
+        AppLocalizations.of(context).getTranslatedValue('no_fishing_activities_recorded'),
         style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.center,
       ),
@@ -212,7 +213,7 @@ class _TripDetails extends StatelessWidget {
     return Builder(builder: (BuildContext context) {
       return Row(
         children: [
-          Text('Started: ', style: Theme.of(context).textTheme.headline6),
+          Text(AppLocalizations.of(context).getTranslatedValue('started'), style: Theme.of(context).textTheme.headline6),
           Text(friendlyDateTime(trip.startedAt),
               style: Theme.of(context).textTheme.headline6)
         ],
@@ -237,7 +238,7 @@ class _TripDetails extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Duration: ', style: Theme.of(context).textTheme.headline6),
+          Text(AppLocalizations.of(context).getTranslatedValue('duration'), style: Theme.of(context).textTheme.headline6),
           ElapsedCounter(
               style: Theme.of(context).textTheme.headline6,
               startedDateTime: trip.startedAt),

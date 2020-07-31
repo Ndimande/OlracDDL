@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:olrac_themes/olrac_themes.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/repos/fishing_method.dart';
 import 'package:olracddl/theme.dart';
@@ -95,7 +96,7 @@ class FishingMethodScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      title: 'Fishing Method',
+      title: AppLocalizations.of(context).getTranslatedValue('fishing_method'),
       body: FutureBuilder(
           future: FishingMethodRepo().all(),
           builder: (context, AsyncSnapshot<List<FishingMethod>> snapshot) {

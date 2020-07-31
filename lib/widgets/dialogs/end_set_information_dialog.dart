@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
 import 'package:olracddl/widgets/inputs/location_editor.dart';
@@ -80,7 +81,7 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
         RaisedButton(
           color: _allValid() ? null : OlracColoursLight.olspsGrey,
           child: Text(
-            'Save',
+            AppLocalizations.of(context).getTranslatedValue('save'),
             style: Theme.of(context).textTheme.headline4,
           ),
           onPressed: _onPressSave,
@@ -105,7 +106,7 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
   @override
   Widget build(BuildContext context) {
     final dialogTitle = Text(
-      'End Set Information',
+      AppLocalizations.of(context).getTranslatedValue('end_set_information'),
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.subtitle1,
     );
@@ -125,7 +126,7 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
     final Widget locationEditor = LocationEditor(
       subTitleStyle: Theme.of(context).textTheme.headline6,
       fieldColor: OlracColoursLight.olspsExtraLightBlue,
-      title: 'Location',
+      title: AppLocalizations.of(context).getTranslatedValue('location'),
       titleStyle: Theme.of(context).textTheme.headline3,
       location: _endLocation ?? Location(latitude: 0, longitude: 0),
       onChanged: (Location l) => setState(() => _endLocation = l),
@@ -135,10 +136,10 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Set Duration',
+           Text(
+            AppLocalizations.of(context).getTranslatedValue('set_duration'),
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
           Container(
             width: 200,
@@ -162,10 +163,10 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Number of Hooks/Traps',
+           Text(
+            AppLocalizations.of(context).getTranslatedValue('number_of_hooks/traps'),
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
           Container(
             width: 200,
@@ -173,14 +174,14 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
               children: [
                 Expanded(
                   child: _miniTextInput(
-                    labelText: 'Hooks',
+                    labelText: AppLocalizations.of(context).getTranslatedValue('hooks'),
                     onChanged: (String text) => setState(() => _hooks = text),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: _miniTextInput(
-                    labelText: 'Traps',
+                    labelText: AppLocalizations.of(context).getTranslatedValue('traps'),
                     onChanged: (String text) => setState(() => _traps = text),
                   ),
                 ),
@@ -195,15 +196,15 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Max # of Lines Used',
+           Text(
+            AppLocalizations.of(context).getTranslatedValue('max_#_of_lines_used'),
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
           Container(
             width: 100,
             child: _miniTextInput(
-              labelText: 'Lines',
+              labelText:AppLocalizations.of(context).getTranslatedValue('lines'),
               onChanged: (String text) => setState(() => _linesUsed = text),
             ),
           ),

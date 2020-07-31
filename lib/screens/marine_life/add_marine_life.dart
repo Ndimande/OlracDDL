@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/catch_condition.dart';
 import 'package:olracddl/models/marine_life.dart';
 import 'package:olracddl/models/species.dart';
@@ -122,7 +123,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _species,
-          label: 'Species',
+          label: AppLocalizations.of(context).getTranslatedValue('species'),
           onChanged: (Species species) => setState(() => _species = species),
           items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
             return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
@@ -143,7 +144,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
         return DDLModelDropdown<CatchCondition>(
           labelTheme: true,
           selected: _condition,
-          label: 'Condition',
+          label: AppLocalizations.of(context).getTranslatedValue('condition'),
           onChanged: (CatchCondition condition) => setState(() => _condition = condition),
           items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition condition) {
             return DropdownMenuItem<CatchCondition>(value: condition, child: Text(condition.name));
@@ -157,7 +158,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Estimated Weight', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('estimated_weight'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -181,7 +182,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Tag Number', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('tag_number'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -228,7 +229,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   StripButton _saveButton() {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
-      labelText: 'Save',
+      labelText: AppLocalizations.of(context).getTranslatedValue('save'),
       onPressed: _onPressSaveButton,
     );
   }
@@ -257,7 +258,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      title: 'Marine Life',
+      title: AppLocalizations.of(context).getTranslatedValue('marine_life'),
       scaffoldKey: _scaffoldKey,
       body: _body(),
     );

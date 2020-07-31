@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 class DDLModelDropdown<T> extends StatelessWidget {
   final T selected;
@@ -60,7 +61,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
                   hint: Padding(
                     padding: const EdgeInsets.all(0),
                     child: Text(
-                      hint ?? 'Tap to select',
+                      hint ?? AppLocalizations.of(context).getTranslatedValue('tap_to_select'),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),

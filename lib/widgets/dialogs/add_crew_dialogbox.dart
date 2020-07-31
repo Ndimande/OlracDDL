@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/repos/crew_member.dart';
 import 'package:olracddl/theme.dart';
@@ -90,7 +91,7 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
         child: Column(
           children: <Widget>[
             Text(
-              'Crew Members',
+              AppLocalizations.of(context).getTranslatedValue('crew_members'),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),

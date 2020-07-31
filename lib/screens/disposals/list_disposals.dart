@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/disposal.dart';
 import 'package:olracddl/repos/disposal.dart';
 import 'package:olracddl/screens/disposals/add_disposal.dart';
@@ -21,16 +22,16 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: 'Trip ${widget.tripID}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${widget.tripID}',
           onPressed: () {
             // magnitude
             Navigator.pop(context);
           },
         ),
         BreadcrumbElement(
-          label: 'Set ${widget.fishingSetID}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${widget.fishingSetID}',
         ),
-        BreadcrumbElement(label: 'Disposals', onPressed: () {}),
+        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('disposals'), onPressed: () {}),
       ],
     );
   }
@@ -39,7 +40,7 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
     return Expanded(
       child: Center(
         child: Text(
-          'No Disposals Recorded',
+          AppLocalizations.of(context).getTranslatedValue('no_disposals_recorded'),
           style: Theme.of(context).textTheme.headline2,
           textAlign: TextAlign.center,
         ),
@@ -52,7 +53,7 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
 
     final List<DataColumn> columns = [
       DataColumn(label: Text('', style: headerStyle)),
-      DataColumn(label: Text('Species', style: headerStyle)),
+      DataColumn(label: Text(AppLocalizations.of(context).getTranslatedValue('species'), style: headerStyle)),
       DataColumn(label: Text('Dis.', style: headerStyle), numeric: true),
       DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
       DataColumn(label: Text('#', style: headerStyle), numeric: true),
@@ -102,7 +103,7 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         StripButton(
-          labelText: 'Add Disposal',
+          labelText: AppLocalizations.of(context).getTranslatedValue('add_disposal'),
           onPressed: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (_) => AddDisposalScreen(widget.fishingSetID)));
             setState(() {});

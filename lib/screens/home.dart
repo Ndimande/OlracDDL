@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_data.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
+import 'package:olracddl/screens/settings_screen.dart';
 import 'package:olracddl/screens/start_trip.dart';
 import 'package:olracddl/screens/trip.dart';
 import 'package:olracddl/theme.dart';
@@ -58,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (allTrips.isEmpty) {
       return Center(
-        child: Text('No Trips Recorded',
+        child: Text(AppLocalizations.of(context).getTranslatedValue('no_trips_recorded'),
             style: Theme.of(context).textTheme.headline2),
       );
     }
@@ -92,13 +94,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
                 child: StripButton(
-                    labelText: 'Start New Trip',
+                    labelText: AppLocalizations.of(context).getTranslatedValue('start_new_trip'),
                     onPressed: _onPressStartTripButton))
           else
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
               child: StripButton(
-                  labelText: 'Active Trip', onPressed: _onPressActiveTripButton),
+                  labelText: 'Active Trip',
+                  onPressed: _onPressActiveTripButton),
             ),
         ],
       ),
@@ -134,7 +137,9 @@ Widget _drawerHeader() {
           'Username',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         Text(
           AppData.profile.username,
           style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w400),
@@ -206,9 +211,10 @@ class _HomeDrawer extends StatelessWidget {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
-              Container(color: const Color.fromRGBO(255, 255, 255, 0.5),
-              margin: const EdgeInsets.only(bottom: 20),
-                child: _drawerHeader()),
+              Container(
+                  color: const Color.fromRGBO(255, 255, 255, 0.5),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: _drawerHeader()),
               Column(
                 children: [
                   _listTile(
@@ -219,7 +225,7 @@ class _HomeDrawer extends StatelessWidget {
                   _listTile(
                     iconData: Icons.settings,
                     text: 'Settings',
-                    onTap: () => null,
+                    onTap: () async =>  await Navigator.of(context).push(MaterialPageRoute(builder: (_) => SettingsScreen())),
                   ),
                   _listTile(
                     iconData: Icons.info,
@@ -235,3 +241,4 @@ class _HomeDrawer extends StatelessWidget {
     );
   }
 }
+

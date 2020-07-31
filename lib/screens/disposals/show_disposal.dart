@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:olrac_widgets/westlake.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/disposal.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/trip.dart';
@@ -40,19 +41,19 @@ class _ShowDisposalScreenState extends State<ShowDisposalScreen> {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: 'Trip ${_trip.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${_trip.id}',
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
         BreadcrumbElement(
-          label: 'Set ${_fishingSet.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${_fishingSet.id}',
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: 'Disposal'),
+        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('disposal'),),
         BreadcrumbElement(label: '#' + widget.indexID.toString()),
       ],
     );
@@ -98,13 +99,13 @@ class _ShowDisposalScreenState extends State<ShowDisposalScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const StripButton(
-            labelText: 'Edit',
+           StripButton(
+            labelText: AppLocalizations.of(context).getTranslatedValue('edit'),
             onPressed: null,
             color: OlracColoursLight.olspsGrey,
           ),
           StripButton(
-            labelText: 'Delete',
+            labelText: AppLocalizations.of(context).getTranslatedValue('delete'),
             onPressed: _onPressDelete,
             color: OlracColoursLight.olspsRed,
           ),
@@ -131,12 +132,12 @@ class _ShowDisposalScreenState extends State<ShowDisposalScreen> {
 
   Widget _dataTable() {
     final details = Column(children: [
-      _dataRow('Common Name', _disposal.species.commonName),
-      _dataRow('Species', _disposal.species.scientificName),
-      _dataRow('Disposal State', _disposal.disposalState.name),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'), _disposal.species.commonName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('species'), _disposal.species.scientificName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('disposal_state'), _disposal.disposalState.name),
 
-      _dataRow('Estimated Green Weight', (_disposal.estimatedGreenWeight / 1000).toString() + 'Kg'),
-      _dataRow('Number of Individuals', _disposal.individuals.toString()),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('estimated_green_weight'), (_disposal.estimatedGreenWeight / 1000).toString() + 'Kg'),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('number_of_individuals'), _disposal.individuals.toString()),
 //      _dataRow('Uploaded', _trip.isUploaded ? 'Yes' : 'No'),
     ]);
 

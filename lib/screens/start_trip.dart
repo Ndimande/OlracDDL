@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
@@ -153,7 +154,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Crew Members', style: Theme.of(context).textTheme.headline2),
+          Text(AppLocalizations.of(context).getTranslatedValue('crew_members'), style: Theme.of(context).textTheme.headline2),
           _skipperDropdown(),
           _crew(),
           _notesInput(),
@@ -171,7 +172,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
 
   Widget _saveButton() {
     return StripButton(
-      labelText: 'Save',
+      labelText: AppLocalizations.of(context).getTranslatedValue('save'),
       onPressed: _onPressSave,
       color: _page2Valid()
           ? OlracColoursLight.olspsHighlightBlue
@@ -204,7 +205,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return DDLModelDropdown<Port>(
           labelTheme: false,
           selected: _port,
-          label: 'Departure Port',
+          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
           onChanged: (Port port) => setState(() => _port = port),
           items: snapshot.data.map(
             (Port p) {
@@ -221,7 +222,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Departure Details', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('departure_details'), style: Theme.of(context).textTheme.headline2),
         DateTimeEditor(
           title: 'Date, Time and Location',
           onChanged: (Picker picker, List<int> selectedIndices) {
@@ -251,7 +252,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return DDLModelDropdown<Vessel>(
           labelTheme: false,
           selected: _vessel,
-          label: 'Vessel',
+          label: AppLocalizations.of(context).getTranslatedValue('vessel'),
           onChanged: (Vessel vessel) => setState(() => _vessel = vessel),
           items: snapshot.data.map(
             (Vessel v) {
@@ -281,7 +282,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return DDLModelDropdown<Skipper>(
           labelTheme: false,
           selected: _skipper,
-          label: 'Skipper',
+          label: AppLocalizations.of(context).getTranslatedValue('skipper'),
           onChanged: (Skipper skipper) => setState(() => _skipper = skipper),
           items: snapshot.data.map(
             (Skipper v) {
@@ -301,7 +302,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        Text('Operational', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('operational'), style: Theme.of(context).textTheme.headline2),
         _vesselDropdown(),
       ],
     );
@@ -378,7 +379,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           Row(
             children: [
               Text('Crew', style: Theme.of(context).textTheme.headline3),
-              InkWell(
+              GestureDetector(
                 onTap: () async {
                   final List<CrewMember> crewMembers =
                       await showDialog<List<CrewMember>>(
@@ -423,7 +424,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   Widget _notesInput() {
     final title = Row(
       children: [
-        Text('Notes', style: Theme.of(context).textTheme.headline3),
+        Text(AppLocalizations.of(context).getTranslatedValue('notes'), style: Theme.of(context).textTheme.headline3),
         IconButton(
           icon: const Icon(Icons.camera_alt),
           onPressed: () {},
@@ -458,7 +459,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
               });
             }
           }),
-      title: 'Trip Information',
+      title: AppLocalizations.of(context).getTranslatedValue('trip_information'),
       body: _page == Page.One ? _page1() : _page2(),
     );
   }

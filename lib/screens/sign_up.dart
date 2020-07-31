@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_config.dart';
 import 'package:olracddl/app_data.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/country.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/repos/country.dart';
@@ -82,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Email', style: Theme.of(context).textTheme.headline2),
+          Text(AppLocalizations.of(context).getTranslatedValue('email'), style: Theme.of(context).textTheme.headline2),
           const SizedBox(height: 5),
           TextFormField(
             style: Theme.of(context).textTheme.headline3,
@@ -113,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return DDLModelDropdown<Country>(
           labelTheme: true,
           selected: _country,
-          label: 'Country',
+          label: AppLocalizations.of(context).getTranslatedValue('country'),
           onChanged: (Country country) => setState(() => _country = country),
           items: countries.map<DropdownMenuItem<Country>>((Country country) {
             return DropdownMenuItem<Country>(
@@ -161,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       margin: const EdgeInsets.symmetric(vertical: 15,),
       child: StripButton(
         color: _allValid() ? Theme.of(context).accentColor : Colors.grey,
-        labelText: 'Save',
+        labelText: AppLocalizations.of(context).getTranslatedValue('save'),
         onPressed: _allValid() ? _onPressSaveButton : null,
       ),
     );
@@ -171,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
-      title: 'Sign Up',
+      title: AppLocalizations.of(context).getTranslatedValue('sign_up'),
       body: _body(),
     );
   }

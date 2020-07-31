@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:olrac_widgets/westlake.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/marine_life.dart';
 import 'package:olracddl/models/trip.dart';
@@ -44,7 +45,7 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: 'Trip ${_trip.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${_trip.id}',
           onPressed: () {
             // magnitude
             Navigator.pop(context);
@@ -53,13 +54,13 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
           },
         ),
         BreadcrumbElement(
-          label: 'Set ${_fishingSet.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${_fishingSet.id}',
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: 'Marine Life'),
+        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('marine_life')),
         BreadcrumbElement(label: widget.indexID.toString()),
       ],
     );
@@ -118,11 +119,11 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
 
   Widget _dataTable() {
     final details = Column(children: [
-      _dataRow('Common Name', _marineLife.species.commonName),
-      _dataRow('Species', _marineLife.species.scientificName),
-      _dataRow('Condition', _marineLife.condition.name.substring(0, 1).toUpperCase()), //check if this is right
-       _dataRow('Estimated Weight', (_marineLife.estimatedWeight / 1000).toString()),
-      _dataRow('Tag Number', _marineLife.tagNumber),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'), _marineLife.species.commonName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('species'), _marineLife.species.scientificName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('condition'), _marineLife.condition.name.substring(0, 1).toUpperCase()), //check if this is right
+       _dataRow(AppLocalizations.of(context).getTranslatedValue('estimated_weight'), (_marineLife.estimatedWeight / 1000).toString()),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('tag_number'), _marineLife.tagNumber),
       _dataRow('Uploaded', _trip.isUploaded ? 'Yes' : 'No'),
     ]);
 
@@ -147,13 +148,13 @@ class _ShowMarineLifeScreenState extends State<ShowMarineLifeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const StripButton(
-            labelText: 'Edit',
+           StripButton(
+            labelText: AppLocalizations.of(context).getTranslatedValue('edit'),
             onPressed: null,
             color: OlracColoursLight.olspsGrey,
           ),
           StripButton(
-            labelText: 'Delete',
+            labelText: AppLocalizations.of(context).getTranslatedValue('delete'),
             onPressed: _onPressDelete,
             color: OlracColoursLight.olspsRed,
           ),

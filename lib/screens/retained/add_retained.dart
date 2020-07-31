@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_utils/units.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/models/species.dart';
 import 'package:olracddl/repos/retained_catch.dart';
@@ -54,7 +55,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _species,
-          label: 'Species',
+          label: AppLocalizations.of(context).getTranslatedValue('species'),
           onChanged: (Species species) => setState(() => _species = species),
           items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
             return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
@@ -68,7 +69,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Green Weight', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('green_weight'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           children: [
@@ -94,7 +95,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Number of Individuals', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('number_of_individuals'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           children: [
@@ -108,7 +109,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8),
-              child: Text('Individuals', style: Theme.of(context).textTheme.headline3),
+              child: Text(AppLocalizations.of(context).getTranslatedValue('individuals'), style: Theme.of(context).textTheme.headline3),
             ),
           ],
         ),
@@ -135,7 +136,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
   StripButton _saveButton() {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
-      labelText: 'Save',
+      labelText: AppLocalizations.of(context).getTranslatedValue('save'),
       onPressed: _onPressSaveButton,
     );
   }
@@ -167,7 +168,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return WestlakeScaffold(
       scaffoldKey: _scaffoldKey,
       body: _body(),
-      title: 'Catch Information',
+      title: AppLocalizations.of(context).getTranslatedValue('catch_information'),
     );
   }
 }

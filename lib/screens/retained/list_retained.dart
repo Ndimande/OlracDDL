@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/repos/retained_catch.dart';
 import 'package:olracddl/screens/retained/add_retained.dart';
@@ -21,13 +22,13 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: 'Trip ${widget.tripID}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${widget.tripID}',
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: 'Set ${widget.setID}'),
-        BreadcrumbElement(label: 'Retained'),
+        BreadcrumbElement(label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${widget.setID}'),
+        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('retained')),
       ],
     );
   }
@@ -36,7 +37,7 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
     return Expanded(
       child: Center(
         child: Text(
-          'No Retained Catch\nRecorded',
+          AppLocalizations.of(context).getTranslatedValue('no_retained_catch_recorded'),
           style: Theme.of(context).textTheme.headline2,
           textAlign: TextAlign.center,
         ),
@@ -49,7 +50,7 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
 
     final List<DataColumn> columns = [
       DataColumn(label: Text('', style: headerStyle)),
-      DataColumn(label: Text('Species', style: headerStyle)),
+      DataColumn(label: Text(AppLocalizations.of(context).getTranslatedValue('species'), style: headerStyle)),
       DataColumn(label: Text('Kg', style: headerStyle), numeric: true),
       DataColumn(label: Text('#', style: headerStyle), numeric: true),
     ];
@@ -119,7 +120,7 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         StripButton(
-          labelText: 'Add Retained Catch',
+          labelText: AppLocalizations.of(context).getTranslatedValue('add_retained_catch'),
           onPressed: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (_) => AddRetainedScreen(widget.setID)));
             setState(() {});

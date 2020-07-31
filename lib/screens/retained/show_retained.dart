@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:olrac_widgets/westlake.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/retained_catch.dart';
 import 'package:olracddl/models/trip.dart';
@@ -41,7 +42,7 @@ class _ShowRetainedScreenState extends State<ShowRetainedScreen> {
     return Breadcrumb(
       elements: [
         BreadcrumbElement(
-          label: 'Trip ${_trip.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('trip')} ${_trip.id}',
           onPressed: () {
             // magnitude
             Navigator.pop(context);
@@ -50,13 +51,13 @@ class _ShowRetainedScreenState extends State<ShowRetainedScreen> {
           },
         ),
         BreadcrumbElement(
-          label: 'Set ${_fishingSet.id}',
+          label: '${AppLocalizations.of(context).getTranslatedValue('set')} ${_fishingSet.id}',
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
           },
         ),
-        BreadcrumbElement(label: 'Retained'),
+        BreadcrumbElement(label: AppLocalizations.of(context).getTranslatedValue('retained')),
         BreadcrumbElement(label: widget.indexID.toString()),
       ],
     );
@@ -115,10 +116,10 @@ class _ShowRetainedScreenState extends State<ShowRetainedScreen> {
 
   Widget _dataTable() {
     final details = Column(children: [
-      _dataRow('Common Name', _retainedCatch.species.commonName),
-      _dataRow('Species', _retainedCatch.species.scientificName),
-      _dataRow('Green Weight', (_retainedCatch.greenWeight / 1000).toString()),
-      _dataRow('No. of Individuals', _retainedCatch.individuals.toString()),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('common_name'), _retainedCatch.species.commonName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('species'), _retainedCatch.species.scientificName),
+      _dataRow(AppLocalizations.of(context).getTranslatedValue('green_weight'), (_retainedCatch.greenWeight / 1000).toString()),
+      _dataRow('# ${AppLocalizations.of(context).getTranslatedValue('individuals')}', _retainedCatch.individuals.toString()),
       _dataRow('Uploaded', _trip.isUploaded ? 'Yes' : 'No'),
     ]);
 
@@ -143,13 +144,13 @@ class _ShowRetainedScreenState extends State<ShowRetainedScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const StripButton(
-            labelText: 'Edit',
+         StripButton(
+            labelText: AppLocalizations.of(context).getTranslatedValue('edit'),
             onPressed: null,
             color: OlracColoursLight.olspsGrey,
           ),
           StripButton(
-            labelText: 'Delete',
+            labelText: AppLocalizations.of(context).getTranslatedValue('delete'),
             onPressed: _onPressDelete,
             color: OlracColoursLight.olspsRed,
           ),

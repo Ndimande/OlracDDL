@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/westlake/strip_button.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/theme.dart';
-import 'package:olracddl/widgets/datetime_editor.dart';
-import 'package:olracddl/widgets/location_editor.dart';
+import 'inputs/datetime_editor.dart';
+import 'inputs/location_editor.dart';
 
 class EndTripInformationDialog extends StatelessWidget {
   @override
@@ -21,54 +22,57 @@ class EndTripInformationDialog extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Text(
-              'End Trip Information',
+              AppLocalizations.of(context)
+                  .getTranslatedValue('end_trip_information'),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),
-
             DateTimeEditor(
-                    title: 'Date and Time',
-                    initialDateTime: DateTime.now(),
-                    onChanged: () {},
-                    titleStyle: Theme.of(context).textTheme.headline3,
-                    fieldColor: OlracColoursLight.olspsExtraLightBlue,
-                  ),
+              title: 'Date and Time',
+              initialDateTime: DateTime.now(),
+              onChanged: () {},
+              titleStyle: Theme.of(context).textTheme.headline3,
+              fieldColor: OlracColoursLight.olspsExtraLightBlue,
+            ),
             LocationEditor(
               subTitleStyle: Theme.of(context).textTheme.headline6,
               fieldColor: OlracColoursLight.olspsExtraLightBlue,
-              title: 'Location',
+              title:
+                  AppLocalizations.of(context).getTranslatedValue('location'),
               titleStyle: Theme.of(context).textTheme.headline3,
               location: Location(latitude: 0, longitude: 0),
               onChanged: (Location l) {},
             ),
             Container(
-                child:
-                Row(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Set Duration',textAlign: TextAlign.left,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
-                  ],
-
-                )
-            ),
+                child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)
+                      .getTranslatedValue('set_duration'),
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ],
+            )),
             const SizedBox(
               height: 5,
             ),
-
             Container(
-
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RaisedButton(
                     color: Colors.grey,
                     //  labelText:'Mins',
-                    onPressed: (){},
+                    onPressed: () {},
                     child: Container(
                       height: 40,
                       width: 70,
                       alignment: Alignment.bottomRight,
-                      child: const Text('Hours ',
-                        style: TextStyle(fontSize: 15),
+                      child: Text(
+                        AppLocalizations.of(context).getTranslatedValue('hours'),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                   ),
@@ -78,31 +82,35 @@ class EndTripInformationDialog extends StatelessWidget {
                   ),
                   RaisedButton(
                     color: Colors.grey,
-                  //  labelText:'Mins',
-                    onPressed: (){},
+                    //  labelText:'Mins',
+                    onPressed: () {},
                     child: Container(
                       height: 40,
                       width: 70,
                       alignment: Alignment.bottomRight,
-                      child: const Text('Mins',
-                        style: TextStyle(fontSize: 15),
+                      child: Text(
+                        AppLocalizations.of(context).getTranslatedValue('mins'),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-
             const SizedBox(
               height: 5,
             ),
             Container(
-                child:
-                Row(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Number of Hooks/Traps',textAlign: TextAlign.left,style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                  ],
-                )),
+                child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context).getTranslatedValue('number_of_hooks/traps'),
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ],
+            )),
             const SizedBox(
               height: 10,
             ),
@@ -116,13 +124,14 @@ class EndTripInformationDialog extends StatelessWidget {
                     RaisedButton(
                       color: Colors.grey,
                       //  labelText:'Mins',
-                      onPressed: (){},
+                      onPressed: () {},
                       child: Container(
                         height: 40,
                         width: 70,
                         alignment: Alignment.bottomRight,
-                        child: const Text('Hooks',
-                          style: TextStyle(fontSize: 15),
+                        child:  Text(
+                          AppLocalizations.of(context).getTranslatedValue('hooks'),
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -133,17 +142,17 @@ class EndTripInformationDialog extends StatelessWidget {
                     RaisedButton(
                       color: Colors.grey,
                       //  labelText:'Mins',
-                      onPressed: (){},
+                      onPressed: () {},
                       child: Container(
                         height: 40,
                         width: 70,
                         alignment: Alignment.bottomRight,
-                        child: const Text('Traps',
-                          style: TextStyle(fontSize: 15),
+                        child:  Text(
+                          AppLocalizations.of(context).getTranslatedValue('traps'),
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -153,12 +162,16 @@ class EndTripInformationDialog extends StatelessWidget {
               height: 5,
             ),
             Container(
-                child:
-                Row(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Max # of Lines Used',textAlign: TextAlign.left,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
-                  ],
-                )),
+                child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                Text(
+                  AppLocalizations.of(context).getTranslatedValue('max_#_of_lines_used'),
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ],
+            )),
             const SizedBox(
               height: 5,
             ),
@@ -173,13 +186,14 @@ class EndTripInformationDialog extends StatelessWidget {
                     RaisedButton(
                       color: Colors.grey,
                       //  labelText:'Mins',
-                      onPressed: (){},
+                      onPressed: () {},
                       child: Container(
                         height: 40,
                         width: 70,
                         alignment: Alignment.bottomRight,
-                        child: const Text('Lines  ',
-                          style: TextStyle(fontSize: 15),
+                        child:  Text(
+                          AppLocalizations.of(context).getTranslatedValue('lines'),
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -187,14 +201,13 @@ class EndTripInformationDialog extends StatelessWidget {
                 ),
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               //crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 RaisedButton(
                   child: Text(
-                    'Save',
+                    AppLocalizations.of(context).getTranslatedValue('save'),
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   onPressed: () {},

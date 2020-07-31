@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
 import 'package:olracddl/widgets/inputs/location_editor.dart';
@@ -49,7 +50,7 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
     return LocationEditor(
       subTitleStyle: Theme.of(context).textTheme.headline6,
       fieldColor: OlracColoursLight.olspsExtraLightBlue,
-      title: 'Location',
+      title: AppLocalizations.of(context).getTranslatedValue('location'),
       titleStyle: Theme.of(context).textTheme.headline3,
       location: _location ?? Location(latitude: 0, longitude: 0),
       onChanged: (Location l) {
@@ -73,7 +74,7 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
       children: [
         RaisedButton(
           child: Text(
-            'Save',
+            AppLocalizations.of(context).getTranslatedValue('save'),
             style: Theme.of(context).textTheme.headline4,
           ),
           onPressed: _onPressSaveButton,
@@ -94,7 +95,7 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
         child: Column(
           children: <Widget>[
             Text(
-              'End Trip Information',
+              AppLocalizations.of(context).getTranslatedValue('end_trip_information'),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/catch_condition.dart';
 import 'package:olracddl/models/disposal.dart';
 import 'package:olracddl/models/species.dart';
@@ -119,7 +120,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _species,
-          label: 'Species',
+          label: AppLocalizations.of(context).getTranslatedValue('species'),
           onChanged: (Species species) => setState(() => _species = species),
           items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
             return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
@@ -140,7 +141,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
         return DDLModelDropdown<CatchCondition>(
           labelTheme: true,
           selected: _disposalState,
-          label: 'Disposal State',
+          label: AppLocalizations.of(context).getTranslatedValue('disposal_state'),
           onChanged: (CatchCondition disposalState) => setState(() => _disposalState = disposalState),
           items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition disposalState) {
             return DropdownMenuItem<CatchCondition>(value: disposalState, child: Text(disposalState.name));
@@ -154,7 +155,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Estimated Green Weight', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('estimated_green_weight'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -178,7 +179,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Number of Individuals', style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('number_of_individuals'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -191,7 +192,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            Text('Individuals', style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
+            Text(AppLocalizations.of(context).getTranslatedValue('individuals'), style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
           ],
         )
       ],
@@ -227,7 +228,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
   StripButton _saveButton() {
     return StripButton(
       color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
-      labelText: 'Save',
+      labelText: AppLocalizations.of(context).getTranslatedValue('save'),
       onPressed: _onPressSaveButton,
     );
   }
@@ -256,9 +257,10 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
-      title: 'Disposals',
+      title: AppLocalizations.of(context).getTranslatedValue('disposals'),
       scaffoldKey: _scaffoldKey,
       body: _body(),
     );
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/localization/app_localization.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _loginButton() => Container(
         margin: const EdgeInsets.all(5),
         child: StripButton(
-          labelText: '      Log In      ',
+          labelText: AppLocalizations.of(context).getTranslatedValue('log_in'),
           onPressed: () {},
         ),
       );
