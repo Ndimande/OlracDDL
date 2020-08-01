@@ -13,6 +13,8 @@ import 'package:olracddl/screens/splash.dart';
 import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'get_lookup_data.dart';
+
 final DatabaseProvider _databaseProvider = DatabaseProvider();
 Database _database;
 
@@ -23,6 +25,20 @@ Future<void> main() async {
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
   DioProvider().init();
+  await storeSpecies();
+  await storeSeaConditions();
+  await storeSeaBottomTypes();
+  await storeMoonPhases();
+  await  storeCloudTypes();
+  await storeCloudCovers();
+  await storePorts();
+  await storeVesselNames();
+  await storeFishingAreas();
+  await storeCrewMembers();
+  await storeSkippers();
+  await storeCatchConditions();
+  //await storeFishingMethods(); //works but still need to figure out how to deal with pictures!!
+
   runApp(MyApp());
 }
 
@@ -48,13 +64,13 @@ class _MyAppState extends State<MyApp> {
 //      if (!AppConfig.debugMode)
       await Future.delayed(const Duration(seconds: 5));
 
-//      if (AppData.profile != null) {
-//        await _navigatorKey.currentState
-//            .pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
-//      } else {
-//        await _navigatorKey.currentState
-//            .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => SignUpScreen()));
-//      }
+      if (AppData.profile != null) {
+        await _navigatorKey.currentState
+            .pushReplacement(MaterialPageRoute(maintainState: true, builder: (_) => HomeScreen()));
+      } else {
+        await _navigatorKey.currentState
+            .pushReplacement(MaterialPageRoute(maintainState: false, builder: (_) => SignUpScreen()));
+      }
     });
   }
 

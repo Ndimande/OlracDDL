@@ -350,7 +350,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           ),
           const SizedBox(height: 15),
           _weatherConditions(),
-          //WeatherConditionButton(),
+         // WeatherConditionButton(),
           const SizedBox(height: 15),
           _notesInput(),
           Container(

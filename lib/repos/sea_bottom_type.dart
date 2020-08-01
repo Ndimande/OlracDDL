@@ -10,6 +10,7 @@ class SeaBottomTypeRepo extends DatabaseRepo<SeaBottomType> {
     return SeaBottomType(
       id: result['id'],
       name: result['name'],
+      namePortuguese: result['name_portuguese'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

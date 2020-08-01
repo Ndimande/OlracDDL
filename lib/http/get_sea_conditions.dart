@@ -14,8 +14,7 @@ Future<List<SeaCondition>>  getSeaConditions() async{
   final  List<SeaCondition> seaConditionType = [];
 
   for(final Map seaConditionData in seaConditionList){
-    seaConditionType.add(SeaCondition(name: seaConditionData['displayname']));
-
+    seaConditionType.add(SeaCondition(name: seaConditionData['displayname'] ,imageString: seaConditionData['code'],namePortuguese: seaConditionData['displayname_portuguese'] )); //This need to be evaluated...Second Parameter!!!!!
   }
   return seaConditionType;
 }

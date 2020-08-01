@@ -4,7 +4,7 @@ import 'package:olracddl/app_config.dart';
 import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/repos/sea_bottom_type.dart';
 
-const String _baseUrl = AppConfig.DDM_URL + '/api/bottom_types';
+const String _baseUrl = AppConfig.DDM_URL + '/api/bottom_types/';
 final Dio _dio = DioProvider().dio;
 Future<List<SeaBottomType>>  getSeaBottomTypes() async{
   Response response;
@@ -14,7 +14,7 @@ Future<List<SeaBottomType>>  getSeaBottomTypes() async{
  final  List<SeaBottomType> seaBottomType = [];
 
   for(final Map SeaBottomTypeData in seaBottomList){
-    seaBottomType.add(SeaBottomType(name: SeaBottomTypeData['displayname']));
+    seaBottomType.add(SeaBottomType(name: SeaBottomTypeData['displayname'], namePortuguese: SeaBottomTypeData['displayname_portuguese']));
 
   }
   return seaBottomType;

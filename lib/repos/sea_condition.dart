@@ -10,6 +10,7 @@ class SeaConditionRepo extends DatabaseRepo<SeaCondition> {
     return SeaCondition(
       id: result['id'],
       name: result['name'],
+      namePortuguese: result['name_portuguese'],
       createdAt: DateTime.parse(result['created_at']),
       imageString: result['image_string'],
     );

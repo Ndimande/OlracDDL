@@ -14,8 +14,7 @@ Future<List<Species>>  getSpecies() async{
   final  List<Species> speciesType = [];
 
   for(final Map speciesData in speciesList){
-    speciesType.add(Species(commonName: speciesData['common_name']));
-
+    speciesType.add(Species(commonName: speciesData['common_name'], scientificName: speciesData['scientific_name'], commonNamePortuguese: speciesData['common_name_portuguese']));
   }
   return speciesType;
 }

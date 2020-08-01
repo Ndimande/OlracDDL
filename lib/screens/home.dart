@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/post_data.dart';
+import 'package:olracddl/repos/fishing_set.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/start_trip.dart';
@@ -102,8 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: StripButton(
                       color: OlracColoursLight.olspsHighlightBlue,
                       labelText: 'Upload',
-                      onPressed: uploadTrip,disabled: _completedTrips.isEmpty? true : false,
+                      onPressed: uploadTrip,
+                      disabled: _completedTrips.isEmpty? true : false,
                   )
+
                 ),
             ],
           ),
@@ -112,10 +118,35 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Future<void> uploadTrip()async{
-    for(final Trip trip in _completedTrips){
-      await postTrip( trip);
+    final FishingSetRepo fishingSets = FishingSetRepo();
+
+    for(final Trip trip in _completedTrips) {
+      if(!trip.isUploaded){
+        final TripRepo tripRepo= TripRepo();
+        final Map<String,dynamic> toTripModel = await postTrip( trip);
+        trip.uploadedAt =  DateTime.now().toUtc();
+        FishingSet set =await fishingSets.find(trip.id);
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        await postFishingSet(set);
+        //print(toTripModel);
+        if(!trip.isUploaded){
+
+          await tripRepo.store(trip);
+        }
+      }
     }
+    setState(() {});
   }
+//  Future<void> uploadSet(int tripId)async{
+//    final FishingSetRepo fishingSets = FishingSetRepo();
+//     fishingSets.find(tripId);
+////      postFishingSet() ;
+//     // final Map<String,dynamic> toFishingSetModel = await postFishingSet( fishingSet);
+//
+//    //Create postTrip Func
+//    //check uploaded_at
+//    //
+//  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

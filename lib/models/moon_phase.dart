@@ -16,7 +16,7 @@ class MoonPhase extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      'imageString': imageString,
+      'image_string': imageString,
     };
   }
 

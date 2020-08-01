@@ -10,6 +10,7 @@ class CatchConditionRepo extends DatabaseRepo<CatchCondition> {
     return CatchCondition(
       id: result['id'],
       name: result['name'],
+      namePortuguese: result['name_portuguese'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

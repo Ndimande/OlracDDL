@@ -2,12 +2,14 @@ import 'package:database_repo/database_repo.dart';
 
 class SeaCondition extends Model {
   String name;
+  String namePortuguese;
   DateTime createdAt;
   String imageString;
 
   SeaCondition({
     int id,
     this.name,
+    this.namePortuguese,
     this.createdAt,
     this.imageString,
   }) : super(id: id);
@@ -16,7 +18,8 @@ class SeaCondition extends Model {
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      'imageString': imageString,
+      'name_portuguese' : namePortuguese,
+      'image_string': imageString,
     };
   }
 
@@ -25,6 +28,7 @@ class SeaCondition extends Model {
     return {
       'imageString': imageString,
       'name': name,
+      'namePortuguese' : namePortuguese,
       'createdAt': createdAt,
     };
   }

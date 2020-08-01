@@ -146,7 +146,7 @@ class FishingSet extends Model {
       'endLatitude': endLocation.latitude,
       'endLongitude': endLocation.longitude,
       'seaBottomDepth': seaBottomDepth,
-      'seaBottomDepthUnit': seaBottomDepthUnit,
+      'seaBottomDepthUnit': seaBottomDepthUnit.toString(),
       'minimumHookSize': minimumHookSize,
       'hooks': hooks,
       'traps': traps,
