@@ -123,7 +123,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
           label: AppLocalizations.of(context).getTranslatedValue('species'),
           onChanged: (Species species) => setState(() => _species = species),
           items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
         );
       },
@@ -144,7 +144,7 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
           label: AppLocalizations.of(context).getTranslatedValue('disposal_state'),
           onChanged: (CatchCondition disposalState) => setState(() => _disposalState = disposalState),
           items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition disposalState) {
-            return DropdownMenuItem<CatchCondition>(value: disposalState, child: Text(disposalState.name));
+            return DropdownMenuItem<CatchCondition>(value: disposalState, child: Text(disposalState.name, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
         );
       },

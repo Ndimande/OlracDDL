@@ -61,20 +61,24 @@ class _SplashScreenState extends State<SplashScreen> {
       );
 
   Widget _appInfo() => Container(
-        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        //margin: const EdgeInsets.only(bottom: 15,),
         child: Column(
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 40),
-              child: _olracLogo(275),
+              child: _olracLogo(200),
             ),
             const Divider(color: Colors.transparent, thickness: 1),
-            Text(AppLocalizations.of(context).getTranslatedValue('dynamic_data_logger'),
-                style: _fontStyle(16, FontWeight.w700),
+            Text(
+                AppLocalizations.of(context)
+                    .getTranslatedValue('dynamic_data_logger'),
+                style: _fontStyle(14, FontWeight.w700),
                 textAlign: TextAlign.center),
             //Text(AppData.packageInfo?.version, style: _fontStyle(10)),
-            Text(AppLocalizations.of(context).getTranslatedValue('mobile_application'),
-                style: _fontStyle(16, FontWeight.normal),
+            Text(
+                AppLocalizations.of(context)
+                    .getTranslatedValue('mobile_application'),
+                style: _fontStyle(14, FontWeight.normal),
                 textAlign: TextAlign.center),
           ],
         ),
@@ -84,19 +88,21 @@ class _SplashScreenState extends State<SplashScreen> {
         margin: const EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
-            Text(AppLocalizations.of(context).getTranslatedValue('developed_by'), style: _fontStyle(14, FontWeight.w600)),
+            Text(
+                AppLocalizations.of(context).getTranslatedValue('developed_by'),
+                style: _fontStyle(14, FontWeight.w600)),
             const SizedBox(height: 15),
-            _olspsLogo(275),
+            _olspsLogo(200),
           ],
         ),
       );
 
   Widget _customisedFor() => Container(
-        margin: const EdgeInsets.all(5),
         child: Column(
           children: <Widget>[
             Text(
-              AppLocalizations.of(context).getTranslatedValue('in_cooperation_with_ana_fraga'),
+              AppLocalizations.of(context)
+                  .getTranslatedValue('in_cooperation_with_ana_fraga'),
               style: _fontStyle(14, FontWeight.w500),
               textAlign: TextAlign.center,
             ),
@@ -118,13 +124,35 @@ class _SplashScreenState extends State<SplashScreen> {
             _customisedFor(),
             Column(
               children: [
-                Image.asset(
-                  'assets/images/sponsor_logo1.png',
-                  height: 50,
-                  width: _scaleImage(150),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    'assets/images/logo5.png',
+                    width: _scaleImage(150),
+                  ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20,),
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset(
+                        'assets/images/sponsor_logo1.png',
+                        width: _scaleImage(150),
+                      ),
+                      Image.asset(
+                        'assets/images/logo4.png',
+                        width: _scaleImage(170),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 20,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

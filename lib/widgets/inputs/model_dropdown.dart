@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olracddl/localization/app_localization.dart';
+import 'package:olracddl/widgets/inputs/olsps_search_dropdown.dart';
+
 
 class DDLModelDropdown<T> extends StatelessWidget {
   final T selected;
@@ -37,8 +39,8 @@ class DDLModelDropdown<T> extends StatelessWidget {
         children: <Widget>[
           if (label != null)
             Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 15,
+              margin: const EdgeInsets.only(
+                bottom: 5, top: 12,
               ),
               child: Text(
                 label,
@@ -48,29 +50,29 @@ class DDLModelDropdown<T> extends StatelessWidget {
               ),
             ),
           Container(
+            //height: 68,
             decoration: ShapeDecoration(
               color: fieldColor ?? Colors.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
             ),
-            child: DropdownButtonHideUnderline(
-              child: ButtonTheme(
-                alignedDropdown: true,
-                child: DropdownButton<T>(
-                  hint: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Text(
-                      hint ?? AppLocalizations.of(context).getTranslatedValue('tap_to_select'),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
+            child: ButtonTheme(
+              alignedDropdown: true,
+              child: SearchableDropdown<T>(
+                underline: const Padding(padding: EdgeInsets.all(0),),
+                hint: Padding(
+                  padding: const EdgeInsets.only(top:0),
+                  child: Text(
+                    hint ?? AppLocalizations.of(context).getTranslatedValue('tap_to_select'),
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
-                  isExpanded: true,
-                  style: Theme.of(context).textTheme.headline3,
-                  value: selected,
-                  onChanged: onChanged,
-                  items: items,
                 ),
+                isExpanded: true,
+                style: Theme.of(context).textTheme.headline3,
+                value: selected,
+                onChanged: onChanged,
+                items: items,
               ),
             ),
           )

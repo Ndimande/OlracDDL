@@ -58,7 +58,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
           label: AppLocalizations.of(context).getTranslatedValue('species'),
           onChanged: (Species species) => setState(() => _species = species),
           items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName));
+            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
         );
       },

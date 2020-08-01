@@ -71,7 +71,6 @@ class FishingMethodScreen extends StatelessWidget {
           final rows = chunk(fishingMethods, columnCount);
 
           return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: rows.map<Widget>((fms) {
               return Expanded(
                 child: Row(

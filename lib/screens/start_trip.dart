@@ -154,7 +154,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('crew_members'), style: Theme.of(context).textTheme.headline2),
+          Text(AppLocalizations.of(context).getTranslatedValue('crew_members'),
+              style: Theme.of(context).textTheme.headline2),
           _skipperDropdown(),
           _crew(),
           _notesInput(),
@@ -205,11 +206,12 @@ class _StartTripScreenState extends State<StartTripScreen> {
         return DDLModelDropdown<Port>(
           labelTheme: false,
           selected: _port,
-          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
+          label:
+              AppLocalizations.of(context).getTranslatedValue('departure_port'),
           onChanged: (Port port) => setState(() => _port = port),
           items: snapshot.data.map(
             (Port p) {
-              return DropdownMenuItem<Port>(value: p, child: Text(p.name));
+              return DropdownMenuItem<Port>(value: p, child: Text(p.name, style: Theme.of(context).textTheme.headline3,));
             },
           ).toList(),
         );
@@ -222,9 +224,13 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('departure_details'), style: Theme.of(context).textTheme.headline2),
+        Text(
+            AppLocalizations.of(context)
+                .getTranslatedValue('departure_details'),
+            style: Theme.of(context).textTheme.headline2),
         DateTimeEditor(
-          title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
+          title: AppLocalizations.of(context)
+              .getTranslatedValue('date_time_and_location'),
           onChanged: (Picker picker, List<int> selectedIndices) {
             setState(() {
               startDatetime = DateTime.parse(picker.adapter.toString());
@@ -258,7 +264,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
             (Vessel v) {
               return DropdownMenuItem<Vessel>(
                 value: v,
-                child: Text(v.name),
+                child: Text(v.name, style: Theme.of(context).textTheme.headline3,),
               );
             },
           ).toList(),
@@ -288,7 +294,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
             (Skipper v) {
               return DropdownMenuItem<Skipper>(
                 value: v,
-                child: Text(v.name),
+                child: Text(v.name, style: Theme.of(context).textTheme.headline3,),
               );
             },
           ).toList(),
@@ -302,7 +308,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        Text(AppLocalizations.of(context).getTranslatedValue('operational'), style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('operational'),
+            style: Theme.of(context).textTheme.headline2),
+        const SizedBox(height: 15),
         _vesselDropdown(),
       ],
     );
@@ -355,30 +363,35 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 30),
       child: Text(
-        AppLocalizations.of(context).getTranslatedValue('no_crew_members_added'),
+        AppLocalizations.of(context)
+            .getTranslatedValue('no_crew_members_added'),
         style: Theme.of(context).textTheme.headline3,
       ),
     );
   }
 
   Widget _crewList() {
-    int index = 0; 
+    int index = 0;
     return Column(
       children: _crewMembers.map((CrewMember cm) {
-        index ++; 
-        return _crewMemberRow(index, cm.shortName, cm.seamanId, 2); //role needs to be changed here from being static 
+        index++;
+        return _crewMemberRow(index, cm.shortName, cm.seamanId,
+            2); //role needs to be changed here from being static
       }).toList(),
     );
   }
 
   Widget _crew() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15,),
+      margin: const EdgeInsets.symmetric(
+        vertical: 15,
+      ),
       child: Column(
         children: [
           Row(
             children: [
-              Text(AppLocalizations.of(context).getTranslatedValue('crew'), style: Theme.of(context).textTheme.headline3),
+              Text(AppLocalizations.of(context).getTranslatedValue('crew'),
+                  style: Theme.of(context).textTheme.headline3),
               GestureDetector(
                 onTap: () async {
                   final List<CrewMember> crewMembers =
@@ -407,8 +420,12 @@ class _StartTripScreenState extends State<StartTripScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _columnHeader(1, '#'),
-                _columnHeader(3, AppLocalizations.of(context).getTranslatedValue('name')),
-                _columnHeader(3, AppLocalizations.of(context).getTranslatedValue('seaman_id')),
+                _columnHeader(
+                    3, AppLocalizations.of(context).getTranslatedValue('name')),
+                _columnHeader(
+                    3,
+                    AppLocalizations.of(context)
+                        .getTranslatedValue('seaman_id')),
                 _columnHeader(2, 'Role'),
               ],
             ),
@@ -424,7 +441,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
   Widget _notesInput() {
     final title = Row(
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('notes'), style: Theme.of(context).textTheme.headline3),
+        Text(AppLocalizations.of(context).getTranslatedValue('notes'),
+            style: Theme.of(context).textTheme.headline3),
         IconButton(
           icon: const Icon(Icons.camera_alt),
           onPressed: () {},
@@ -459,7 +477,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
               });
             }
           }),
-      title: AppLocalizations.of(context).getTranslatedValue('trip_information'),
+      title:
+          AppLocalizations.of(context).getTranslatedValue('trip_information'),
       body: _page == Page.One ? _page1() : _page2(),
     );
   }

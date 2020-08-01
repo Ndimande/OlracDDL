@@ -57,8 +57,9 @@ class _LanguageDialogBoxState extends State<LanguageDialogBox> {
       backgroundColor: Colors.white,
       content: Container(
         height: 130,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
               onTap: () {
@@ -75,7 +76,7 @@ class _LanguageDialogBoxState extends State<LanguageDialogBox> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             InkWell(
               onTap: () {
                 _changeLanguage(portuguese);

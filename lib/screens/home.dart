@@ -135,7 +135,7 @@ Widget _drawerHeader() {
       children: <Widget>[
          Text(
           AppLocalizations.of(context).getTranslatedValue('username'),
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
         const SizedBox(
           height: 10,

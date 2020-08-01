@@ -189,7 +189,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           items: snapshot.data
               .map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
             return DropdownMenuItem<FishingArea>(
-                value: fa, child: Text(fa.name));
+                value: fa, child: Text(fa.name, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
           onChanged: (FishingArea fa) {
             setState(() {
@@ -240,7 +240,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           items: snapshot.data
               .map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
             return DropdownMenuItem<SeaBottomType>(
-                value: sbt, child: Text(sbt.name));
+                value: sbt, child: Text(sbt.name, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
         );
       },
@@ -266,7 +266,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
           items:
               snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
             return DropdownMenuItem<Species>(
-                value: species, child: Text(species.commonName));
+                value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
           }).toList(),
         );
       },

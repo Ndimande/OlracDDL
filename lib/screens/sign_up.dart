@@ -119,7 +119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           items: countries.map<DropdownMenuItem<Country>>((Country country) {
             return DropdownMenuItem<Country>(
               value: country,
-              child: Text(country.name,),
+              child: Text(country.name, style: Theme.of(context).textTheme.headline3,),
             );
           }).toList(),
         );

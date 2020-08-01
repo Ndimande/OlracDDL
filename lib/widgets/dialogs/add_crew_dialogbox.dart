@@ -36,7 +36,7 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
           items: crewMembers.map((CrewMember cm) {
             return DropdownMenuItem<CrewMember>(
               value: cm,
-              child: Text(cm.name),
+              child: Text(cm.name, style: Theme.of(context).textTheme.headline3,),
             );
           }).toList(),
         );
