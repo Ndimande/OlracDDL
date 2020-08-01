@@ -126,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
         final Map<String,dynamic> toTripModel = await postTrip( trip);
         trip.uploadedAt =  DateTime.now().toUtc();
         FishingSet set =await fishingSets.find(trip.id);
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         await postFishingSet(set);
         //print(toTripModel);
         if(!trip.isUploaded){
@@ -137,16 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {});
   }
-//  Future<void> uploadSet(int tripId)async{
-//    final FishingSetRepo fishingSets = FishingSetRepo();
-//     fishingSets.find(tripId);
-////      postFishingSet() ;
-//     // final Map<String,dynamic> toFishingSetModel = await postFishingSet( fishingSet);
-//
-//    //Create postTrip Func
-//    //check uploaded_at
-//    //
-//  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
