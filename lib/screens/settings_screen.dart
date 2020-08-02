@@ -27,6 +27,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 30,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
       title: AppLocalizations.of(context).getTranslatedValue('settings'),
       body: Container(
         margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),

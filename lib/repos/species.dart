@@ -12,6 +12,7 @@ class SpeciesRepo extends DatabaseRepo<Species> {
       commonName: result['common_name'],
       scientificName: result['scientific_name'],
       createdAt: DateTime.parse(result['created_at']),
+      commonNamePortuguese: result['common_name_portuguese'],
     );
   }
 }

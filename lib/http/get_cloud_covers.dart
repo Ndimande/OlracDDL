@@ -15,7 +15,7 @@ Future<List<CloudCover>> getCloudCovers() async{
   final  List<CloudCover> CloudCovers = [];
 
   for(final Map CloudCoverData in cloudCoverList){
-    CloudCovers.add(CloudCover(name: CloudCoverData['displayname']));
+    CloudCovers.add(CloudCover(name: CloudCoverData['displayname'],imageString: CloudCoverData['code']));
 
   }
   return CloudCovers;

@@ -12,6 +12,7 @@ class FishingSetTile extends StatelessWidget {
   final Function onPressRetained;
   final Function onPressDisposal;
   final Function onPressMarineLife;
+  final Function longPressFunction;
 
   const FishingSetTile({
     @required this.indexNumber,
@@ -19,13 +20,14 @@ class FishingSetTile extends StatelessWidget {
     @required this.onPressDisposal,
     @required this.onPressMarineLife,
     @required this.onPressRetained,
+    @required this.longPressFunction,
   }) : assert(fishingSet != null);
 
   Widget imageButton(String imagePath, onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(3),
         height: 40,
         width: 40,
         decoration: BoxDecoration(
@@ -90,36 +92,39 @@ class FishingSetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
-      ),
-      child: Container(
-        height: 80,
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _indexNumber(),
-            Container(
-              padding: const EdgeInsets.all(5),
-              height: 100,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _startDateTime(),
-                  _catchEntries(),
-                ],
+    return GestureDetector(
+          onLongPress: longPressFunction,
+          child: Card(
+        elevation: 3,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
+        ),
+        child: Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _indexNumber(),
+              Container(
+                padding: const EdgeInsets.all(5),
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _startDateTime(),
+                    _catchEntries(),
+                  ],
+                ),
               ),
-            ),
-            imageButton('assets/images/catch_icon.png', onPressRetained),
-            imageButton('assets/images/disposal_icon.png', onPressDisposal),
-            imageButton(
-                'assets/images/marine_life_icon.png', onPressMarineLife),
-          ],
+              imageButton('assets/images/catch_icon.png', onPressRetained),
+              imageButton('assets/images/disposal_icon.png', onPressDisposal),
+              imageButton(
+                  'assets/images/marine_life_icon.png', onPressMarineLife),
+            ],
+          ),
         ),
       ),
     );

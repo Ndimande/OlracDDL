@@ -14,6 +14,7 @@ import 'package:olracddl/screens/marine_life/list_marine_life.dart';
 import 'package:olracddl/screens/retained/list_retained.dart';
 import 'package:olracddl/screens/start_set.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/circle_button.dart';
 import 'package:olracddl/widgets/dialogs/end_set_information_dialog.dart';
 import 'package:olracddl/widgets/dialogs/end_trip_information_dialog.dart';
 import 'package:olracddl/widgets/elapsed_counter.dart';
@@ -90,6 +91,13 @@ class _TripScreenState extends State<TripScreen> {
   }
 
   Widget _endTripButton() {
+    if (activeSet != null) {
+      return StripButton(
+        color: OlracColoursLight.olspsGrey,
+        labelText: AppLocalizations.of(context).getTranslatedValue('end_trip'),
+        onPressed: null,
+      );
+    }
     return StripButton(
       color: OlracColoursLight.olspsRed,
       labelText: AppLocalizations.of(context).getTranslatedValue('end_trip'),
@@ -113,7 +121,8 @@ class _TripScreenState extends State<TripScreen> {
   Widget _noFishingActivities() {
     return Center(
       child: Text(
-        AppLocalizations.of(context).getTranslatedValue('no_fishing_activities_recorded'),
+        AppLocalizations.of(context)
+            .getTranslatedValue('no_fishing_activities_recorded'),
         style: Theme.of(context).textTheme.headline2,
         textAlign: TextAlign.center,
       ),
@@ -127,6 +136,7 @@ class _TripScreenState extends State<TripScreen> {
         final FishingSet fishingSet = _trip.fishingSets[index];
 
         return FishingSetTile(
+          longPressFunction: () {},
           fishingSet: fishingSet,
           indexNumber: index,
           onPressDisposal: () async {
@@ -172,7 +182,9 @@ class _TripScreenState extends State<TripScreen> {
 
   Widget _bottomButtons() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15,),
+        margin: const EdgeInsets.symmetric(
+          vertical: 15,
+        ),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [_fishingSetButton(), _endTripButton()]));
@@ -192,7 +204,14 @@ class _TripScreenState extends State<TripScreen> {
         _trip = snapshot.data['trip'];
 
         return WestlakeScaffold(
-          actions: const [IconButton(icon: Icon(Icons.edit))],
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 30,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          //actions: const [IconButton(icon: Icon(Icons.edit))],
           body: _body(),
         );
       },
@@ -213,7 +232,9 @@ class _TripDetails extends StatelessWidget {
     return Builder(builder: (BuildContext context) {
       return Row(
         children: [
-          Text('${AppLocalizations.of(context).getTranslatedValue('started')}: ', style: Theme.of(context).textTheme.headline6),
+          Text(
+              '${AppLocalizations.of(context).getTranslatedValue('started')}: ',
+              style: Theme.of(context).textTheme.headline6),
           Text(friendlyDateTime(trip.startedAt),
               style: Theme.of(context).textTheme.headline6)
         ],
@@ -225,7 +246,8 @@ class _TripDetails extends StatelessWidget {
     return Builder(builder: (BuildContext context) {
       return Row(
         children: [
-          Text('${AppLocalizations.of(context).getTranslatedValue('ended')}: ', style: Theme.of(context).textTheme.headline6),
+          Text('${AppLocalizations.of(context).getTranslatedValue('ended')}: ',
+              style: Theme.of(context).textTheme.headline6),
           Text(friendlyDateTime(trip.startedAt),
               style: Theme.of(context).textTheme.headline6)
         ],
@@ -238,7 +260,9 @@ class _TripDetails extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${AppLocalizations.of(context).getTranslatedValue('duration')}: ', style: Theme.of(context).textTheme.headline6),
+          Text(
+              '${AppLocalizations.of(context).getTranslatedValue('duration')}: ',
+              style: Theme.of(context).textTheme.headline6),
           ElapsedCounter(
               style: Theme.of(context).textTheme.headline6,
               startedDateTime: trip.startedAt),
@@ -247,37 +271,68 @@ class _TripDetails extends StatelessWidget {
     });
   }
 
-  Widget _locationButton() {
-    return Container(
-      margin: const EdgeInsets.only(left: 20),
-      child: IconButton(
-        icon: Image.asset('assets/images/location_icon.png'),
-        onPressed: () {},
-      ),
-    );
-  }
+  // Widget _locationButton() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(left: 20),
+  //     child: IconButton(
+  //       icon: Image.asset('assets/images/location_icon.png'),
+  //       onPressed: () {},
+  //     ),
+  //   );
+  // }
 
-  Widget _fishingMethodButton() {
+  StatefulBuilder _fishingMethodButton() {
     Future<FishingMethod> currentFM() async {
       return await CurrentFishingMethod.get();
     }
 
-    return FutureBuilder(
-      future: currentFM(),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
-        }
-        final FishingMethod fm = snapshot.data;
-        return IconButton(
-          icon: SvgIcon(
-              assetPath: fm.svgPath, color: OlracColoursLight.olspsDarkBlue),
-          onPressed: () async {
-            final FishingMethod method = await Navigator.push(context,
-                MaterialPageRoute(builder: (_) => FishingMethodScreen()));
-            if (method != null) {
-              CurrentFishingMethod.set(method);
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return FutureBuilder(
+          future: currentFM(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
             }
+            final FishingMethod fm = snapshot.data;
+            return ClipOval(
+              child: Material(
+                color: OlracColoursLight.olspsDarkBlue, // button color
+                child: InkWell(
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      child:
+                          SvgIcon(assetPath: fm.svgPath, color: Colors.white),
+                    ),
+                  ),
+                  onTap: () async {
+                    final FishingMethod method = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => FishingMethodScreen()));
+                    if (method != null) {
+                       setState((){});
+                      CurrentFishingMethod.set(method);
+                    }
+                  },
+                ),
+              ),
+            );
+
+            // IconButton(
+            //   icon: SvgIcon(
+            //       assetPath: fm.svgPath, color: OlracColoursLight.olspsDarkBlue),
+            //   onPressed: () async {
+            //     final FishingMethod method = await Navigator.push(context,
+            //         MaterialPageRoute(builder: (_) => FishingMethodScreen()));
+            //     if (method != null) {
+            //       CurrentFishingMethod.set(method);
+            //     }
+            //   },
+            // );
           },
         );
       },
@@ -298,7 +353,8 @@ class _TripDetails extends StatelessWidget {
                 if (trip.isActive) _duration() else _ended(),
               ],
             ),
-            _locationButton(),
+            SizedBox(width: 10),
+            //_locationButton(),
             _fishingMethodButton(),
           ],
         ),

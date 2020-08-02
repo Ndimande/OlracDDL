@@ -166,6 +166,10 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       scaffoldKey: _scaffoldKey,
       body: _body(),
       title: AppLocalizations.of(context).getTranslatedValue('catch_information'),

@@ -16,10 +16,12 @@ class FishingMethodScreen extends StatelessWidget {
   }
 
   Widget _buildFishingMethodCard(FishingMethod method) {
-    final Widget svg = LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    final Widget svg = LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return Container(
         child: SvgIcon(
-          height: constraints.maxWidth * 0.32, // we have to use height for width because height constraint is infinite
+          height: constraints.maxWidth *
+              0.32, // we have to use height for width because height constraint is infinite
           color: OlracColoursLight.olspsDarkBlue,
           assetPath: method.svgPath,
         ),
@@ -28,7 +30,9 @@ class FishingMethodScreen extends StatelessWidget {
 
     return Builder(builder: (BuildContext context) {
       return Container(
-        decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(25))),
         margin: const EdgeInsets.all(12),
         child: FlatButton(
           padding: const EdgeInsets.all(8),
@@ -40,14 +44,21 @@ class FishingMethodScreen extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    (Localizations.localeOf(context).languageCode == 'en')? method.name : method.portugueseName,
+                    (Localizations.localeOf(context).languageCode == 'en')
+                        ? method.name
+                        : method.portugueseName,
                     style: Theme.of(context).textTheme.headline6,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    (Localizations.localeOf(context).languageCode == 'en')? '(${method.abbreviation})' : '(${method.portugueseAbbreviation})',
-                    style: Theme.of(context).textTheme.headline6.copyWith(color: OlracColours.olspsDarkBlue),
+                    (Localizations.localeOf(context).languageCode == 'en')
+                        ? '(${method.abbreviation})'
+                        : '(${method.portugueseAbbreviation})',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(color: OlracColours.olspsDarkBlue),
                   ),
                 ],
               )
@@ -59,8 +70,9 @@ class FishingMethodScreen extends StatelessWidget {
     });
   }
 
-  dynamic chunk(list, int perChunk) =>
-      list.isEmpty ? list : ([list.take(perChunk), ...chunk(list.skip(perChunk), perChunk)]);
+  dynamic chunk(list, int perChunk) => list.isEmpty
+      ? list
+      : ([list.take(perChunk), ...chunk(list.skip(perChunk), perChunk)]);
 
   Widget _fishingMethodGrid(List<FishingMethod> fishingMethods) {
     return Container(
@@ -95,6 +107,13 @@ class FishingMethodScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          size: 30,
+        ),
+        onPressed: () => Navigator.pop(context),
+      ),
       title: AppLocalizations.of(context).getTranslatedValue('fishing_method'),
       body: FutureBuilder(
           future: FishingMethodRepo().all(),

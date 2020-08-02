@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:migrator/migrator.dart';
 import 'package:olracddl/app_config.dart';
@@ -6,6 +7,7 @@ import 'package:olracddl/app_migrations.dart';
 import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/profile.dart';
 import 'package:olracddl/providers/database.dart';
+import 'package:olracddl/providers/dio.dart';
 import 'package:olracddl/screens/home.dart';
 import 'package:olracddl/screens/sign_up.dart';
 import 'package:olracddl/screens/splash.dart';
@@ -13,6 +15,8 @@ import 'package:olracddl/theme.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+
+import 'get_lookup_data.dart';
 
 final DatabaseProvider _databaseProvider = DatabaseProvider();
 Database _database;
@@ -23,6 +27,20 @@ Future<void> main() async {
   _database = await _databaseProvider.connect();
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
+  DioProvider().init();
+  await storeSpecies();
+  //await storeSeaConditions();
+  await storeSeaBottomTypes();
+  //await storeMoonPhases();
+  //await  storeCloudTypes();
+  //await storeCloudCovers();
+  await storePorts();
+  await storeVesselNames();
+  await storeFishingAreas();
+  await storeCrewMembers();
+  await storeSkippers();
+  await storeCatchConditions();
+  //await storeFishingMethods(); //works but still need to figure out how to deal with pictures!!
 
   runApp(MyApp());
 }

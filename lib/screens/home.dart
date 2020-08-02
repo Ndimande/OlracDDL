@@ -1,10 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/trip.dart';
+import 'package:olracddl/post_data.dart';
+import 'package:olracddl/repos/fishing_set.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/settings_screen.dart';
@@ -32,7 +37,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Trip> _completedTrips = [];
   Trip _activeTrip;
-
   Future<void> _onPressStartTripButton() async {
     final FishingMethod method = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
@@ -41,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await Navigator.push(
           context, MaterialPageRoute(builder: (_) => const StartTripScreen()));
     }
-
     setState(() {});
   }
 
@@ -57,10 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
       allTrips.add(_activeTrip);
     }
     allTrips.addAll(_completedTrips.reversed);
-
     if (allTrips.isEmpty) {
       return Center(
-        child: Text(AppLocalizations.of(context).getTranslatedValue('no_trips_recorded'),
+        child: Text(
+            AppLocalizations.of(context)
+                .getTranslatedValue('no_trips_recorded'),
             style: Theme.of(context).textTheme.headline2),
       );
     }
@@ -90,22 +94,56 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Expanded(child: _trips()),
-          if (_activeTrip == null)
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 15),
-                child: StripButton(
-                    labelText: AppLocalizations.of(context).getTranslatedValue('start_new_trip'),
-                    onPressed: _onPressStartTripButton))
-          else
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              child: StripButton(
-                  labelText: AppLocalizations.of(context).getTranslatedValue('active_trip'),
-                  onPressed: _onPressActiveTripButton),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (_activeTrip == null)
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 15),
+                    child: StripButton(
+                        labelText: AppLocalizations.of(context)
+                            .getTranslatedValue('start_new_trip'),
+                        onPressed: _onPressStartTripButton))
+              else
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: StripButton(
+                      labelText: AppLocalizations.of(context)
+                          .getTranslatedValue('active_trip'),
+                      onPressed: _onPressActiveTripButton),
+                ),
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: StripButton(
+                    color: OlracColoursLight.olspsHighlightBlue,
+                    labelText: 'Upload',
+                    onPressed: uploadTrip,
+                    disabled: _completedTrips.isEmpty ? true : false,
+                  )),
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> uploadTrip() async {
+    final FishingSetRepo fishingSets = FishingSetRepo();
+
+    for (final Trip trip in _completedTrips) {
+      if (!trip.isUploaded) {
+        final TripRepo tripRepo = TripRepo();
+        final Map<String, dynamic> toTripModel = await postTrip(trip);
+        trip.uploadedAt = DateTime.now().toUtc();
+        FishingSet set = await fishingSets.find(trip.id);
+        await postFishingSet(set);
+        //print(toTripModel);
+        if (!trip.isUploaded) {
+          await tripRepo.store(trip);
+        }
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -119,7 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!snapshot.hasData) {
           return const Scaffold();
         }
-
         _completedTrips = snapshot.data['completedTrips'] as List<Trip>;
         _activeTrip = snapshot.data['activeTrip'];
         return _body();
@@ -133,7 +170,7 @@ Widget _drawerHeader() {
     final username = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-         Text(
+        Text(
           AppLocalizations.of(context).getTranslatedValue('username'),
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
@@ -147,7 +184,6 @@ Widget _drawerHeader() {
         ),
       ],
     );
-
     return Container(
       height: 150,
       child: DrawerHeader(
@@ -173,7 +209,10 @@ Widget _drawerHeader() {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    BackButton(color: Theme.of(context).primaryColor),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                   ],
                 )
               ],
@@ -219,17 +258,21 @@ class _HomeDrawer extends StatelessWidget {
                 children: [
                   _listTile(
                     iconData: Icons.history,
-                    text: AppLocalizations.of(context).getTranslatedValue('trip_history'),
+                    text: AppLocalizations.of(context)
+                        .getTranslatedValue('trip_history'),
                     onTap: () => null,
                   ),
                   _listTile(
                     iconData: Icons.settings,
-                    text: AppLocalizations.of(context).getTranslatedValue('settings'),
-                    onTap: () async =>  await Navigator.of(context).push(MaterialPageRoute(builder: (_) => SettingsScreen())),
+                    text: AppLocalizations.of(context)
+                        .getTranslatedValue('settings'),
+                    onTap: () async => await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => SettingsScreen())),
                   ),
                   _listTile(
                     iconData: Icons.info,
-                    text: AppLocalizations.of(context).getTranslatedValue('about'),
+                    text: AppLocalizations.of(context)
+                        .getTranslatedValue('about'),
                     onTap: () => null,
                   ),
                 ],
@@ -241,4 +284,3 @@ class _HomeDrawer extends StatelessWidget {
     );
   }
 }
-

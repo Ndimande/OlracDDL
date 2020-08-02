@@ -21,6 +21,7 @@ import 'package:olracddl/screens/trip.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/dialogs/add_crew_dialogbox.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/location_editor.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,7 +39,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   _StartTripScreenState({this.startDatetime});
 
   DateTime startDatetime;
-
+  Location startLocation;
   Port _port;
   Vessel _vessel;
   Skipper _skipper;
@@ -69,16 +70,29 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return true;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getLocation().then((Location l) {
+      setState(() {
+        startLocation = l;
+      });
+    });
+  }
+
+  Future<Location> getLocation() async {
+    final Position p = await Geolocator().getCurrentPosition();
+    return Location(latitude: p.latitude, longitude: p.longitude);
+  }
+
   Future<void> _onPressSave() async {
     if (!_page2Valid()) {
       return;
     }
 
-    final Position p = await Geolocator().getCurrentPosition();
-
     final newTrip = Trip(
       uuid: Uuid().v4(),
-      startLocation: Location(latitude: p.latitude, longitude: p.longitude),
+      startLocation: startLocation,
       startedAt: startDatetime,
       port: _port,
       vessel: _vessel,
@@ -120,53 +134,70 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   Widget _page1() {
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _fishingMethodButton(),
-          const SizedBox(height: 15),
-          _departureDetails(),
-          _operational(),
-          const SizedBox(height: 20),
-          Container(
-            constraints: const BoxConstraints.expand(height: 38),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Text(
-                  '1/2',
-                  style: Theme.of(context).textTheme.headline2,
-                ),
-                Positioned(child: _nextButton(), right: 0),
-              ],
+      child: SizedBox(
+        height: _screenHeight * 0.88,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _fishingMethodButton(),
+                  const SizedBox(height: 15),
+                  _departureDetails(),
+                  _operational(),
+                ],
+              ),
             ),
-          ),
-        ],
+            const Spacer(),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              constraints: const BoxConstraints.expand(height: 38),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Text(
+                    '1/2',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                  Positioned(child: _nextButton(), right: 0),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _page2() {
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('crew_members'),
-              style: Theme.of(context).textTheme.headline2),
-          _skipperDropdown(),
-          _crew(),
-          _notesInput(),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [_saveButton()],
+      child: SizedBox(
+        height: _screenHeight * 0.88,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                AppLocalizations.of(context).getTranslatedValue('crew_members'),
+                style: Theme.of(context).textTheme.headline2),
+            _skipperDropdown(),
+            _crew(),
+            const Spacer(),
+            _notesInput(),
+            Container(
+              margin: const EdgeInsets.only(top: 10, bottom: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [_saveButton()],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -211,7 +242,12 @@ class _StartTripScreenState extends State<StartTripScreen> {
           onChanged: (Port port) => setState(() => _port = port),
           items: snapshot.data.map(
             (Port p) {
-              return DropdownMenuItem<Port>(value: p, child: Text(p.name, style: Theme.of(context).textTheme.headline3,));
+              return DropdownMenuItem<Port>(
+                  value: p,
+                  child: Text(
+                    p.name,
+                    style: Theme.of(context).textTheme.headline3,
+                  ));
             },
           ).toList(),
         );
@@ -237,6 +273,17 @@ class _StartTripScreenState extends State<StartTripScreen> {
             });
           },
           initialDateTime: startDatetime,
+          titleStyle: Theme.of(context).textTheme.headline3,
+          fieldColor: Colors.white,
+        ),
+        LocationEditor(
+          layoutOption: false,
+          subTitleStyle: Theme.of(context).textTheme.headline6,
+          fieldColor: Colors.white,
+          //title: AppLocalizations.of(context).getTranslatedValue('location'),
+          titleStyle: Theme.of(context).textTheme.headline3,
+          location: startLocation ?? Location(latitude: 0, longitude: 0),
+          onChanged: (Location l) => setState(() => startLocation = l),
         ),
         _portDropdown(),
       ],
@@ -264,7 +311,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
             (Vessel v) {
               return DropdownMenuItem<Vessel>(
                 value: v,
-                child: Text(v.name, style: Theme.of(context).textTheme.headline3,),
+                child: Text(
+                  v.name,
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               );
             },
           ).toList(),
@@ -294,7 +344,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
             (Skipper v) {
               return DropdownMenuItem<Skipper>(
                 value: v,
-                child: Text(v.name, style: Theme.of(context).textTheme.headline3,),
+                child: Text(
+                  v.name,
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               );
             },
           ).toList(),
@@ -346,15 +399,13 @@ class _StartTripScreenState extends State<StartTripScreen> {
     int index,
     String shortName,
     String seamanId,
-    int mainRole,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _rowLayout(1, index.toString()),
         _rowLayout(3, shortName),
-        _rowLayout(3, seamanId),
-        _rowLayout(2, mainRole.toString()),
+        _rowLayout(2, seamanId),
       ],
     );
   }
@@ -375,8 +426,11 @@ class _StartTripScreenState extends State<StartTripScreen> {
     return Column(
       children: _crewMembers.map((CrewMember cm) {
         index++;
-        return _crewMemberRow(index, cm.shortName, cm.seamanId,
-            2); //role needs to be changed here from being static
+        return _crewMemberRow(
+          index,
+          cm.shortName,
+          cm.seamanId,
+        ); //role needs to be changed here from being static
       }).toList(),
     );
   }
@@ -384,52 +438,69 @@ class _StartTripScreenState extends State<StartTripScreen> {
   Widget _crew() {
     return Container(
       margin: const EdgeInsets.symmetric(
-        vertical: 15,
+        vertical: 20,
       ),
       child: Column(
         children: [
           Row(
             children: [
-              Text(AppLocalizations.of(context).getTranslatedValue('crew'),
-                  style: Theme.of(context).textTheme.headline3),
-              GestureDetector(
-                onTap: () async {
-                  final List<CrewMember> crewMembers =
-                      await showDialog<List<CrewMember>>(
-                    builder: (_) => AddCrewDialog(),
-                    context: context,
-                  );
-                  if (crewMembers != null) {
-                    setState(() {
-                      _crewMembers = crewMembers;
-                    });
-                  }
-                },
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  child: SvgPicture.asset('assets/icons/image/add_icon.svg',
-                      height: 20, width: 20),
+              ClipOval(
+                child: Material(
+                  color: _crewMembers.isEmpty
+                      ? OlracColoursLight.olspsHighlightBlue
+                      : OlracColoursLight.olspsDarkBlue,
+                  child: InkWell(
+                    onTap: () async {
+                      final List<CrewMember> crewMembers =
+                          await showDialog<List<CrewMember>>(
+                        builder: (_) => AddCrewDialog(),
+                        context: context,
+                      );
+                      if (crewMembers != null) {
+                        setState(() {
+                          _crewMembers = crewMembers;
+                        });
+                      }
+                    },
+                    child: SizedBox(
+                      width: 45,
+                      height: 45,
+                      child: Container(
+                        margin: const EdgeInsets.all(12),
+                        child: SvgPicture.asset(
+                          'assets/icons/image/add_icon.svg',
+                          height: 35,
+                          width: 35,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
+              const SizedBox(width: 10),
+              Text(AppLocalizations.of(context).getTranslatedValue('add_crew'),
+                  style: Theme.of(context).textTheme.headline3),
             ],
           ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _columnHeader(1, '#'),
-                _columnHeader(
-                    3, AppLocalizations.of(context).getTranslatedValue('name')),
-                _columnHeader(
-                    3,
-                    AppLocalizations.of(context)
-                        .getTranslatedValue('seaman_id')),
-                _columnHeader(2, 'Role'),
-              ],
-            ),
-          ),
+          _crewMembers.isEmpty
+              ? Container()
+              : Container(
+                  margin: const EdgeInsets.only(bottom: 10, top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _columnHeader(1, '#'),
+                      _columnHeader(
+                          3,
+                          AppLocalizations.of(context)
+                              .getTranslatedValue('name')),
+                      _columnHeader(
+                          2,
+                          AppLocalizations.of(context)
+                              .getTranslatedValue('seaman_id')),
+                    ],
+                  ),
+                ),
           Container(
             child: _crewMembers.isEmpty ? _noCrewMembersAdded() : _crewList(),
           ),
@@ -443,16 +514,17 @@ class _StartTripScreenState extends State<StartTripScreen> {
       children: [
         Text(AppLocalizations.of(context).getTranslatedValue('notes'),
             style: Theme.of(context).textTheme.headline3),
-        IconButton(
-          icon: const Icon(Icons.camera_alt),
-          onPressed: () {},
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.camera_alt),
+        //   onPressed: () {},
+        // ),
       ],
     );
 
     return Column(
       children: [
         title,
+        const SizedBox(height: 10),
         TextField(
           onChanged: (String text) => _notes = text,
           minLines: 2,

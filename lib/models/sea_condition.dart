@@ -2,6 +2,7 @@ import 'package:database_repo/database_repo.dart';
 
 class SeaCondition extends Model {
   String name;
+  String namePortuguese;
   DateTime createdAt;
   String imageString;
   String portugueseName;
@@ -29,6 +30,7 @@ class SeaCondition extends Model {
       'portugueseName': portugueseName, 
       'imageString': imageString,
       'name': name,
+      'namePortuguese' : namePortuguese,
       'createdAt': createdAt,
     };
   }

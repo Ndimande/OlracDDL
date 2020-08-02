@@ -5,6 +5,7 @@ import 'package:olracddl/models/disposal.dart';
 import 'package:olracddl/repos/disposal.dart';
 import 'package:olracddl/screens/disposals/add_disposal.dart';
 import 'package:olracddl/screens/disposals/show_disposal.dart';
+import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
 import 'package:olracddl/widgets/circle_button.dart';
 
@@ -99,17 +100,25 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
   }
 
   Widget _bottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        StripButton(
-          labelText: AppLocalizations.of(context).getTranslatedValue('add_disposal'),
-          onPressed: () async {
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => AddDisposalScreen(widget.fishingSetID)));
-            setState(() {});
-          },
-        )
-      ],
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          StripButton(
+            labelText: AppLocalizations.of(context).getTranslatedValue('add_disposal'),
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => AddDisposalScreen(widget.fishingSetID)));
+              setState(() {});
+            },
+          ),
+            StripButton(
+              color: OlracColoursLight.olspsRed,
+            labelText: AppLocalizations.of(context).getTranslatedValue('save_and_exit'),
+            onPressed: () =>  Navigator.pop(context),
+          )
+        ],
+      ),
     );
   }
 
@@ -136,6 +145,10 @@ class _ListDisposalsScreenState extends State<ListDisposalsScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       body: Column(
         children: [
           _breadcrumb(),

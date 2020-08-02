@@ -257,6 +257,10 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       title: AppLocalizations.of(context).getTranslatedValue('disposals'),
       scaffoldKey: _scaffoldKey,
       body: _body(),

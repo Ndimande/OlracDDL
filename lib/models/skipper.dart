@@ -5,6 +5,9 @@ class Skipper extends Model {
   String shortName;
   String seamanId;
   DateTime createdAt;
+  String firstName;
+  String middleName;
+  String lastName;
 
   Skipper({
     int id,
@@ -12,13 +15,17 @@ class Skipper extends Model {
     this.shortName,
     this.seamanId,
     this.createdAt,
+    this.firstName,
+    this.middleName,
+    this.lastName,
   }) : super(id: id);
 
   factory Skipper.fromMap(Map map) {
     return Skipper(
       id: map['id'] as int,
-      shortName: map['shortName'],
-      name: map['name'],
+      firstName: map['firstName'],
+      middleName: map['middleName'],
+      lastName: map['lastName'],
       seamanId: map['seamanId'],
       createdAt: DateTime.parse(map['createdAt'] as String),
     );
@@ -26,6 +33,8 @@ class Skipper extends Model {
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
+    name = '$firstName $middleName $lastName';
+    shortName ='$firstName  $lastName';
     return {
       'name': name,
       'short_name': shortName,

@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:database_repo/database_repo.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/fishing_set.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/vessel.dart';
+
+import 'current_fishing_method.dart';
+import 'fishing_method.dart';
 
 class Trip extends Model {
   String uuid;
@@ -92,11 +96,13 @@ class Trip extends Model {
       'endedAt': endedAt == null ? null : endedAt.toIso8601String(),
       'endLocation': endLocation.toMap(),
       'skipper': skipper.toMap(),
-      'crewMembersJson': jsonEncode(crewMembers),
       'notes': notes,
       'uploadedAt': uploadedAt == null ? null : uploadedAt.toIso8601String(),
       'portID': port.id,
       'vesselID': vessel.id,
     };
   }
+
+
+
 }

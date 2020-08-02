@@ -258,6 +258,10 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       title: AppLocalizations.of(context).getTranslatedValue('marine_life'),
       scaffoldKey: _scaffoldKey,
       body: _body(),

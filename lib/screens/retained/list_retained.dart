@@ -8,6 +8,8 @@ import 'package:olracddl/screens/retained/show_retained.dart';
 import 'package:olracddl/widgets/bread_crumb.dart';
 import 'package:olracddl/widgets/circle_button.dart';
 
+import '../../theme.dart';
+
 class ListRetainedScreen extends StatefulWidget {
   final int tripID, setID;
 
@@ -116,23 +118,35 @@ class _ListRetainedScreenState extends State<ListRetainedScreen> {
   }
 
   Widget _bottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        StripButton(
-          labelText: AppLocalizations.of(context).getTranslatedValue('add_retained_catch'),
-          onPressed: () async {
-            await Navigator.push(context, MaterialPageRoute(builder: (_) => AddRetainedScreen(widget.setID)));
-            setState(() {});
-          },
-        )
-      ],
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          StripButton(
+            labelText: AppLocalizations.of(context).getTranslatedValue('add_catch'),
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => AddRetainedScreen(widget.setID)));
+              setState(() {});
+            },
+          ),
+          StripButton(
+              color: OlracColoursLight.olspsRed,
+            labelText: AppLocalizations.of(context).getTranslatedValue('save_and_exit'),
+            onPressed: () =>  Navigator.pop(context),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       body: Column(
         children: [
           _breadcrumb(),

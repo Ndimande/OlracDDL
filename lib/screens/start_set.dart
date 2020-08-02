@@ -28,6 +28,7 @@ import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/dialogs/environment_dialog.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/location_editor.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 enum Page {
@@ -36,6 +37,7 @@ enum Page {
 }
 
 class StartSetScreen extends StatefulWidget {
+  
   final int _tripID;
 
   const StartSetScreen(this._tripID);
@@ -45,10 +47,14 @@ class StartSetScreen extends StatefulWidget {
 }
 
 class _StartSetScreenState extends State<StartSetScreen> {
+
+  
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// When the set started
   DateTime _startedAt = DateTime.now();
+
+  Location _startLocation;
 
   FishingArea _fishingArea;
 
@@ -94,6 +100,10 @@ class _StartSetScreenState extends State<StartSetScreen> {
       return false;
     }
 
+    if (_startLocation == null) {
+      return false;
+    }
+
     return true;
   }
 
@@ -109,16 +119,27 @@ class _StartSetScreenState extends State<StartSetScreen> {
     return true;
   }
 
-  Future<void> _onPressSaveButton() async {
-    final Position p = await Geolocator().getCurrentPosition();
-    final Location location =
-        Location(longitude: p.longitude, latitude: p.latitude);
+  @override
+  void initState() {
+    super.initState();
+    getLocation().then((Location l) {
+      setState(() {
+        _startLocation = l;
+      });
+    });
+  }
 
+  Future<Location> getLocation() async {
+    final Position p = await Geolocator().getCurrentPosition();
+    return Location(latitude: p.latitude, longitude: p.longitude);
+  }
+
+  Future<void> _onPressSaveButton() async {
     final FishingMethod currentFishingMethod = await CurrentFishingMethod.get();
     assert(currentFishingMethod != null);
     final FishingSet fishingSet = FishingSet(
       startedAt: _startedAt,
-      startLocation: location,
+      startLocation: _startLocation,
       fishingMethod: currentFishingMethod,
       notes: _notes,
       minimumHookSize: _minimumHookSize,
@@ -144,31 +165,25 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: <Widget>[
-              Flexible(
-                flex: 5,
-                child: DateTimeEditor(
-                  titleStyle: Theme.of(context).textTheme.headline2,
-                  initialDateTime: DateTime.now(),
-                  title: 'Date, Time and Location',
-                  onChanged: (picker, indices) {
-                    setState(() {
-                      _startedAt = DateTime.parse(picker.adapter.toString());
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 5),
-              Flexible(
-                flex: 1,
-                child: IconButton(
-                  icon: Image.asset('assets/images/location_icon.png'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          )
+          DateTimeEditor(
+            titleStyle: Theme.of(context).textTheme.headline2,
+            initialDateTime: DateTime.now(),
+            title: 'Date, Time and Location',
+            onChanged: (picker, indices) {
+              setState(() {
+                _startedAt = DateTime.parse(picker.adapter.toString());
+              });
+            },
+          ),
+          LocationEditor(
+            layoutOption: false,
+            subTitleStyle: Theme.of(context).textTheme.headline6,
+            fieldColor: Colors.white,
+            //title: AppLocalizations.of(context).getTranslatedValue('location'),
+            titleStyle: Theme.of(context).textTheme.headline3,
+            location: _startLocation ?? Location(latitude: 0, longitude: 0),
+            onChanged: (Location l) => setState(() => _startLocation = l),
+          ),
         ],
       ),
     );
@@ -185,11 +200,16 @@ class _StartSetScreenState extends State<StartSetScreen> {
           return const CircularProgressIndicator();
         }
         return DDLModelDropdown<FishingArea>(
-          label: AppLocalizations.of(context).getTranslatedValue('fishing_area'),
+          label:
+              AppLocalizations.of(context).getTranslatedValue('fishing_area'),
           items: snapshot.data
               .map<DropdownMenuItem<FishingArea>>((FishingArea fa) {
             return DropdownMenuItem<FishingArea>(
-                value: fa, child: Text(fa.name, style: Theme.of(context).textTheme.headline3,));
+                value: fa,
+                child: Text(
+                  fa.name,
+                  style: Theme.of(context).textTheme.headline3,
+                ));
           }).toList(),
           onChanged: (FishingArea fa) {
             setState(() {
@@ -202,22 +222,51 @@ class _StartSetScreenState extends State<StartSetScreen> {
     );
   }
 
-  Widget _seaBottomDepthInput() {
-    return Container(
+  Widget _seaBottomDepthInputAndMinimumHookSize(BuildContext context) {
+    double _screenWidth = MediaQuery.of(context).size.width;
+    return Row(
+      children: [
+        Container(
+            width: _screenWidth * 0.43,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+          AppLocalizations.of(context)
+              .getTranslatedValue('sea_bottom_depth'),
+          style: Theme.of(context).textTheme.headline3),
+                const SizedBox(height: 5),
+                TextField(
+        style: Theme.of(context).textTheme.headline3,
+        onChanged: (String name) => setState(() => _seaBottomDepth = name),
+        keyboardType: TextInputType.number,
+                )
+              ],
+            ),
+          ),
+        const SizedBox(width: 10,),
+        Container(
+      width:  _screenWidth * 0.43,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('sea_bottom_depth'),
-              style: Theme.of(context).textTheme.headline3),
-          const SizedBox(height: 15),
-          TextField(
-            style: Theme.of(context).textTheme.headline3,
-            onChanged: (String name) => setState(() => _seaBottomDepth = name),
-            keyboardType: TextInputType.number,
-          )
-        ],
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                AppLocalizations.of(context)
+          .getTranslatedValue('minimum_hook_size'),
+                style: Theme.of(context).textTheme.headline3),
+            const SizedBox(height: 5),
+            TextField(
+              style: Theme.of(context).textTheme.headline3,
+              onChanged: (String minimumHookSize) =>
+        setState(() => _minimumHookSize = minimumHookSize),
+              keyboardType: TextInputType.text,
+            )
+          ],
       ),
+    ),
+      ],
     );
   }
 
@@ -234,13 +283,18 @@ class _StartSetScreenState extends State<StartSetScreen> {
         return DDLModelDropdown<SeaBottomType>(
           labelTheme: false,
           selected: _seaBottomType,
-          label: AppLocalizations.of(context).getTranslatedValue('sea_bottom_type'),
+          label: AppLocalizations.of(context)
+              .getTranslatedValue('sea_bottom_type'),
           onChanged: (SeaBottomType seaBottomType) =>
               setState(() => _seaBottomType = seaBottomType),
           items: snapshot.data
               .map<DropdownMenuItem<SeaBottomType>>((SeaBottomType sbt) {
             return DropdownMenuItem<SeaBottomType>(
-                value: sbt, child: Text(sbt.name, style: Theme.of(context).textTheme.headline3,));
+                value: sbt,
+                child: Text(
+                  sbt.name,
+                  style: Theme.of(context).textTheme.headline3,
+                ));
           }).toList(),
         );
       },
@@ -260,44 +314,53 @@ class _StartSetScreenState extends State<StartSetScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _targetSpecies,
-          label: AppLocalizations.of(context).getTranslatedValue('target_species'),
+          label:
+              AppLocalizations.of(context).getTranslatedValue('target_species'),
           onChanged: (Species species) =>
               setState(() => _targetSpecies = species),
           items:
               snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
             return DropdownMenuItem<Species>(
-                value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
+                value: species,
+                child: Text(
+                  species.commonName,
+                  style: Theme.of(context).textTheme.headline3,
+                ));
           }).toList(),
         );
       },
     );
   }
 
-  Widget _minimumHookSizeInput() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(AppLocalizations.of(context).getTranslatedValue('minimum_hook_size'),
-              style: Theme.of(context).textTheme.headline3),
-          const SizedBox(height: 15),
-          TextField(
-            style: Theme.of(context).textTheme.headline3,
-            onChanged: (String minimumHookSize) =>
-                setState(() => _minimumHookSize = minimumHookSize),
-            keyboardType: TextInputType.text,
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _minimumHookSizeInput() {
+  //   return Container(
+  //     width: 175,
+  //     margin: const EdgeInsets.symmetric(vertical: 8),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //             AppLocalizations.of(context)
+  //                 .getTranslatedValue('minimum_hook_size'),
+  //             style: Theme.of(context).textTheme.headline3),
+  //         const SizedBox(height: 5),
+  //         TextField(
+  //           style: Theme.of(context).textTheme.headline3,
+  //           onChanged: (String minimumHookSize) =>
+  //               setState(() => _minimumHookSize = minimumHookSize),
+  //           keyboardType: TextInputType.text,
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _notesInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('notes'), style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('notes'),
+            style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         TextField(
           onChanged: (String text) => setState(() => _notes = text),
@@ -329,7 +392,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
       child: Column(
         children: [
           _dateTimeInput(),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -337,11 +400,17 @@ class _StartSetScreenState extends State<StartSetScreen> {
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           _fishingAreaDropdown(),
-          _seaBottomDepthInput(),
           _seaBottomTypeDropdown(),
-          _minimumHookSizeInput(),
+          Row(
+            children: [
+              _seaBottomDepthInputAndMinimumHookSize(context),
+              // const SizedBox(width: 15),
+              // _minimumHookSizeInput(),
+            ],
+          ),
+          
           const SizedBox(height: 15),
           _paginator(),
         ],
@@ -360,11 +429,12 @@ class _StartSetScreenState extends State<StartSetScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              AppLocalizations.of(context).getTranslatedValue('weather_conditions'),
+              AppLocalizations.of(context)
+                  .getTranslatedValue('weather_conditions'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           _weatherConditions(),
           const SizedBox(height: 15),
           _notesInput(),
@@ -391,13 +461,16 @@ class _StartSetScreenState extends State<StartSetScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _weatherConditionButton(
+                  _seaCondition,
                   _seaCondition != null,
                   _onSeaConditionPressed,
-                  AppLocalizations.of(context).getTranslatedValue('sea_condition'),
+                  AppLocalizations.of(context)
+                      .getTranslatedValue('sea_condition'),
                   'assets/icons/svg/wave.svg',
                   RoundedCorner.topLeft,
                 ),
                 _weatherConditionButton(
+                  _cloudType,
                   _cloudType != null,
                   _onCloudTypePressed,
                   AppLocalizations.of(context).getTranslatedValue('cloud_type'),
@@ -412,13 +485,16 @@ class _StartSetScreenState extends State<StartSetScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _weatherConditionButton(
+                   _cloudCover,
                   _cloudCover != null,
                   _onCloudCoverPressed,
-                  AppLocalizations.of(context).getTranslatedValue('cloud_cover'),
+                  AppLocalizations.of(context)
+                      .getTranslatedValue('cloud_cover'),
                   'assets/icons/svg/cloud_sun.svg',
                   RoundedCorner.bottomLeft,
                 ),
                 _weatherConditionButton(
+                  _moonPhase,
                   _moonPhase != null,
                   _onMoonPhasePressed,
                   AppLocalizations.of(context).getTranslatedValue('moon_phase'),
@@ -434,6 +510,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   Widget _weatherConditionButton(
+    dynamic conditionType, 
     bool confirmed,
     Function onTap,
     String label,
@@ -473,16 +550,21 @@ class _StartSetScreenState extends State<StartSetScreen> {
               Center(
                 child: Text(
                   label,
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
               const SizedBox(height: 4),
               Expanded(
                 child: confirmed
-                    ? SvgPicture.asset(
-                        svgPath,
-                        color: OlracColoursLight.olspsHighlightBlue,
-                      )
+                    ? ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        child: Image.asset(
+                          conditionType.imageString,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
                     : SvgPicture.asset(svgPath),
               ),
             ],
@@ -499,7 +581,8 @@ class _StartSetScreenState extends State<StartSetScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return EnvironmentDialog(
-          title: AppLocalizations.of(context).getTranslatedValue('sea_condition'),
+          title:
+              AppLocalizations.of(context).getTranslatedValue('sea_condition'),
           models: _seaConditions,
         );
       },
@@ -507,6 +590,7 @@ class _StartSetScreenState extends State<StartSetScreen> {
   }
 
   Future<void> _onSeaConditionPressed() async {
+    
     _seaCondition = await _seaConditionInputDialog();
     if (_seaCondition != null) {
       setState(() {});
@@ -603,8 +687,13 @@ class _StartSetScreenState extends State<StartSetScreen> {
   @override
   Widget build(BuildContext context) {
     return WestlakeScaffold(
+      leading: IconButton(
+            icon: const Icon(Icons.arrow_back, size: 30,),
+            onPressed: () => Navigator.pop(context),
+          ),
       scaffoldKey: _scaffoldKey,
-      title: AppLocalizations.of(context).getTranslatedValue('start_fishing_set'),
+      title:
+          AppLocalizations.of(context).getTranslatedValue('start_fishing_set'),
       body: _page == Page.One ? _page1() : _page2(),
     );
   }

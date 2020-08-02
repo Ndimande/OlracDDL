@@ -10,6 +10,7 @@ class LocationEditor extends StatelessWidget {
   final TextStyle titleStyle;
   final TextStyle subTitleStyle;
   final Color fieldColor;
+  final bool layoutOption;
 
   const LocationEditor({
     @required this.location,
@@ -18,6 +19,7 @@ class LocationEditor extends StatelessWidget {
     this.titleStyle,
     this.subTitleStyle,
     this.fieldColor,
+    this.layoutOption = true,
   });
 
   @override
@@ -25,6 +27,7 @@ class LocationEditor extends StatelessWidget {
     final latitudePicker = _CoordinatePicker(
       subTitleStyle: subTitleStyle,
       fieldColor: fieldColor,
+      layoutOption: layoutOption,
       decimalValue: location.latitude,
       orientation: CoordinateOrientation.Latitude,
       onPressConfirm: (double value) {
@@ -34,6 +37,7 @@ class LocationEditor extends StatelessWidget {
     );
 
     final longitudePicker = _CoordinatePicker(
+      layoutOption: layoutOption,
       subTitleStyle: subTitleStyle,
       fieldColor: fieldColor,
       decimalValue: location.longitude,
@@ -48,29 +52,39 @@ class LocationEditor extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
+          if (title != null) Container(
             child: Text(title, style: titleStyle),
             padding: const EdgeInsets.only(top: 15, bottom: 10),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ) else const SizedBox(height: 15),
+          layoutOption
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          latitudePicker,
+                          longitudePicker,
+                        ],
+                      ),
+                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.all(5),
+                    //   child: IconButton(icon: Icon(Icons.location_on)),
+                    // ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     latitudePicker,
+                    const SizedBox(width: 15),
                     longitudePicker,
                   ],
                 ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(5),
-              //   child: IconButton(icon: Icon(Icons.location_on)),
-              // ),
-            ],
-          )
         ],
       ),
     );
@@ -78,6 +92,7 @@ class LocationEditor extends StatelessWidget {
 }
 
 class _CoordinatePicker extends StatelessWidget {
+  final bool layoutOption;
   final double decimalValue;
   final CoordinateOrientation orientation;
   final Function(double) onPressConfirm;
@@ -88,6 +103,7 @@ class _CoordinatePicker extends StatelessWidget {
       {@required this.orientation,
       @required this.onPressConfirm,
       @required this.decimalValue,
+      @required this.layoutOption,
       this.fieldColor,
       this.subTitleStyle})
       : assert(orientation != null),
@@ -161,18 +177,15 @@ class _CoordinatePicker extends StatelessWidget {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     final Coordinate coordinate = Coordinate.fromDecimal(
       decimalValue: decimalValue,
       coordinateOrientation: orientation,
     );
 
     return Builder(
-      builder: (
-        BuildContext context,
-      ) {
+      builder: (BuildContext context) {
+        var _screenWidth = MediaQuery.of(context).size.width;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -184,11 +197,11 @@ class _CoordinatePicker extends StatelessWidget {
               },
               child: Container(
                   alignment: Alignment.centerLeft,
-                  width: double.infinity,
+                  width: layoutOption? double.infinity :_screenWidth * 0.415,
                   height: 50,
                   decoration: BoxDecoration(
                       color: fieldColor ?? Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      borderRadius: const BorderRadius.all(Radius.circular(20))),
                   child: Container(
                     margin: const EdgeInsets.only(left: 10),
                     child: Text(coordinate.sexagesimalString,

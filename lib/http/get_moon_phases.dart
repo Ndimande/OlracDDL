@@ -14,7 +14,7 @@ Future<List<MoonPhase>>  getMoonPhases() async{
   final  List<MoonPhase> moonPhaseType = [];
 
   for(final Map moonPhaseData in moonPhaseList){
-    moonPhaseType.add(MoonPhase(name: moonPhaseData['displayname']));
+    moonPhaseType.add(MoonPhase(name: moonPhaseData['displayname'], imageString: moonPhaseData['code'] )); //confirm again...
   }
   return moonPhaseType;
 }
