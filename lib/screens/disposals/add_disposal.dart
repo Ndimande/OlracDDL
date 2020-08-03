@@ -12,6 +12,7 @@ import 'package:olracddl/repos/disposal.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/location_editor.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 class AddDisposalScreen extends StatefulWidget {
@@ -36,11 +37,16 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
   @override
   void initState() {
     super.initState();
-    Geolocator().getCurrentPosition().then((Position p) {
+    getLocation().then((Location l) {
       setState(() {
-        _location = Location(latitude: p.latitude, longitude: p.longitude);
+        _location = l;
       });
     });
+  }
+
+  Future<Location> getLocation() async {
+    final Position p = await Geolocator().getCurrentPosition();
+    return Location(latitude: p.latitude, longitude: p.longitude);
   }
 
   bool _allValid() {
@@ -73,35 +79,30 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
 
   Widget _dateTimeInput() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: <Widget>[
-              Flexible(
-                flex: 5,
-                child: DateTimeEditor(
-                  titleStyle: Theme.of(context).textTheme.headline2,
-                  initialDateTime: _createdAt,
-                  title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
-                  onChanged: (picker, indices) {
-                    setState(() {
-                      _createdAt = DateTime.parse(picker.adapter.toString());
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 5),
-              Flexible(
-                flex: 1,
-                child: IconButton(
-                  icon: Image.asset('assets/images/location_icon.png'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          )
+          DateTimeEditor(
+              titleStyle: Theme.of(context).textTheme.headline2,
+              initialDateTime: _createdAt,
+              title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
+              onChanged: (picker, indices) {
+                setState(() {
+                  _createdAt = DateTime.parse(picker.adapter.toString());
+                });
+              },
+            ),
+            LocationEditor(
+          layoutOption: false,
+          subTitleStyle: Theme.of(context).textTheme.headline6,
+          fieldColor: Colors.white,
+          //title: AppLocalizations.of(context).getTranslatedValue('location'),
+          titleStyle: Theme.of(context).textTheme.headline3,
+          location: _location ?? Location(latitude: 0, longitude: 0),
+          onChanged: (Location l) => setState(() => _location = l),
+        ),
+
         ],
       ),
     );
@@ -155,21 +156,14 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('estimated_green_weight'), style: Theme.of(context).textTheme.headline2),
+        Text('${AppLocalizations.of(context).getTranslatedValue('estimated_green_weight')} (Kg)', style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              width: 100,
-              child: TextField(
-                onChanged: (String text) => setState(() => _estimatedGreenWeight = text),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text('Kg', style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
-          ],
+        Container(
+          width: 100,
+          child: TextField(
+            onChanged: (String text) => setState(() => _estimatedGreenWeight = text),
+            keyboardType: TextInputType.number,
+          ),
         )
       ],
     );
@@ -181,19 +175,12 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
       children: [
         Text(AppLocalizations.of(context).getTranslatedValue('number_of_individuals'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              width: 100,
-              child: TextField(
-                onChanged: (String text) => setState(() => _numberOfIndividuals = text),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(AppLocalizations.of(context).getTranslatedValue('individuals'), style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
-          ],
+        Container(
+          width: 100,
+          child: TextField(
+            onChanged: (String text) => setState(() => _numberOfIndividuals = text),
+            keyboardType: TextInputType.number,
+          ),
         )
       ],
     );
@@ -209,10 +196,11 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
             children: [
               _dateTimeInput(),
               _speciesDropdown(),
+              const SizedBox(height: 5),
               _disposalStateDropdown(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               _estimatedGreenWeightsInput(),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               _numberOfIndividualInput(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

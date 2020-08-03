@@ -12,9 +12,9 @@ import 'package:olracddl/screens/home.dart';
 import 'package:olracddl/screens/sign_up.dart';
 import 'package:olracddl/screens/splash.dart';
 import 'package:olracddl/theme.dart';
+import 'package:olracddl/widgets/dialogs/download_dialogbox.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 
 import 'get_lookup_data.dart';
 
@@ -28,18 +28,18 @@ Future<void> main() async {
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
   DioProvider().init();
-  await storeSpecies();
+  //await storeSpecies();
   //await storeSeaConditions();
-  await storeSeaBottomTypes();
+  //await storeSeaBottomTypes();
   //await storeMoonPhases();
   //await  storeCloudTypes();
   //await storeCloudCovers();
-  await storePorts();
-  await storeVesselNames();
-  await storeFishingAreas();
-  await storeCrewMembers();
-  await storeSkippers();
-  await storeCatchConditions();
+  //await storePorts();
+  //await storeVesselNames();
+  //await storeFishingAreas();
+  //await storeCrewMembers();
+  //await storeSkippers();
+  //await storeCatchConditions();
   //await storeFishingMethods(); //works but still need to figure out how to deal with pictures!!
 
   runApp(MyApp());
@@ -51,19 +51,18 @@ Future<void> _onAppRunning() async {
 }
 
 class MyApp extends StatefulWidget {
-  static void setLocale(BuildContext context, Locale locale){
+  static void setLocale(BuildContext context, Locale locale) {
     _MyAppState state = context.findRootAncestorStateOfType<_MyAppState>();
     state.setLocale(locale);
   }
-
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale; 
-  void setLocale(Locale locale){
+  Locale _locale;
+  void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
     });
@@ -99,18 +98,19 @@ class _MyAppState extends State<MyApp> {
         const Locale('pt', 'PT'),
       ],
       localizationsDelegates: [
-        AppLocalizations.delegate, 
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      localeResolutionCallback: (deviceLocale, supportedLocales){
-        for(var locale in supportedLocales){
-          if(locale.languageCode == deviceLocale.languageCode && locale.countryCode == deviceLocale.countryCode){
-            return deviceLocale; 
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        for (var locale in supportedLocales) {
+          if (locale.languageCode == deviceLocale.languageCode &&
+              locale.countryCode == deviceLocale.countryCode) {
+            return deviceLocale;
           }
         }
-          return supportedLocales.first; 
+        return supportedLocales.first;
       },
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(

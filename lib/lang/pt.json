@@ -69,6 +69,7 @@
     "longitude": "Longitude",
     "longline": "Palangre",
     "marine_life": "Vida Marinha",
+    "marine_species":"Espécies Marinha", 
     "max_#_of_lines_used": "Número Máximo de Linhas Usadas",
     "minimum_hook_size": "Tamanho Mínimo de Anzol",
     "mins": "Min",

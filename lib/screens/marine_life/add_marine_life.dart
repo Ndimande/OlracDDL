@@ -11,16 +11,15 @@ import 'package:olracddl/repos/catch_condition.dart';
 import 'package:olracddl/repos/marine_life.dart';
 import 'package:olracddl/repos/species.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
+import 'package:olracddl/widgets/inputs/location_editor.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 import '../../theme.dart';
 
-
 class AddMarineLifeScreen extends StatefulWidget {
-
   final int fishingSetID;
 
-    const AddMarineLifeScreen(this.fishingSetID);
+  const AddMarineLifeScreen(this.fishingSetID);
 
   @override
   _AddMarineLifeScreenState createState() => _AddMarineLifeScreenState();
@@ -39,11 +38,16 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   @override
   void initState() {
     super.initState();
-    Geolocator().getCurrentPosition().then((Position p) {
+    getLocation().then((Location l) {
       setState(() {
-        _location = Location(latitude: p.latitude, longitude: p.longitude);
+        _location = l;
       });
     });
+  }
+
+  Future<Location> getLocation() async {
+    final Position p = await Geolocator().getCurrentPosition();
+    return Location(latitude: p.latitude, longitude: p.longitude);
   }
 
   bool _allValid() {
@@ -80,31 +84,26 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: <Widget>[
-              Flexible(
-                flex: 5,
-                child: DateTimeEditor(
-                  titleStyle: Theme.of(context).textTheme.headline2,
-                  initialDateTime: _createdAt,
-                  title: AppLocalizations.of(context).getTranslatedValue('date_time_and_location'),
-                  onChanged: (picker, indices) {
-                    setState(() {
-                      _createdAt = DateTime.parse(picker.adapter.toString());
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 5),
-              Flexible(
-                flex: 1,
-                child: IconButton(
-                  icon: Image.asset('assets/images/location_icon.png'),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          )
+          DateTimeEditor(
+            titleStyle: Theme.of(context).textTheme.headline2,
+            initialDateTime: _createdAt,
+            title: AppLocalizations.of(context)
+                .getTranslatedValue('date_time_and_location'),
+            onChanged: (picker, indices) {
+              setState(() {
+                _createdAt = DateTime.parse(picker.adapter.toString());
+              });
+            },
+          ),
+          LocationEditor(
+            layoutOption: false,
+            subTitleStyle: Theme.of(context).textTheme.headline6,
+            fieldColor: Colors.white,
+            //title: AppLocalizations.of(context).getTranslatedValue('location'),
+            titleStyle: Theme.of(context).textTheme.headline3,
+            location: _location ?? Location(latitude: 0, longitude: 0),
+            onChanged: (Location l) => setState(() => _location = l),
+          ),
         ],
       ),
     );
@@ -123,10 +122,16 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
         return DDLModelDropdown<Species>(
           labelTheme: true,
           selected: _species,
-          label: AppLocalizations.of(context).getTranslatedValue('species'),
+          label: AppLocalizations.of(context).getTranslatedValue('marine_species'),
           onChanged: (Species species) => setState(() => _species = species),
-          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
+          items:
+              snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+            return DropdownMenuItem<Species>(
+                value: species,
+                child: Text(
+                  species.commonName,
+                  style: Theme.of(context).textTheme.headline3,
+                ));
           }).toList(),
         );
       },
@@ -145,9 +150,16 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
           labelTheme: true,
           selected: _condition,
           label: AppLocalizations.of(context).getTranslatedValue('condition'),
-          onChanged: (CatchCondition condition) => setState(() => _condition = condition),
-          items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition condition) {
-            return DropdownMenuItem<CatchCondition>(value: condition, child: Text(condition.name, style: Theme.of(context).textTheme.headline3,));
+          onChanged: (CatchCondition condition) =>
+              setState(() => _condition = condition),
+          items: snapshot.data.map<DropdownMenuItem<CatchCondition>>(
+              (CatchCondition condition) {
+            return DropdownMenuItem<CatchCondition>(
+                value: condition,
+                child: Text(
+                  condition.name,
+                  style: Theme.of(context).textTheme.headline3,
+                ));
           }).toList(),
         );
       },
@@ -158,21 +170,17 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('estimated_weight'), style: Theme.of(context).textTheme.headline2),
+        Text(
+            '${AppLocalizations.of(context).getTranslatedValue('estimated_weight')} (Kg)',
+            style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              width: 150,
-              child: TextField(
-                onChanged: (String text) => setState(() => _estimatedWeight = text),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text('Kg', style: Theme.of(context).textTheme.headline2.copyWith(fontWeight: FontWeight.normal))
-          ],
+        Container(
+          width: 150,
+          child: TextField(
+            onChanged: (String text) =>
+                setState(() => _estimatedWeight = text),
+            keyboardType: TextInputType.number,
+          ),
         )
       ],
     );
@@ -182,7 +190,8 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('tag_number'), style: Theme.of(context).textTheme.headline2),
+        Text(AppLocalizations.of(context).getTranslatedValue('tag_number'),
+            style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -228,7 +237,9 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
 
   StripButton _saveButton() {
     return StripButton(
-      color: _allValid() ? Theme.of(context).accentColor : OlracColoursLight.olspsGrey,
+      color: _allValid()
+          ? Theme.of(context).accentColor
+          : OlracColoursLight.olspsGrey,
       labelText: AppLocalizations.of(context).getTranslatedValue('save'),
       onPressed: _onPressSaveButton,
     );
@@ -259,9 +270,12 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   Widget build(BuildContext context) {
     return WestlakeScaffold(
       leading: IconButton(
-            icon: const Icon(Icons.arrow_back, size: 30,),
-            onPressed: () => Navigator.pop(context),
-          ),
+        icon: const Icon(
+          Icons.arrow_back,
+          size: 30,
+        ),
+        onPressed: () => Navigator.pop(context),
+      ),
       title: AppLocalizations.of(context).getTranslatedValue('marine_life'),
       scaffoldKey: _scaffoldKey,
       body: _body(),
