@@ -54,10 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+    bool _allUploaded = false;
+
+ 
+
   Widget _trips() {
     final List<Trip> allTrips = [];
     if (_activeTrip != null) {
       allTrips.add(_activeTrip);
+      _allUploaded = true;
     }
     allTrips.addAll(_completedTrips.reversed);
     if (allTrips.isEmpty) {
@@ -89,6 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _body() {
+
+
     return WestlakeScaffold(
       drawer: _HomeDrawer(),
       body: Column(
@@ -116,11 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: StripButton(
                     color: OlracColoursLight.olspsHighlightBlue,
-                    labelText: 'Upload',
+                    labelText: AppLocalizations.of(context).getTranslatedValue('upload'),
                     onPressed: uploadTrip,
-                    disabled: _completedTrips.isEmpty ? true : false,
+                    disabled: (_completedTrips.isEmpty || _allUploaded)? true : false,
                   )),
             ],
+
           ),
         ],
       ),
@@ -128,22 +136,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> uploadTrip() async {
-    final FishingSetRepo fishingSets = FishingSetRepo();
-
+    final FishingSetRepo fishingSetRepo = FishingSetRepo();
     for (final Trip trip in _completedTrips) {
       if (!trip.isUploaded) {
+        trip.uploadedAt = DateTime.now().toUtc();
         final TripRepo tripRepo = TripRepo();
         final Map<String, dynamic> toTripModel = await postTrip(trip);
-        trip.uploadedAt = DateTime.now().toUtc();
-        FishingSet set = await fishingSets.find(trip.id);
-        await postFishingSet(set);
-        //print(toTripModel);
-        if (!trip.isUploaded) {
+        if (trip.isUploaded && toTripModel != null) {
+          print(trip.isUploaded);
           await tripRepo.store(trip);
+          trip.fishingSets = await fishingSetRepo.all(where: 'trip_id = ${trip.id}');
+          for(final FishingSet fishingSet in trip.fishingSets){
+            final Map<String, dynamic> toFishingSet = await postFishingSet(fishingSet);
+            if(toFishingSet != null){
+             // print('jk1');
+            }
+          }
         }
       }
     }
+  if(_completedTrips.where((element) => !element.isUploaded).toList().isEmpty){
     setState(() {});
+  }
+  _allUploaded = true;
+
   }
 
   @override
@@ -237,6 +253,10 @@ class _HomeDrawer extends StatelessWidget {
       },
     );
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {

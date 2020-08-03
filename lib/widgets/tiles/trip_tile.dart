@@ -60,7 +60,7 @@ class TripTile extends StatelessWidget {
           children: [
             startDateTime,
             Text('${trip.fishingSets.length} Sets', style: Theme.of(context).textTheme.headline3),
-            Text('Xkg, $_tripDurationString', style: Theme.of(context).textTheme.headline3),
+            //Text('Xkg, $_tripDurationString', style: Theme.of(context).textTheme.headline3),
           ],
         ),
       );

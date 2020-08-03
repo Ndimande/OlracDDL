@@ -22,6 +22,8 @@ import 'package:olracddl/widgets/numbered_boat.dart';
 import 'package:olracddl/widgets/svg_icon.dart';
 import 'package:olracddl/widgets/tiles/fishing_set_tile.dart';
 
+import 'home.dart';
+
 Future<Map> _load(int tripID) async {
   final Trip trip = await TripRepo().find(tripID);
   return {
@@ -58,7 +60,10 @@ class _TripScreenState extends State<TripScreen> {
     trip.endedAt = result['endedAt'];
     trip.endLocation = result['endLocation'];
     await TripRepo().store(trip);
-    Navigator.pop(context);
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => HomeScreen()),
+    );
   }
 
   Future<void> _onPressStartFishingSet() async {
@@ -314,7 +319,7 @@ class _TripDetails extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (_) => FishingMethodScreen()));
                     if (method != null) {
-                       setState((){});
+                      setState(() {});
                       CurrentFishingMethod.set(method);
                     }
                   },

@@ -112,7 +112,8 @@ Future<Map<String, dynamic>> postTrip(Trip data ) async {
     print(response.data);
   } on DioError catch (e) {
     print(e.response.data);
-    // print(printer);
+      printer = null;
+      print(printer);
   }return printer;
 }
 
@@ -127,7 +128,8 @@ Future<Map<String, dynamic>> postFishingSet(FishingSet data ) async {
     print(response.data);
   } on DioError catch (e) {
     print(e.response.data);
-   // print(printer);
+     printer = null;
+     print(printer);
   }return printer;
 }
 
