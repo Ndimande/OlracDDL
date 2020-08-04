@@ -1,5 +1,5 @@
 /// This will be ignored in release mode
-const bool _DEV_RESET_DB = true;
+const bool _DEV_RESET_DB = false;
 
 class AppConfig {
   /// Is the app running in debug mode?

@@ -10,7 +10,7 @@ class PortRepo extends DatabaseRepo<Port> {
     return Port(
       id: result['id'],
       name: result['name'],
-      //namePortuguese: result['name_portuguese'],
+      portugueseName: result['portuguese_name'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

@@ -6,25 +6,18 @@ import 'dart:convert';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:imei_plugin/imei_plugin.dart';
 import 'package:intl/intl.dart';
-import 'package:olracddl/models/cloud_cover.dart';
-import 'package:olracddl/models/cloud_type.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_area.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/fishing_set.dart';
-import 'package:olracddl/models/moon_phase.dart';
-import 'package:olracddl/app_config.dart';
-import 'package:olracddl/models/profile.dart';
-import 'package:olracddl/models/sea_bottom_type.dart';
-import 'package:olracddl/models/sea_condition.dart';
-import 'package:olracddl/models/species.dart';
-import 'package:olracddl/providers/dio.dart';
-import 'package:olracddl/repos/moon_phase.dart';
 
-import 'app_data.dart';
+import 'package:olracddl/app_config.dart';
+
+
+import 'package:olracddl/providers/dio.dart';
+
 import 'models/trip.dart';
 
 const String _baseUrl = AppConfig.DDM_URL;

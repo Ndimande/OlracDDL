@@ -2,16 +2,16 @@ import 'package:database_repo/database_repo.dart';
 
 class Port extends Model {
   String name;
-  //String namePortuguese;
+  String portugueseName;
   DateTime createdAt;
 
-  Port({int id, this.name, this.createdAt}) : super(id: id); //this.namePortuguese, 
+  Port({int id, this.name, this.portugueseName, this.createdAt}) : super(id: id); 
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
     return {
       'name': name,
-      //'name_portuguese' : namePortuguese,
+      'portuguese_name': portugueseName,
     };
   }
 
@@ -19,7 +19,7 @@ class Port extends Model {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      //'namePortuguese' : namePortuguese,
+      'portugueseName' : portugueseName,
       'createdAt': createdAt,
     };
   }
