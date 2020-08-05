@@ -30,15 +30,15 @@ Future<void> main() async {
   final Migrator migrator = Migrator(_database, appMigrations);
   await migrator.run(AppConfig.RESET_DATABASE);
 
-  await deleteSpecies(); 
-  await deleteSkippers(); 
-  await deleteCrewMembers();
-  await deleteVessels();
-  //await deleteSeaConditions(); 
-  await deleteSeaBottomType(); 
-  await deleteCatchConditions();
-  await deleteFishingAreas();
-  await deletePorts(); 
+  // await deleteSpecies(); 
+  // await deleteSkippers(); 
+  // await deleteCrewMembers();
+  // await deleteVessels();
+  // //await deleteSeaConditions(); 
+  // await deleteSeaBottomType(); 
+  // await deleteCatchConditions();
+  // await deleteFishingAreas();
+  // await deletePorts(); 
 
   DioProvider().init();
 
