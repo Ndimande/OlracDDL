@@ -95,6 +95,7 @@
     "portuguese":"Portuguese", 
     "quantity":"Quantity ",
     "retained":"Retained",
+    "return_island": "Return Island",
     "return_port": "Return Port",
     "retype_password":"Retype Password",
     "save":"Save",
