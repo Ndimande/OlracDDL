@@ -95,6 +95,7 @@
     "portuguese":"Portuguese", 
     "quantity":"Quantity ",
     "retained":"Retained",
+    "return_port": "Return Port",
     "retype_password":"Retype Password",
     "save":"Save",
     "save_and_exit":"Save and Exit",

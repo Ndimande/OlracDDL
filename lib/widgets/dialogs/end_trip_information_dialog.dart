@@ -3,9 +3,12 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/localization/app_localization.dart';
+import 'package:olracddl/models/port.dart';
+import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
 import 'package:olracddl/widgets/inputs/location_editor.dart';
+import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 class EndTripInformationDialog extends StatefulWidget {
   @override
@@ -16,6 +19,12 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
   Location _location;
 
   DateTime _endedAt = DateTime.now();
+
+  //Island _island;
+  
+  Port _port;
+
+
 
   @override
   void initState() {
@@ -83,6 +92,60 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
     );
   }
 
+
+  Widget _islandDropdown() {
+    Future<List<Island>> getIslands() async =>  IslandRepo().all();
+    return FutureBuilder(
+      future: getIslands(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Island> islands = snapshot.data;
+
+        return DDLModelDropdown<Island>(
+          labelTheme: false,
+          selected: _island,
+          label: AppLocalizations.of(context).getTranslatedValue('return_island'),
+          onChanged: (Island island) => setState(() => _island = island),
+          items: islands.map<DropdownMenuItem<Island>>((Island island) {
+            return DropdownMenuItem<Island>(
+              value: island,
+              child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+
+  Widget _portDropdown() {
+    Future<List<Port>> getPorts() async =>  PortRepo().all();
+    return FutureBuilder(
+      future: getPorts(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Port> ports = snapshot.data;
+
+        return DDLModelDropdown<Port>(
+          labelTheme: false,
+          selected: _port,
+          label: AppLocalizations.of(context).getTranslatedValue('return_port'),
+          onChanged: (Port port) => setState(() => _port = port),
+          items: ports.map<DropdownMenuItem<Port>>((Port port) {
+            return DropdownMenuItem<Port>(
+              value: port,
+              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -109,3 +172,4 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
     );
   }
 }
+

@@ -95,6 +95,8 @@
     "portuguese":"Português",
     "quantity": "Quantidade",
     "retained": "Retidos",
+    "return_island": "Ilha de Retorno",
+    "return_port": "Porto de Retorno",
     "retype_password": "Repetir Palavra-Passe",
     "save": "Salvar",
     "save_and_exit":"Salvar e Sair",
