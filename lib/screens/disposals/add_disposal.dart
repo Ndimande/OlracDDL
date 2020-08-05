@@ -108,7 +108,9 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
     );
   }
 
+
   Widget _speciesDropdown() {
+    final _screenWidth = MediaQuery.of(context).size.width;
     Future<List<Species>> _getSpecies() async => await SpeciesRepo().all();
 
     return FutureBuilder(
@@ -118,20 +120,24 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
           return Container();
         }
 
-        return DDLModelDropdown<Species>(
-          labelTheme: true,
-          selected: _species,
-          label: AppLocalizations.of(context).getTranslatedValue('species'),
-          onChanged: (Species species) => setState(() => _species = species),
-          items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
-          }).toList(),
+        return Container(
+          width: _screenWidth * 0.415,
+          child: DDLModelDropdown<Species>(
+            labelTheme: true,
+            selected: _species,
+            label: AppLocalizations.of(context).getTranslatedValue('species'),
+            onChanged: (Species species) => setState(() => _species = species),
+            items: snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+              return DropdownMenuItem<Species>(value: species, child: Text(species.commonName, style: Theme.of(context).textTheme.headline3,));
+            }).toList(),
+          ),
         );
       },
     );
   }
 
   Widget _disposalStateDropdown() {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return FutureBuilder(
       future: CatchConditionRepo().all(),
       builder: (context, snapshot) {
@@ -139,14 +145,17 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
           return Container();
         }
 
-        return DDLModelDropdown<CatchCondition>(
-          labelTheme: true,
-          selected: _disposalState,
-          label: AppLocalizations.of(context).getTranslatedValue('disposal_state'),
-          onChanged: (CatchCondition disposalState) => setState(() => _disposalState = disposalState),
-          items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition disposalState) {
-            return DropdownMenuItem<CatchCondition>(value: disposalState, child: Text(disposalState.name, style: Theme.of(context).textTheme.headline3,));
-          }).toList(),
+        return Container(
+          width: _screenWidth * 0.415,
+          child: DDLModelDropdown<CatchCondition>(
+            labelTheme: true,
+            selected: _disposalState,
+            label: AppLocalizations.of(context).getTranslatedValue('disposal_state'),
+            onChanged: (CatchCondition disposalState) => setState(() => _disposalState = disposalState),
+            items: snapshot.data.map<DropdownMenuItem<CatchCondition>>((CatchCondition disposalState) {
+              return DropdownMenuItem<CatchCondition>(value: disposalState, child: Text(disposalState.name, style: Theme.of(context).textTheme.headline3,));
+            }).toList(),
+          ),
         );
       },
     );
@@ -195,9 +204,14 @@ class _AddDisposalScreenState extends State<AddDisposalScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _dateTimeInput(),
-              _speciesDropdown(),
-              const SizedBox(height: 5),
-              _disposalStateDropdown(),
+              Row(
+                children: [
+                  _speciesDropdown(),
+                  SizedBox(width: 15),
+                   _disposalStateDropdown(),
+                ],
+              ),
+             
               const SizedBox(height: 15),
               _estimatedGreenWeightsInput(),
               const SizedBox(height: 5),

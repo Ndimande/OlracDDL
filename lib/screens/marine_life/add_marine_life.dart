@@ -110,6 +110,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
   }
 
   Widget _speciesDropdown() {
+    final _screenWidth = MediaQuery.of(context).size.width; 
     Future<List<Species>> _getSpecies() async => await SpeciesRepo().all();
 
     return FutureBuilder(
@@ -119,26 +120,31 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
           return Container();
         }
 
-        return DDLModelDropdown<Species>(
-          labelTheme: true,
-          selected: _species,
-          label: AppLocalizations.of(context).getTranslatedValue('marine_species'),
-          onChanged: (Species species) => setState(() => _species = species),
-          items:
-              snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
-            return DropdownMenuItem<Species>(
-                value: species,
-                child: Text(
-                  species.commonName,
-                  style: Theme.of(context).textTheme.headline3,
-                ));
-          }).toList(),
+        return Container(
+          width: _screenWidth * 0.415,
+          child: DDLModelDropdown<Species>(
+            labelTheme: true,
+            selected: _species,
+            label:
+                AppLocalizations.of(context).getTranslatedValue('marine_species'),
+            onChanged: (Species species) => setState(() => _species = species),
+            items:
+                snapshot.data.map<DropdownMenuItem<Species>>((Species species) {
+              return DropdownMenuItem<Species>(
+                  value: species,
+                  child: Text(
+                    species.commonName,
+                    style: Theme.of(context).textTheme.headline3,
+                  ));
+            }).toList(),
+          ),
         );
       },
     );
   }
 
   Widget _conditionDropdown() {
+     final _screenWidth = MediaQuery.of(context).size.width; 
     return FutureBuilder(
       future: CatchConditionRepo().all(),
       builder: (context, snapshot) {
@@ -146,21 +152,24 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
           return Container();
         }
 
-        return DDLModelDropdown<CatchCondition>(
-          labelTheme: true,
-          selected: _condition,
-          label: AppLocalizations.of(context).getTranslatedValue('condition'),
-          onChanged: (CatchCondition condition) =>
-              setState(() => _condition = condition),
-          items: snapshot.data.map<DropdownMenuItem<CatchCondition>>(
-              (CatchCondition condition) {
-            return DropdownMenuItem<CatchCondition>(
-                value: condition,
-                child: Text(
-                  condition.name,
-                  style: Theme.of(context).textTheme.headline3,
-                ));
-          }).toList(),
+        return Container(
+          width: _screenWidth * 0.415,
+          child: DDLModelDropdown<CatchCondition>(
+            labelTheme: true,
+            selected: _condition,
+            label: AppLocalizations.of(context).getTranslatedValue('condition'),
+            onChanged: (CatchCondition condition) =>
+                setState(() => _condition = condition),
+            items: snapshot.data.map<DropdownMenuItem<CatchCondition>>(
+                (CatchCondition condition) {
+              return DropdownMenuItem<CatchCondition>(
+                  value: condition,
+                  child: Text(
+                    condition.name,
+                    style: Theme.of(context).textTheme.headline3,
+                  ));
+            }).toList(),
+          ),
         );
       },
     );
@@ -177,8 +186,7 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
         Container(
           width: 150,
           child: TextField(
-            onChanged: (String text) =>
-                setState(() => _estimatedWeight = text),
+            onChanged: (String text) => setState(() => _estimatedWeight = text),
             keyboardType: TextInputType.number,
           ),
         )
@@ -218,15 +226,22 @@ class _AddMarineLifeScreenState extends State<AddMarineLifeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _dateTimeInput(),
-              _speciesDropdown(),
-              _conditionDropdown(),
-              const SizedBox(height: 10),
+              Row(
+                children: [
+                  _speciesDropdown(),
+                  const SizedBox(width: 15),
+                  _conditionDropdown(),
+                ],
+              ),
+              const SizedBox(height: 20),
               _estimatedWeightsInput(),
               const SizedBox(height: 10),
-              _tagNumberInput(),
+              
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  _tagNumberInput(),
                   _saveButton(),
                 ],
               ),

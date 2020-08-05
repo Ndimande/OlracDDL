@@ -44,7 +44,9 @@ class CurrentFishingMethod {
         createdAt: DateTime.parse(resultJson['createdAt'] as String),
         name: resultJson['name'] as String,
         svgPath: resultJson['svgPath'] as String,
-        abbreviation: resultJson['abbreviation'] as String);
+        abbreviation: resultJson['abbreviation'] as String,
+        portugueseName: resultJson['portugueseName'] as String,
+        portugueseAbbreviation: resultJson['portugueseAbbreviation'] as String);
   }
 
   static Future<void> set(FishingMethod method) async {

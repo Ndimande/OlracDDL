@@ -110,12 +110,12 @@ Future<void> storeFishingAreas() async{
  }
 }
 
-Future<void> storeFishingMethods() async{
- final List<FishingMethod>  fishingMethodNames = await getFishingMethods();
- for(final FishingMethod fishingMethodName in fishingMethodNames){
-  await FishingMethodRepo().store(fishingMethodName);
- }
-}
+// Future<void> storeFishingMethods() async{
+//  final List<FishingMethod>  fishingMethodNames = await getFishingMethods();
+//  for(final FishingMethod fishingMethodName in fishingMethodNames){
+//   await FishingMethodRepo().store(fishingMethodName);
+//  }
+// }
 
 Future<void> storeCrewMembers() async{
  final List<CrewMember>  crewMemberNames = await getCrewMembers();

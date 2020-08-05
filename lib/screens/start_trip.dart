@@ -226,33 +226,29 @@ class _StartTripScreenState extends State<StartTripScreen> {
         });
   }
 
-  Widget _portDropdown() {
-    Future<List<Port>> getPorts() async => await PortRepo().all();
-
+    Widget _portDropdown() {
+    Future<List<Port>> getPorts() async =>  PortRepo().all();
     return FutureBuilder(
-      builder: (context, AsyncSnapshot<List<Port>> snapshot) {
+      future: getPorts(),
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Container();
+          return const TextField();
         }
+        final List<Port> ports = snapshot.data;
+
         return DDLModelDropdown<Port>(
           labelTheme: false,
           selected: _port,
-          label:
-              AppLocalizations.of(context).getTranslatedValue('departure_port'),
+          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
           onChanged: (Port port) => setState(() => _port = port),
-          items: snapshot.data.map(
-            (Port p) {
-              return DropdownMenuItem<Port>(
-                  value: p,
-                  child: Text(
-                    p.name,
-                    style: Theme.of(context).textTheme.headline3,
-                  ));
-            },
-          ).toList(),
+          items: ports.map<DropdownMenuItem<Port>>((Port port) {
+            return DropdownMenuItem<Port>(
+              value: port,
+              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
+            );
+          }).toList(),
         );
       },
-      future: getPorts(),
     );
   }
 
