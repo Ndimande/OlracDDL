@@ -27,8 +27,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   _database = await _databaseProvider.connect();
-  final Migrator migrator = Migrator(_database, appMigrations);
-  await migrator.run(AppConfig.RESET_DATABASE);
+    final Migrator migrator = Migrator(_database, appMigrations);
+    await migrator.run(AppConfig.RESET_DATABASE);
 
   // await deleteSpecies(); 
   // await deleteSkippers(); 
@@ -40,25 +40,18 @@ Future<void> main() async {
   // await deleteFishingAreas();
   // await deletePorts(); 
 
-  DioProvider().init();
-
-  
-
-  await storeSpecies();
-  await storeSeaBottomTypes();
   //await storeSeaConditions();
   //await storeMoonPhases();
   //await  storeCloudTypes();
   //await storeCloudCovers();
-  await storePorts();
-  await storeVesselNames();
-  await storeFishingAreas();
-  await storeCrewMembers();
-  await storeSkippers();
-  await storeCatchConditions();
   //await storeFishingMethods(); //works but still need to figure out how to deal with pictures!!
+  
+
 
   runApp(MyApp());
+
+  
+
 }
 
 /// Run things once the app has started and the splash screen is showing.

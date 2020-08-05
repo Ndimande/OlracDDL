@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:olrac_widgets/olrac_widgets.dart';
+import 'package:olracddl/http/get_species.dart';
+
 import 'package:olracddl/localization/app_localization.dart';
+import 'package:olracddl/models/species.dart';
+import 'package:olracddl/providers/dio.dart';
+import 'package:olracddl/repos/species.dart';
+
+import '../get_lookup_data.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,10 +23,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    getDdmData(); 
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
   }
+
+
+   Future<void> getDdmData() async {
+     DioProvider().init(); 
+     //await storeSpecies();
+     await storeSeaBottomTypes();
+     await storePorts();
+     await storeVesselNames();
+     await storeFishingAreas();
+     await storeCrewMembers();
+     await storeSkippers();
+     await storeCatchConditions();
+    }
+
+
+
+  
 
   @override
   void dispose() {
