@@ -290,6 +290,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
         final List<Port> ports = snapshot.data;
 
         return DDLModelDropdown<Port>(
+          //hint: (_island != null)? 'tap to select' : 'Please Select an Island First',
           labelTheme: false,
           selected: _port,
           label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
@@ -375,7 +376,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   Widget _skipperDropdown() {
-    Future<List<Skipper>> getSkippers() async => await SkipperRepo().all();
+    Future<List<Skipper>> getSkippers() async => await SkipperRepo().all(where: 'secondary_role OR default_role = 1' );
 
     return FutureBuilder(
       future: getSkippers(),
@@ -501,10 +502,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
                       ? OlracColoursLight.olspsHighlightBlue
                       : OlracColoursLight.olspsDarkBlue,
                   child: InkWell(
-                    onTap: () async {
+                    onTap: (_skipper == null)? null : () async {
                       final List<CrewMember> crewMembers =
                           await showDialog<List<CrewMember>>(
-                        builder: (_) => AddCrewDialog(),
+                        builder: (_) => AddCrewDialog(_skipper),
                         context: context,
                       );
                       if (crewMembers != null) {

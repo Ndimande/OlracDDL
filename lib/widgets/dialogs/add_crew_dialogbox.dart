@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/crew_member.dart';
+import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/repos/crew_member.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/model_dropdown.dart';
@@ -8,6 +9,10 @@ import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 import '../tiles/crew_member_tile.dart';
 
 class AddCrewDialog extends StatefulWidget {
+
+  Skipper skipper; 
+  AddCrewDialog(this.skipper);
+
   @override
   _AddCrewDialogState createState() => _AddCrewDialogState();
 }
@@ -16,9 +21,10 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
   final List<CrewMember> _chosenCrewMembers = [];
 
   Widget _dropdownList() {
+    
     final String crewMemberIds = _chosenCrewMembers.map((CrewMember cm) => cm.id).toList().join(',');
     return FutureBuilder(
-      future: CrewMemberRepo().all(where: 'id NOT IN ($crewMemberIds)'),
+      future: CrewMemberRepo().all(where: 'id NOT IN ($crewMemberIds) AND id NOT IN (${widget.skipper.id})'),  
       builder: (context, AsyncSnapshot<List<CrewMember>> snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();

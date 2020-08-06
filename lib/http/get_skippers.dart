@@ -8,16 +8,21 @@ import 'package:olracddl/repos/species.dart';
 
 const String _baseUrl = AppConfig.DDM_URL + '/api/crews';
 final Dio _dio = DioProvider().dio;
-Future<List<Skipper>>  getSkippers() async{
+Future<List<Skipper>> getSkippers() async {
   Response response;
   response = await _dio.get(_baseUrl);
 
   final List skipperList = response.data['data'];
-  final  List<Skipper> skipperType = [];
+  final List<Skipper> skipperType = [];
 
-  for(final Map CrewMemberData in skipperList){
-    skipperType.add(Skipper(seamanId: CrewMemberData['seaman_book_identification'], firstName : CrewMemberData['firstname'], middleName: CrewMemberData['middlenames'],lastName: CrewMemberData['lastname'], ));
-
+  for (final Map CrewMemberData in skipperList) {
+    skipperType.add(Skipper(
+        seamanId: CrewMemberData['seaman_book_identification'],
+        firstName: CrewMemberData['firstname'],
+        middleName: CrewMemberData['middlenames'],
+        lastName: CrewMemberData['lastname'],
+        defaultRole: CrewMemberData['default_role_id'],
+        secondaryRole: CrewMemberData['secondary_role_id']));
   }
   return skipperType;
 }

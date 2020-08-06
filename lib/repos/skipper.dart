@@ -13,6 +13,8 @@ class SkipperRepo extends DatabaseRepo<Skipper> {
       shortName: result['short_name'],
       seamanId: result['seaman_id'],
       createdAt: DateTime.parse(result['created_at']),
+      defaultRole: result['default_role'] as int,
+      secondaryRole: result['secondary_role'] as int,
     );
   }
 }

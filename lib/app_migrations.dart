@@ -58,7 +58,8 @@ const List<Migration> appMigrations = <Migration>[
         'name_portuguese TEXT '
         ')',
   ),
-  Migration( //Ittai
+  Migration(
+    //Ittai
     name: 'create_sea_conditions',
     sql: 'CREATE TABLE sea_conditions ( '
         'id INTEGER PRIMARY KEY, '
@@ -79,7 +80,8 @@ const List<Migration> appMigrations = <Migration>[
         'portuguese_name TEXT NOT NULL '
         ')',
   ),
-  Migration( //Ittai
+  Migration(
+    //Ittai
     name: 'create_cloud_covers',
     sql: 'CREATE TABLE cloud_covers ( '
         'id INTEGER PRIMARY KEY, '
@@ -89,7 +91,8 @@ const List<Migration> appMigrations = <Migration>[
         'portuguese_name TEXT NOT NULL '
         ')',
   ),
-  Migration( //moon phases
+  Migration(
+    //moon phases
     name: 'create_moon_phases',
     sql: 'CREATE TABLE moon_phases ( '
         'id INTEGER PRIMARY KEY, '
@@ -147,7 +150,9 @@ const List<Migration> appMigrations = <Migration>[
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'short_name TEXT UNIQUE NOT NULL, '
         'name TEXT UNIQUE NOT NULL, '
-        'seaman_id TEXT UNIQUE NULL '
+        'seaman_id TEXT UNIQUE NULL, '
+        'default_role INTEGER NOT NULL, '
+        'secondary_role INTEGER '
         ')',
   ),
   Migration(
@@ -158,7 +163,9 @@ const List<Migration> appMigrations = <Migration>[
         'short_name TEXT UNIQUE NOT NULL, '
         'name TEXT UNIQUE NOT NULL, '
         'seaman_id TEXT NULL, '
-        'island_id TEXT, '
+        'island_id INTEGER, '
+        'default_role INTEGER NOT NULL, '
+        'secondary_role INTEGER, '
         'FOREIGN KEY (island_id) REFERENCES islands (id) '
         ')',
   ),
@@ -333,7 +340,9 @@ const List<Migration> appMigrations = <Migration>[
     (7, 'assets/images/mp7.jpeg', 'Last quarter', 'Último quarto'),
     (8, 'assets/images/mp8.jpeg', 'Waning crescent', 'Quarto minguante')
   '''),
-  Migration(name: 'populate_fishing_methods', sql: '''
+  Migration(
+    name: 'populate_fishing_methods',
+    sql: '''
     INSERT INTO fishing_methods (id, name, svg_path, abbreviation, portuguese_name, portuguese_abbreviation) VALUES
     (1, 'Beach Seine', 'assets/icons/fishing_methods/Oltrace_Beach_Seine.svg', 'SB', 'Xávega', 'X'),
     (2, 'Boat Seine', 'assets/icons/fishing_methods/Oltrace_Purse_Seine.svg', 'SV', 'Cerco', 'C'),
@@ -890,5 +899,4 @@ const List<Migration> appMigrations = <Migration>[
 //    (191,'01C9')
 //  ''',
 //  ),
-
 ];

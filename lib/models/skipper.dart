@@ -8,6 +8,8 @@ class Skipper extends Model {
   String firstName;
   String middleName;
   String lastName;
+  int defaultRole; 
+  int secondaryRole; 
 
   Skipper({
     int id,
@@ -18,6 +20,8 @@ class Skipper extends Model {
     this.firstName,
     this.middleName,
     this.lastName,
+    this.defaultRole,
+    this.secondaryRole,
   }) : super(id: id);
 
   factory Skipper.fromMap(Map map) {
@@ -28,6 +32,8 @@ class Skipper extends Model {
       lastName: map['lastName'],
       seamanId: map['seamanId'],
       createdAt: DateTime.parse(map['createdAt'] as String),
+      defaultRole: map['defualtRole'],
+      secondaryRole: map['secondaryRole'],
     );
   }
 
@@ -39,6 +45,8 @@ class Skipper extends Model {
       'name': name,
       'short_name': shortName,
       'seaman_id': seamanId, 
+      'default_role': defaultRole, 
+      'secondary_role': secondaryRole,
     };
   }
 
@@ -50,6 +58,8 @@ class Skipper extends Model {
       'shortName': shortName, 
       'seamanId': seamanId, 
       'createdAt': createdAt.toIso8601String(),
+      'defaultRole': defaultRole,
+      'secondaryRole': secondaryRole, 
     };
   }
 }
