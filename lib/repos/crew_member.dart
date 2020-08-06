@@ -11,6 +11,7 @@ class CrewMemberRepo extends DatabaseRepo<CrewMember> {
       id: result['id'],
       name: result['name'],
       shortName: result['short_name'],
+      islandID: result['island_id'],
       seamanId: result['seaman_id'],
       createdAt: DateTime.parse(result['created_at']),
     );

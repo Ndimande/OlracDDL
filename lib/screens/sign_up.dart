@@ -102,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _countryDropdown() {
-    Future<List<Country>> getCountries() async => CountryRepo().all();
+    Future<List<Country>> getCountries() async => await CountryRepo().all();
     return FutureBuilder(
       future: getCountries(),
       builder: (context, snapshot) {

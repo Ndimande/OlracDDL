@@ -14,10 +14,9 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE islands ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT NOT NULL, '
-        'portuguese_name Text '
-       // 'island_id TEXT, '
-
+        'portuguese_name TEXT, '
+        'island_id TEXT, '
+        'name TEXT UNIQUE NOT NULL '
         ')',
   ),
   Migration(
@@ -26,8 +25,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'name TEXT NOT NULL, '
-        'portuguese_name TEXT , '
-        'island_id INTEGER, '
+        'portuguese_name TEXT, '
+        'island_id TEXT, '
         'FOREIGN KEY (island_id) REFERENCES islands (id) '
         ')',
   ),
@@ -136,8 +135,8 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE countries ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL, '
-        'country_portuguese TEXT '
+        'country_portuguese TEXT, '
+        'name TEXT UNIQUE NOT NULL '
         ')',
   ),
   Migration(
@@ -157,7 +156,9 @@ const List<Migration> appMigrations = <Migration>[
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'short_name TEXT UNIQUE NOT NULL, '
         'name TEXT UNIQUE NOT NULL, '
-        'seaman_id TEXT UNIQUE NULL '
+        'seaman_id TEXT NULL, '
+        'island_id TEXT, '
+        'FOREIGN KEY (island_id) REFERENCES islands (id) '
         ')',
   ),
   Migration(
@@ -179,7 +180,7 @@ const List<Migration> appMigrations = <Migration>[
         'notes TEXT, '
         'uploaded_at TIMESTAMP, '
         // Foreign keys
-        'port_id INTEGER, ' 
+        'port_id INTEGER, '
         'vessel_id INTEGER, '
         'skipper_id INTEGER, '
         'FOREIGN KEY (vessel_id) REFERENCES vessels (id), '

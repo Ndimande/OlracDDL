@@ -24,27 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    getDdmData(); 
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
   }
 
-
-   Future<void> getDdmData() async {
-     DioProvider().init();
-     await storeCountries();
-     await storeIsland();
-     await storePorts();
-     await storeSpecies();
-     await storeSeaBottomTypes();
-     await storeVesselNames();
-     await storeFishingAreas();
-     await storeCrewMembers();
-     await storeSkippers();
-     await storeCatchConditions();
-    }
 
 
 

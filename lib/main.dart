@@ -29,6 +29,17 @@ Future<void> main() async {
   _database = await _databaseProvider.connect();
     final Migrator migrator = Migrator(_database, appMigrations);
     await migrator.run(AppConfig.RESET_DATABASE);
+    DioProvider().init();
+    await storeCountries();
+    await storeIsland();
+    await storePorts();
+    await storeSpecies();
+    await storeSeaBottomTypes();
+    await storeVesselNames();
+    await storeFishingAreas();
+    await storeCrewMembers();
+    await storeSkippers();
+    await storeCatchConditions();
 
   // await deleteSpecies(); 
   // await deleteSkippers(); 

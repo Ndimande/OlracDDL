@@ -15,7 +15,8 @@ Future<List<CrewMember>>  getCrewMembers() async{
   final  List<CrewMember> CrewMemberType = [];
 
   for(final Map CrewMemberData in CrewMemberList){
-    CrewMemberType.add(CrewMember(seamanId: CrewMemberData['seaman_book_identification'], firstName : CrewMemberData['firstname'], middleName: CrewMemberData['middlenames'],lastName: CrewMemberData['lastname'], ));
+    CrewMemberType.add(CrewMember(seamanId: CrewMemberData['seaman_book_identification'], firstName : CrewMemberData['firstname'],
+      islandID: CrewMemberData['island_id'],middleName: CrewMemberData['middlenames'],lastName: CrewMemberData['lastname'], ));
 
   }
   return CrewMemberType;
