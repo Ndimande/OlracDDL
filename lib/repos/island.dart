@@ -10,6 +10,8 @@ class IslandRepo extends DatabaseRepo<Island> {
     return Island(
       id: result['id'],
       name: result['name'],
+    //  islandID: result['island_id'],
+      portugueseName: result['portuguese_name'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

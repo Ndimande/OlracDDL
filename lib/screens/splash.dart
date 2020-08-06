@@ -33,11 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
    Future<void> getDdmData() async {
-     DioProvider().init(); 
-     //await storeSpecies();
-     await storeCountries(); 
-     await storeSeaBottomTypes();
+     DioProvider().init();
+     await storeCountries();
+     await storeIsland();
      await storePorts();
+     await storeSpecies();
+     await storeSeaBottomTypes();
      await storeVesselNames();
      await storeFishingAreas();
      await storeCrewMembers();
@@ -47,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
-  
 
   @override
   void dispose() {

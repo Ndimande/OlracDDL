@@ -4,7 +4,7 @@ import 'package:olracddl/models/island.dart';
 class Port extends Model {
   String name;
   String portugueseName;
-  Island island;
+  String island;
   DateTime createdAt;
 
   Port({
@@ -20,7 +20,7 @@ class Port extends Model {
     return {
       'name': name,
       'portuguese_name': portugueseName,
-      'island_id': island.id.toString(), 
+      'island_id': island,
     };
   }
 
@@ -30,7 +30,7 @@ class Port extends Model {
       'name': name,
       'portugueseName': portugueseName,
       'createdAt': createdAt,
-      'islandID': island.id, 
+      'island': island,
     };
   }
 }

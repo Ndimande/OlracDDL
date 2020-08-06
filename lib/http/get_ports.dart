@@ -14,9 +14,9 @@ Future<List<Port>> getPorts() async {
 
   for (final Map portData in portList) {
     portType.add(Port(
+      island: portData['island_id'],
       name: portData['displayname'],
       portugueseName: portData['displayname_portuguese'],
-      island: portData['island_id'],
     ));
   }
   return portType;

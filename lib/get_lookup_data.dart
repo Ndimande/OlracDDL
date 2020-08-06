@@ -3,6 +3,7 @@ import 'package:olracddl/http/get_cloud_covers.dart';
 import 'package:olracddl/http/get_country.dart';
 import 'package:olracddl/http/get_fishing_areas.dart';
 import 'package:olracddl/http/get_fishing_methods.dart';
+import 'package:olracddl/http/get_islands.dart';
 import 'package:olracddl/http/get_sea_bottom_types.dart';
 import 'package:olracddl/http/get_vessels.dart';
 import 'package:olracddl/models/cloud_cover.dart';
@@ -10,6 +11,7 @@ import 'package:olracddl/models/cloud_type.dart';
 import 'package:olracddl/models/country.dart';
 import 'package:olracddl/models/fishing_area.dart';
 import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/island.dart';
 import 'package:olracddl/models/moon_phase.dart';
 import 'package:olracddl/models/sea_bottom_type.dart';
 import 'package:olracddl/models/sea_condition.dart';
@@ -23,6 +25,7 @@ import 'package:olracddl/repos/country.dart';
 import 'package:olracddl/repos/crew_member.dart';
 import 'package:olracddl/repos/fishing_area.dart';
 import 'package:olracddl/repos/fishing_method.dart';
+import 'package:olracddl/repos/island.dart';
 import 'package:olracddl/repos/moon_phase.dart';
 import 'package:olracddl/repos/sea_bottom_type.dart';
 import 'package:olracddl/repos/sea_condition.dart';
@@ -147,6 +150,13 @@ Future<void> storeCatchConditions() async{
  final List<CatchCondition>  catchConditionNames = await getCatchConditions();
  for(final CatchCondition catchConditionName in catchConditionNames){
   await CatchConditionRepo().store(catchConditionName);
+ }
+}
+
+Future<void> storeIsland() async{
+ final List<Island>  islandNames = await getIslands();
+ for(final Island islandName in islandNames){
+  await IslandRepo().store(islandName);
  }
 }
 

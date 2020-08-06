@@ -10,24 +10,28 @@ const List<Migration> appMigrations = <Migration>[
         ')',
   ),
   Migration(
-    name: 'create_ports',
-    sql: 'CREATE TABLE ports ( '
-        'id INTEGER PRIMARY KEY, '
-        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL, '
-        'portuguese_name TEXT UNIQUE, '
-        'island_id TEXT, ' 
-        'FOREIGN KEY (island_id) REFERENCES islands (id) '
-        ')',
-  ),
-  Migration(
     name: 'create_islands',
     sql: 'CREATE TABLE islands ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'name TEXT UNIQUE NOT NULL '
+        'name TEXT NOT NULL, '
+        'portuguese_name Text '
+       // 'island_id TEXT, '
+
         ')',
   ),
+  Migration(
+    name: 'create_ports',
+    sql: 'CREATE TABLE ports ( '
+        'id INTEGER PRIMARY KEY, '
+        'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
+        'name TEXT NOT NULL, '
+        'portuguese_name TEXT , '
+        'island_id INTEGER, '
+        'FOREIGN KEY (island_id) REFERENCES islands (id) '
+        ')',
+  ),
+
   Migration(
     name: 'create_vessels',
     sql: 'CREATE TABLE vessels ( '
@@ -132,8 +136,8 @@ const List<Migration> appMigrations = <Migration>[
     sql: 'CREATE TABLE countries ( '
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
-        'country_portuguese TEXT, '
-        'name TEXT UNIQUE NOT NULL '
+        'name TEXT UNIQUE NOT NULL, '
+        'country_portuguese TEXT '
         ')',
   ),
   Migration(
