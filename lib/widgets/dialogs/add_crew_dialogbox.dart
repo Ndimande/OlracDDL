@@ -35,9 +35,10 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
           fieldColor: OlracColoursLight.olspsExtraLightBlue,
           selected: null,
           onChanged: (CrewMember cm) {
+            (cm != null)?
             setState(() {
               _chosenCrewMembers.add(cm);
-            });
+            }): (){};
           },
           items: crewMembers.map((CrewMember cm) {
             return DropdownMenuItem<CrewMember>(
