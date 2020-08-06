@@ -255,7 +255,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
     Widget _portDropdown() {
-    Future<List<Port>> getPorts() async =>  PortRepo().all(where: 'code = ${_island.id}');
+    Future<List<Port>> getPorts() async =>  PortRepo().all(where: 'island_id = ${_island.id}');
     return FutureBuilder(
       future: getPorts(),
       builder: (context, snapshot) {
