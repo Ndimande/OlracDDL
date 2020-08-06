@@ -69,23 +69,15 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).getTranslatedValue('green_weight'), style: Theme.of(context).textTheme.headline2),
+        Text('${AppLocalizations.of(context).getTranslatedValue('green_weight')} (Kg)', style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        Row(
-          children: [
-            Container(
-              width: 110,
-              child: TextField(
-                onChanged: (String greenWeight) =>
-                    setState(() => _greenWeight = (double.parse(greenWeight) * 1000).toInt()),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Kg', style: Theme.of(context).textTheme.headline2),
-            ),
-          ],
+        Container(
+          width: 110,
+          child: TextField(
+            onChanged: (String greenWeight) =>
+                setState(() => _greenWeight = (double.parse(greenWeight) * 1000).toInt()),
+            keyboardType: TextInputType.number,
+          ),
         ),
       ],
     );
@@ -97,21 +89,13 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
       children: [
         Text(AppLocalizations.of(context).getTranslatedValue('number_of_individuals'), style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 15),
-        Row(
-          children: [
-            Container(
-              width: 110,
-              child: TextField(
-                onChanged: (String numberOfIndividuals) =>
-                    setState(() => _numberOfIndividuals = int.parse(numberOfIndividuals)),
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(AppLocalizations.of(context).getTranslatedValue('individuals'), style: Theme.of(context).textTheme.headline3),
-            ),
-          ],
+        Container(
+          width: 110,
+          child: TextField(
+            onChanged: (String numberOfIndividuals) =>
+                setState(() => _numberOfIndividuals = int.parse(numberOfIndividuals)),
+            keyboardType: TextInputType.number,
+          ),
         ),
       ],
     );
@@ -121,6 +105,7 @@ class _AddRetainedScreenState extends State<AddRetainedScreen> {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _speciesDropdown(),
           const SizedBox(height: 15),

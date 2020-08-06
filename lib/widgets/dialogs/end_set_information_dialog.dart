@@ -132,6 +132,22 @@ class _EndSetInformationDialogState extends State<EndSetInformationDialog> {
       onChanged: (Location l) => setState(() => _endLocation = l),
     );
 
+  //   String get _tripDurationString {
+  //   Duration tripDuration;
+
+  //   if (set.isActive) {
+  //     tripDuration = DateTime.now().difference(trip.startedAt);
+  //   } else {
+  //     tripDuration = trip.endedAt.difference(trip.startedAt);
+  //   }
+
+  //   final String hours = tripDuration.inHours.toString();
+  //   final String minutes = tripDuration.inMinutes.toString();
+
+  //   return '${hours}h${minutes}m';
+  // }
+
+
     final Widget setDuration = Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

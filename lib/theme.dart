@@ -133,14 +133,14 @@ class OlracThemesLight {
     textTheme: const TextTheme(
       //main heading
       headline1: TextStyle(
-        fontSize: 35,
+        fontSize: 30,
         fontWeight: FontWeight.w500,
         color: OlracColoursLight.olspsDarkBlue,
       ),
       //sub-heading
       headline2: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
         color: OlracColoursLight.olspsDarkBlue,
       ),
       //text field heading
