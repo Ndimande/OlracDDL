@@ -25,7 +25,7 @@ class DDLModelDropdown<T> extends StatelessWidget {
     this.labelStyle,
     this.hint,
     this.fieldColor,
-    @required this.selected,
+    this.selected,
     @required this.onChanged,
     @required this.items,
     this.labelTheme = false,

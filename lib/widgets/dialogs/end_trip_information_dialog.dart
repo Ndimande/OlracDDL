@@ -3,7 +3,9 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/localization/app_localization.dart';
+import 'package:olracddl/models/island.dart';
 import 'package:olracddl/models/port.dart';
+import 'package:olracddl/repos/island.dart';
 import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/theme.dart';
 import 'package:olracddl/widgets/inputs/datetime_editor.dart';
@@ -12,7 +14,8 @@ import 'package:olracddl/widgets/inputs/model_dropdown.dart';
 
 class EndTripInformationDialog extends StatefulWidget {
   @override
-  _EndTripInformationDialogState createState() => _EndTripInformationDialogState();
+  _EndTripInformationDialogState createState() =>
+      _EndTripInformationDialogState();
 }
 
 class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
@@ -20,11 +23,9 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
 
   DateTime _endedAt = DateTime.now();
 
-  //Island _island;
-  
+  Island _island;
+
   Port _port;
-
-
 
   @override
   void initState() {
@@ -92,36 +93,68 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
     );
   }
 
+  Widget _islandNotSelected() {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 15,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context).getTranslatedValue('departure_port'),
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          const SizedBox(height: 5),
+          Container(
+            height: 51,
+            child: TextField(
+              enabled: false,
+              decoration: InputDecoration(
+                fillColor: Colors.grey[350],
+                hintStyle: Theme.of(context).textTheme.bodyText2,
+                hintText: '   *Waiting on Island Selection',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  // Widget _islandDropdown() {
-  //   Future<List<Island>> getIslands() async =>  IslandRepo().all();
-  //   return FutureBuilder(
-  //     future: getIslands(),
-  //     builder: (context, snapshot) {
-  //       if (!snapshot.hasData) {
-  //         return const TextField();
-  //       }
-  //       final List<Island> islands = snapshot.data;
+  Widget _islandDropdown() {
+    Future<List<Island>> getIslands() async => IslandRepo().all();
+    return FutureBuilder(
+      future: getIslands(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Island> islands = snapshot.data;
 
-  //       return DDLModelDropdown<Island>(
-  //         labelTheme: false,
-  //         selected: _island,
-  //         label: AppLocalizations.of(context).getTranslatedValue('return_island'),
-  //         onChanged: (Island island) => setState(() => _island = island),
-  //         items: islands.map<DropdownMenuItem<Island>>((Island island) {
-  //           return DropdownMenuItem<Island>(
-  //             value: island,
-  //             child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
-  //           );
-  //         }).toList(),
-  //       );
-  //     },
-  //   );
-  // }
-
+        return DDLModelDropdown<Island>(
+          fieldColor: OlracColoursLight.olspsExtraLightBlue,
+          labelTheme: false,
+          selected: _island,
+          label: 'Departure Island',
+          onChanged: (Island islands) => setState(() => _island = islands),
+          items: islands.map<DropdownMenuItem<Island>>((Island island) {
+            return DropdownMenuItem<Island>(
+              value: island,
+              child: Text(
+                island.name,
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
 
   Widget _portDropdown() {
-    Future<List<Port>> getPorts() async =>  PortRepo().all();
+    Future<List<Port>> getPorts() async =>
+        PortRepo().all(where: 'island_id = ${_island.id}');
     return FutureBuilder(
       future: getPorts(),
       builder: (context, snapshot) {
@@ -131,14 +164,19 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
         final List<Port> ports = snapshot.data;
 
         return DDLModelDropdown<Port>(
+          fieldColor: OlracColoursLight.olspsExtraLightBlue,
           labelTheme: false,
           selected: _port,
-          label: AppLocalizations.of(context).getTranslatedValue('return_port'),
+          label:
+              AppLocalizations.of(context).getTranslatedValue('departure_port'),
           onChanged: (Port port) => setState(() => _port = port),
           items: ports.map<DropdownMenuItem<Port>>((Port port) {
             return DropdownMenuItem<Port>(
               value: port,
-              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
+              child: Text(
+                port.name,
+                style: Theme.of(context).textTheme.headline3,
+              ),
             );
           }).toList(),
         );
@@ -158,13 +196,17 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
         child: Column(
           children: <Widget>[
             Text(
-              AppLocalizations.of(context).getTranslatedValue('end_trip_information'),
+              AppLocalizations.of(context)
+                  .getTranslatedValue('end_trip_information'),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             _dateAndTime(),
             _locationInput(),
             const SizedBox(height: 5),
+            _islandDropdown(),
+            (_island == null) ? _islandNotSelected() : _portDropdown(),
+            const SizedBox(height: 15),
             _saveButton()
           ],
         ),
@@ -172,4 +214,3 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
     );
   }
 }
-

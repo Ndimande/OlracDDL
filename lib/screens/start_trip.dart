@@ -43,7 +43,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   DateTime startDatetime;
   Location startLocation;
   Port _port;
-  Island _island; 
+  Island _island;
   Vessel _vessel;
   Skipper _skipper;
   List<CrewMember> _crewMembers = [];
@@ -227,8 +227,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
           });
         });
   }
+
   Widget _islandDropdown() {
-    Future<List<Island>> getIslands() async =>  IslandRepo().all();
+    Future<List<Island>> getIslands() async => IslandRepo().all();
     return FutureBuilder(
       future: getIslands(),
       builder: (context, snapshot) {
@@ -245,7 +246,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
           items: islands.map<DropdownMenuItem<Island>>((Island island) {
             return DropdownMenuItem<Island>(
               value: island,
-              child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
+              child: Text(
+                island.name,
+                style: Theme.of(context).textTheme.headline3,
+              ),
             );
           }).toList(),
         );
@@ -253,34 +257,37 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
-    Widget _islandNotSelected() {
-    Future<List<Port>> getPorts() async =>  [];
-    return FutureBuilder(
-      future: getPorts(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const TextField();
-        }
-        final List<Port> ports = snapshot.data;
-
-        return DDLModelDropdown<Port>(
-          labelTheme: false,
-          selected: _port,
-          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
-          onChanged: (Port port) => setState(() => _port = port),
-          items: ports.map<DropdownMenuItem<Port>>((Port port) {
-            return DropdownMenuItem<Port>(
-              value: port,
-              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
-            );
-          }).toList(),
-        );
-      },
+  Widget _islandNotSelected() {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 15,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context).getTranslatedValue('departure_port'),
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          const SizedBox(height: 5),
+          Container(
+            height: 51,
+            child: TextField(
+              enabled: false,
+              decoration: InputDecoration(
+                hintStyle: Theme.of(context).textTheme.bodyText2,
+                hintText: '   *Waiting on Island Selection',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-    }
+  }
 
-    Widget _portDropdown() {
-    Future<List<Port>> getPorts() async =>  PortRepo().all(where: 'island_id = ${_island.id}');
+  Widget _portDropdown() {
+    Future<List<Port>> getPorts() async =>
+        PortRepo().all(where: 'island_id = ${_island.id}');
     return FutureBuilder(
       future: getPorts(),
       builder: (context, snapshot) {
@@ -293,12 +300,16 @@ class _StartTripScreenState extends State<StartTripScreen> {
           //hint: (_island != null)? 'tap to select' : 'Please Select an Island First',
           labelTheme: false,
           selected: _port,
-          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
+          label:
+              AppLocalizations.of(context).getTranslatedValue('departure_port'),
           onChanged: (Port port) => setState(() => _port = port),
           items: ports.map<DropdownMenuItem<Port>>((Port port) {
             return DropdownMenuItem<Port>(
               value: port,
-              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
+              child: Text(
+                port.name,
+                style: Theme.of(context).textTheme.headline3,
+              ),
             );
           }).toList(),
         );
@@ -336,7 +347,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           onChanged: (Location l) => setState(() => startLocation = l),
         ),
         _islandDropdown(),
-        (_island == null)? _islandNotSelected() : _portDropdown(),
+        (_island == null) ? _islandNotSelected() : _portDropdown(),
         _vesselDropdown(),
       ],
     );
@@ -376,7 +387,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   Widget _skipperDropdown() {
-    Future<List<Skipper>> getSkippers() async => await SkipperRepo().all(where: 'secondary_role OR default_role = 1' );
+    Future<List<Skipper>> getSkippers() async =>
+        await SkipperRepo().all(where: 'secondary_role OR default_role = 1');
 
     return FutureBuilder(
       future: getSkippers(),
@@ -502,18 +514,20 @@ class _StartTripScreenState extends State<StartTripScreen> {
                       ? OlracColoursLight.olspsHighlightBlue
                       : OlracColoursLight.olspsDarkBlue,
                   child: InkWell(
-                    onTap: (_skipper == null)? null : () async {
-                      final List<CrewMember> crewMembers =
-                          await showDialog<List<CrewMember>>(
-                        builder: (_) => AddCrewDialog(_skipper),
-                        context: context,
-                      );
-                      if (crewMembers != null) {
-                        setState(() {
-                          _crewMembers = crewMembers;
-                        });
-                      }
-                    },
+                    onTap: (_skipper == null)
+                        ? null
+                        : () async {
+                            final List<CrewMember> crewMembers =
+                                await showDialog<List<CrewMember>>(
+                              builder: (_) => AddCrewDialog(_skipper),
+                              context: context,
+                            );
+                            if (crewMembers != null) {
+                              setState(() {
+                                _crewMembers = crewMembers;
+                              });
+                            }
+                          },
                     child: SizedBox(
                       width: 45,
                       height: 45,
