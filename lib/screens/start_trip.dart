@@ -151,7 +151,6 @@ class _StartTripScreenState extends State<StartTripScreen> {
                   _fishingMethodButton(),
                   const SizedBox(height: 15),
                   _departureDetails(),
-                  _operational(),
                 ],
               ),
             ),
@@ -254,6 +253,32 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
+    Widget _islandNotSelected() {
+    Future<List<Port>> getPorts() async =>  [];
+    return FutureBuilder(
+      future: getPorts(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Port> ports = snapshot.data;
+
+        return DDLModelDropdown<Port>(
+          labelTheme: false,
+          selected: _port,
+          label: AppLocalizations.of(context).getTranslatedValue('departure_port'),
+          onChanged: (Port port) => setState(() => _port = port),
+          items: ports.map<DropdownMenuItem<Port>>((Port port) {
+            return DropdownMenuItem<Port>(
+              value: port,
+              child: Text(port.name, style: Theme.of(context).textTheme.headline3,),
+            );
+          }).toList(),
+        );
+      },
+    );
+    }
+
     Widget _portDropdown() {
     Future<List<Port>> getPorts() async =>  PortRepo().all(where: 'code = ${_island.id}');
     return FutureBuilder(
@@ -310,7 +335,8 @@ class _StartTripScreenState extends State<StartTripScreen> {
           onChanged: (Location l) => setState(() => startLocation = l),
         ),
         _islandDropdown(),
-        _portDropdown(),
+        (_island == null)? _islandNotSelected() : _portDropdown(),
+        _vesselDropdown(),
       ],
     );
   }
@@ -381,18 +407,18 @@ class _StartTripScreenState extends State<StartTripScreen> {
     );
   }
 
-  Widget _operational() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 15),
-        Text(AppLocalizations.of(context).getTranslatedValue('operational'),
-            style: Theme.of(context).textTheme.headline2),
-        const SizedBox(height: 15),
-        _vesselDropdown(),
-      ],
-    );
-  }
+  // Widget _operational() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const SizedBox(height: 15),
+  //       Text(AppLocalizations.of(context).getTranslatedValue('operational'),
+  //           style: Theme.of(context).textTheme.headline2),
+  //       const SizedBox(height: 15),
+  //       _vesselDropdown(),
+  //     ],
+  //   );
+  // }
 
   Widget _columnHeader(int flex, String header) {
     return Expanded(
