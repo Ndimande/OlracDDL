@@ -93,31 +93,31 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
   }
 
 
-  Widget _islandDropdown() {
-    Future<List<Island>> getIslands() async =>  IslandRepo().all();
-    return FutureBuilder(
-      future: getIslands(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const TextField();
-        }
-        final List<Island> islands = snapshot.data;
+  // Widget _islandDropdown() {
+  //   Future<List<Island>> getIslands() async =>  IslandRepo().all();
+  //   return FutureBuilder(
+  //     future: getIslands(),
+  //     builder: (context, snapshot) {
+  //       if (!snapshot.hasData) {
+  //         return const TextField();
+  //       }
+  //       final List<Island> islands = snapshot.data;
 
-        return DDLModelDropdown<Island>(
-          labelTheme: false,
-          selected: _island,
-          label: AppLocalizations.of(context).getTranslatedValue('return_island'),
-          onChanged: (Island island) => setState(() => _island = island),
-          items: islands.map<DropdownMenuItem<Island>>((Island island) {
-            return DropdownMenuItem<Island>(
-              value: island,
-              child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
+  //       return DDLModelDropdown<Island>(
+  //         labelTheme: false,
+  //         selected: _island,
+  //         label: AppLocalizations.of(context).getTranslatedValue('return_island'),
+  //         onChanged: (Island island) => setState(() => _island = island),
+  //         items: islands.map<DropdownMenuItem<Island>>((Island island) {
+  //           return DropdownMenuItem<Island>(
+  //             value: island,
+  //             child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
+  //           );
+  //         }).toList(),
+  //       );
+  //     },
+  //   );
+  // }
 
 
   Widget _portDropdown() {

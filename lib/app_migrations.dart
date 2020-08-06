@@ -15,7 +15,8 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'name TEXT UNIQUE NOT NULL, '
-        'portuguese_name TEXT UNIQUE, ' 
+        'portuguese_name TEXT UNIQUE, '
+        'island_id TEXT, ' 
         'FOREIGN KEY (island_id) REFERENCES islands (id) '
         ')',
   ),
