@@ -10,6 +10,7 @@ class CountryRepo extends DatabaseRepo<Country> {
     return Country(
       id: result['id'],
       name: result['name'],
+      countryPortuguese: result['country_portuguese'],
       createdAt: DateTime.parse(result['created_at']),
     );
   }

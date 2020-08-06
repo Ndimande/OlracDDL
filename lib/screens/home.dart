@@ -5,11 +5,19 @@ import 'package:olrac_widgets/olrac_widgets.dart';
 import 'package:olracddl/app_data.dart';
 import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
+import 'package:olracddl/models/disposal.dart';
 import 'package:olracddl/models/fishing_method.dart';
 import 'package:olracddl/models/fishing_set.dart';
+import 'package:olracddl/models/marine_life.dart';
+import 'package:olracddl/models/retained_catch.dart';
+import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/post_data.dart';
+import 'package:olracddl/repos/disposal.dart';
 import 'package:olracddl/repos/fishing_set.dart';
+import 'package:olracddl/repos/marine_life.dart';
+import 'package:olracddl/repos/retained_catch.dart';
+import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/trip.dart';
 import 'package:olracddl/screens/fishing_method.dart';
 import 'package:olracddl/screens/settings_screen.dart';
@@ -37,6 +45,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Trip> _completedTrips = [];
   Trip _activeTrip;
+
   Future<void> _onPressStartTripButton() async {
     final FishingMethod method = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => FishingMethodScreen()));
@@ -54,15 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-    bool _allUploaded = false;
-
- 
-
   Widget _trips() {
     final List<Trip> allTrips = [];
     if (_activeTrip != null) {
       allTrips.add(_activeTrip);
-      _allUploaded = true;
     }
     allTrips.addAll(_completedTrips.reversed);
     if (allTrips.isEmpty) {
@@ -94,8 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _body() {
-
-
     return WestlakeScaffold(
       drawer: _HomeDrawer(),
       body: Column(
@@ -123,21 +125,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: StripButton(
                     color: OlracColoursLight.olspsHighlightBlue,
-                    labelText: AppLocalizations.of(context).getTranslatedValue('upload'),
-                    onPressed: uploadTrip,
-                    disabled: (_completedTrips.isEmpty || _allUploaded)? true : false,
+                    labelText: 'Upload',
+                    onPressed: upload,
+                    disabled: _completedTrips.isEmpty ? true : false,
                   )),
             ],
-
           ),
         ],
       ),
     );
   }
 
-  Future<void> uploadTrip() async {
-    final FishingSetRepo fishingSetRepo = FishingSetRepo();
-    for (final Trip trip in _completedTrips) {
+  Future<void> uploadTrip(Trip trip) async {
+    for (final trip in _completedTrips) {
       if (!trip.isUploaded) {
         trip.uploadedAt = DateTime.now().toUtc();
         final TripRepo tripRepo = TripRepo();
@@ -145,21 +145,74 @@ class _HomeScreenState extends State<HomeScreen> {
         if (trip.isUploaded && toTripModel != null) {
           print(trip.isUploaded);
           await tripRepo.store(trip);
-          trip.fishingSets = await fishingSetRepo.all(where: 'trip_id = ${trip.id}');
-          for(final FishingSet fishingSet in trip.fishingSets){
-            final Map<String, dynamic> toFishingSet = await postFishingSet(fishingSet);
-            if(toFishingSet != null){
-             // print('jk1');
-            }
-          }
         }
       }
     }
-  if(_completedTrips.where((element) => !element.isUploaded).toList().isEmpty){
-    setState(() {});
+    if (_completedTrips
+        .where((element) => !element.isUploaded)
+        .toList()
+        .isEmpty) {
+      setState(() {});
+    }
   }
-  _allUploaded = true;
 
+  Future<void> uploadSet(Trip trip) async {
+    final FishingSetRepo fishingSetRepo = FishingSetRepo();
+    final DisposalRepo disposalRepo = DisposalRepo();
+    final RetainedCatchRepo retainedCatchRepo = RetainedCatchRepo();
+    final MarineLifeRepo marineLifeRepo = MarineLifeRepo();
+    for (final trip in _completedTrips) {
+      trip.fishingSets =
+          await fishingSetRepo.all(where: 'trip_id = ${trip.id}');
+      for (final FishingSet fishingSet in trip.fishingSets) {
+        final Map<String, dynamic> toFishingSet =
+            await postFishingSet(fishingSet);
+        if (toFishingSet != null && trip.isUploaded) {
+          final List<Disposal> toDisposals = await disposalRepo.all(
+              where: 'fishing_set_id = ${fishingSet.id}');
+          for (final Disposal disposal in toDisposals) {
+            final Map<String, dynamic> toDisposal =
+                await postDisposal(disposal);
+          }
+
+          final List<RetainedCatch> retainedCatches = await retainedCatchRepo.all(
+              where: 'fishing_set_id = ${fishingSet.id}');
+
+
+          for (final RetainedCatch retainedCatch in retainedCatches) {
+            final Map<String, dynamic> retainedCatches =
+            await postRetainedCatch(retainedCatch);
+          }
+
+//           final List<MarineLife> marineLife = await marineLifeRepo.all(
+//              where: 'fishing_set_id = ${fishingSet.id}');
+//
+//          for (final MarineLife marine in marineLife) {
+//            final Map<String, dynamic> marines =
+//            await postMarineLife(marine);
+//          }
+        }
+      }
+    }
+  }
+
+
+  Future<void> uploadDisposal(Trip trip) async {}
+
+  Future<void> upload() async {
+    for (final trip in _completedTrips) {
+    //  testSkippers();
+      uploadTrip(trip);
+      uploadSet(trip);
+    }
+  }
+
+  Future<void> testSkippers()async{
+    final List<Skipper> skippers = await SkipperRepo().all(
+        where: 'seaman_id = ${'4512'}');
+    for(Skipper skipper in skippers ){
+      print(skipper.name);
+    }
   }
 
   @override
@@ -253,10 +306,6 @@ class _HomeDrawer extends StatelessWidget {
       },
     );
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
