@@ -570,6 +570,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     Widget result = DefaultTextStyle(
       style: _textStyle,
       child: Container(
+        height: (widget.value == null)? 28 : 51, // To modify dropdown height 
         padding: padding.resolve(Directionality.of(context)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
