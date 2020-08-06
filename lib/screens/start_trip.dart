@@ -8,10 +8,12 @@ import 'package:olracddl/localization/app_localization.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/current_fishing_method.dart';
 import 'package:olracddl/models/fishing_method.dart';
+import 'package:olracddl/models/island.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/trip.dart';
 import 'package:olracddl/models/vessel.dart';
+import 'package:olracddl/repos/island.dart';
 import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/trip.dart';
@@ -41,6 +43,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
   DateTime startDatetime;
   Location startLocation;
   Port _port;
+  Island _island; 
   Vessel _vessel;
   Skipper _skipper;
   List<CrewMember> _crewMembers = [];
@@ -225,9 +228,34 @@ class _StartTripScreenState extends State<StartTripScreen> {
           });
         });
   }
+  Widget _islandDropdown() {
+    Future<List<Island>> getIslands() async =>  IslandRepo().all();
+    return FutureBuilder(
+      future: getIslands(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const TextField();
+        }
+        final List<Island> islands = snapshot.data;
+
+        return DDLModelDropdown<Island>(
+          labelTheme: false,
+          selected: _island,
+          label: 'Departure Island',
+          onChanged: (Island islands) => setState(() => _island = islands),
+          items: islands.map<DropdownMenuItem<Island>>((Island island) {
+            return DropdownMenuItem<Island>(
+              value: island,
+              child: Text(island.name, style: Theme.of(context).textTheme.headline3,),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
 
     Widget _portDropdown() {
-    Future<List<Port>> getPorts() async =>  PortRepo().all();
+    Future<List<Port>> getPorts() async =>  PortRepo().all(where: 'code = ${_island.id}');
     return FutureBuilder(
       future: getPorts(),
       builder: (context, snapshot) {
@@ -281,6 +309,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
           location: startLocation ?? Location(latitude: 0, longitude: 0),
           onChanged: (Location l) => setState(() => startLocation = l),
         ),
+        _islandDropdown(),
         _portDropdown(),
       ],
     );

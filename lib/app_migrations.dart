@@ -27,6 +27,7 @@ const List<Migration> appMigrations = <Migration>[
         'name TEXT NOT NULL, '
         'portuguese_name TEXT, '
         'island_id TEXT, '
+        'code TEXT NOT NULL, '
         'FOREIGN KEY (island_id) REFERENCES islands (id) '
         ')',
   ),

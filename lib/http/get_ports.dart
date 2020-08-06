@@ -17,6 +17,7 @@ Future<List<Port>> getPorts() async {
       island: portData['island_id'],
       name: portData['displayname'],
       portugueseName: portData['displayname_portuguese'],
+      code: portData['code'],
     ));
   }
   return portType;

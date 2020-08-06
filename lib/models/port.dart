@@ -6,6 +6,7 @@ class Port extends Model {
   String portugueseName;
   String island;
   DateTime createdAt;
+  String code;
 
   Port({
     int id,
@@ -13,6 +14,7 @@ class Port extends Model {
     this.portugueseName,
     this.island,
     this.createdAt,
+    this.code
   }) : super(id: id);
 
   @override
@@ -21,6 +23,7 @@ class Port extends Model {
       'name': name,
       'portuguese_name': portugueseName,
       'island_id': island,
+      'code': code,
     };
   }
 
@@ -31,6 +34,7 @@ class Port extends Model {
       'portugueseName': portugueseName,
       'createdAt': createdAt,
       'island': island,
+      'code': code, 
     };
   }
 }
