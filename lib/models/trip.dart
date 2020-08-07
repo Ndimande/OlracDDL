@@ -12,6 +12,7 @@ import 'package:olracddl/models/vessel.dart';
 
 import 'current_fishing_method.dart';
 import 'fishing_method.dart';
+import 'island.dart';
 
 class Trip extends Model {
   String uuid;
@@ -30,7 +31,11 @@ class Trip extends Model {
 
   DateTime uploadedAt;
 
+  Island island;
+  Island returnIsland; 
+
   Port port;
+  Port returnPort; 
 
   List<FishingSet> fishingSets;
 
@@ -53,6 +58,9 @@ class Trip extends Model {
     this.notes,
     this.uploadedAt,
     @required this.port,
+    @required this.island,
+    this.returnPort,
+    this.returnIsland, 
     this.fishingSets = const [],
     @required this.vessel,
   })  : assert(uuid != null),
@@ -61,6 +69,7 @@ class Trip extends Model {
         assert(skipper != null),
         assert(crewMembers != null),
         assert(port != null),
+        assert(island != null),
         assert(vessel != null),
         assert(startLocation != null),
         assert(startLocation != null),
@@ -69,7 +78,6 @@ class Trip extends Model {
 
   @override
   Future<Map<String, dynamic>> toDatabaseMap() async {
-
     return {
       'uuid': uuid,
       'started_at': startedAt.toIso8601String(),
@@ -81,7 +89,10 @@ class Trip extends Model {
       'skipper_id': skipper.id,
       'notes': notes,
       'uploaded_at': uploadedAt == null ? null : uploadedAt.toIso8601String(),
+      'island_id': island.id, 
       'port_id': port.id,
+     // 'return_island_id': (returnIsland.id == null)? null : returnIsland.id,
+     // 'return_port_id': (returnPort.id == null)? null : returnPort.id,
       'vessel_id': vessel.id,
     };
   }
@@ -98,7 +109,10 @@ class Trip extends Model {
       'skipper': skipper.toMap(),
       'notes': notes,
       'uploadedAt': uploadedAt == null ? null : uploadedAt.toIso8601String(),
+      'islandID': island.id,
       'portID': port.id,
+      'returnIslandID': (returnIsland.id == null)? null : returnIsland.id,
+      'returnPortID': (returnPort.id == null)? null : returnPort.id,
       'vesselID': vessel.id,
     };
   }

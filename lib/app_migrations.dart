@@ -15,7 +15,6 @@ const List<Migration> appMigrations = <Migration>[
         'id INTEGER PRIMARY KEY, '
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, '
         'portuguese_name TEXT, '
-        'island_id TEXT, '
         'name TEXT UNIQUE NOT NULL '
         ')',
   ),
@@ -189,10 +188,16 @@ const List<Migration> appMigrations = <Migration>[
         'uploaded_at TIMESTAMP, '
         // Foreign keys
         'port_id INTEGER, '
+        'island_id INTEGER, '
+        'return_island_id INTEGER, '
+        'return_port_id INTEGER, '
         'vessel_id INTEGER, '
         'skipper_id INTEGER, '
         'FOREIGN KEY (vessel_id) REFERENCES vessels (id), '
         'FOREIGN KEY (skipper_id) REFERENCES skipper (id), '
+        'FOREIGN KEY (island_id) REFERENCES islands (id), '
+        'FOREIGN KEY (return_island_id) REFERENCES islands (id), '
+        'FOREIGN KEY (return_port_id) REFERENCES ports (id), '
         'FOREIGN KEY (port_id) REFERENCES ports (id) '
         ')',
   ),

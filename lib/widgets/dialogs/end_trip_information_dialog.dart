@@ -111,7 +111,7 @@ class _EndTripInformationDialogState extends State<EndTripInformationDialog> {
             child: TextField(
               enabled: false,
               decoration: InputDecoration(
-                fillColor: Colors.grey[350],
+                fillColor: OlracColoursLight.olspsExtraLightBlue,
                 hintStyle: Theme.of(context).textTheme.bodyText2,
                 hintText: '   *Waiting on Island Selection',
               ),

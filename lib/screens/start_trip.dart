@@ -55,6 +55,10 @@ class _StartTripScreenState extends State<StartTripScreen> {
       return false;
     }
 
+    if (_island == null) {
+      return false;
+    }
+
     if (_vessel == null) {
       return false;
     }
@@ -102,6 +106,7 @@ class _StartTripScreenState extends State<StartTripScreen> {
       notes: _notes,
       crewMembers: _crewMembers,
       skipper: _skipper,
+      island: _island,
     );
 
     final int tripID = await TripRepo().store(newTrip);
@@ -119,10 +124,16 @@ class _StartTripScreenState extends State<StartTripScreen> {
       future: _getFM(),
       builder: (_, AsyncSnapshot<FishingMethod> snapshot) {
         return RaisedButton(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
           color: OlracColoursLight.olspsDarkBlue,
-          child: Text(snapshot.hasData ? snapshot.data.name : '',
-              style: Theme.of(context).primaryTextTheme.headline5),
+          child: Text(
+            snapshot.hasData ? snapshot.data.name : '',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
           onPressed: () async {
             final FishingMethod fm = await Navigator.push(context,
                 MaterialPageRoute(builder: (_) => FishingMethodScreen()));
@@ -137,24 +148,15 @@ class _StartTripScreenState extends State<StartTripScreen> {
   }
 
   Widget _page1() {
-    final double _screenHeight = MediaQuery.of(context).size.height;
-    return SingleChildScrollView(
-      child: SizedBox(
-        height: _screenHeight * 0.88,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _fishingMethodButton(),
-                  const SizedBox(height: 15),
-                  _departureDetails(),
-                ],
-              ),
-            ),
-            const Spacer(),
+            _fishingMethodButton(),
+            const SizedBox(height: 5),
+            _departureDetails(),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               constraints: const BoxConstraints.expand(height: 38),
@@ -242,7 +244,9 @@ class _StartTripScreenState extends State<StartTripScreen> {
           labelTheme: false,
           selected: _island,
           label: 'Departure Island',
-          onChanged: (Island islands) => setState(() => _island = islands),
+          onChanged: (Island islands) => setState(() {
+            _island = islands;
+          }),
           items: islands.map<DropdownMenuItem<Island>>((Island island) {
             return DropdownMenuItem<Island>(
               value: island,

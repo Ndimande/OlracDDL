@@ -2,6 +2,7 @@ import 'package:database_repo/database_repo.dart';
 import 'package:olrac_utils/olrac_utils.dart';
 import 'package:olracddl/models/crew_member.dart';
 import 'package:olracddl/models/fishing_set.dart';
+import 'package:olracddl/models/island.dart';
 import 'package:olracddl/models/port.dart';
 import 'package:olracddl/models/skipper.dart';
 import 'package:olracddl/models/trip.dart';
@@ -9,6 +10,7 @@ import 'package:olracddl/models/vessel.dart';
 import 'package:olracddl/providers/database.dart';
 import 'package:olracddl/repos/crew_member.dart';
 import 'package:olracddl/repos/fishing_set.dart';
+import 'package:olracddl/repos/island.dart';
 import 'package:olracddl/repos/port.dart';
 import 'package:olracddl/repos/skipper.dart';
 import 'package:olracddl/repos/vessel.dart';
@@ -55,7 +57,11 @@ class TripRepo extends DatabaseRepo<Trip> {
 
   @override
   Future<Trip> fromDatabaseResult(Map<String, dynamic> result) async {
+    final Island island = await IslandRepo().find(result['island_id']);
     final Port port = await PortRepo().find(result['port_id']);
+
+    final Island returnIsland = await IslandRepo().find(result['return_island_id']);
+    final Port returnPort = await PortRepo().find(result['return_port_id']); 
 
     final DateTime startedAt = DateTime.parse(result['started_at']);
     final Location startLocation = result['start_latitude'] == null
@@ -87,7 +93,10 @@ class TripRepo extends DatabaseRepo<Trip> {
       skipper: skipper,
       crewMembers: crewMembers,
       notes: result['notes'],
+      island: island,
       port: port,
+      returnIsland: returnIsland,
+      returnPort: returnPort,
       vessel: vessel,
       uploadedAt: result['uploaded_at'] == null ? null : DateTime.parse(result['uploaded_at']),
       createdAt: DateTime.parse(result['created_at']),
