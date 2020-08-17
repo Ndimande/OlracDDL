@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
             //Text(AppData.packageInfo?.version, style: _fontStyle(10)),
             Text(
                 AppLocalizations.of(context)
-                    .getTranslatedValue('mobile_application'),
+                    .getTranslatedValue('mddl'),
                 style: _fontStyle(14, FontWeight.normal),
                 textAlign: TextAlign.center),
           ],
@@ -138,15 +138,8 @@ class _SplashScreenState extends State<SplashScreen> {
             Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Image.asset(
-                    'assets/images/logo5.png',
-                    width: _scaleImage(150),
-                  ),
-                ),
-                Container(
                   margin: const EdgeInsets.symmetric(
-                    vertical: 20,
+                    vertical: 40,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -164,7 +157,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    vertical: 20,
+                    vertical: 50,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

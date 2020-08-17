@@ -24,7 +24,7 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
     
     final String crewMemberIds = _chosenCrewMembers.map((CrewMember cm) => cm.id).toList().join(',');
     return FutureBuilder(
-      future: CrewMemberRepo().all(where: 'id NOT IN ($crewMemberIds) AND id NOT IN (${widget.skipper.id})'),  
+      future: CrewMemberRepo().all(where: 'id NOT IN ($crewMemberIds) AND id NOT IN (${widget.skipper.id})'),
       builder: (context, AsyncSnapshot<List<CrewMember>> snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
@@ -38,6 +38,9 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
             (cm != null)?
             setState(() {
               _chosenCrewMembers.add(cm);
+              // ignore: list_remove_unrelated_type
+              crewMembers.remove(_chosenCrewMembers);
+            // ignore: unnecessary_statements
             }): (){};
           },
           items: crewMembers.map((CrewMember cm) {
@@ -63,6 +66,11 @@ class _AddCrewDialogState extends State<AddCrewDialog> {
               onPressDelete: () {
                 setState(() {
                   _chosenCrewMembers.removeAt(index);
+
+
+
+
+
                 });
               }); //created a seperated widget for this, crew_member_tile.dart
         },

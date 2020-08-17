@@ -10,12 +10,14 @@ class Profile {
 
   Profile({
     @required this.uuid,
+    @required this.name,
     @required this.username,
     @required this.email,
     @required this.country,
   }) : assert(uuid != null);
 
   String uuid;
+  String name;
   String username;
   String email;
   Country country;
@@ -23,6 +25,7 @@ class Profile {
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,
+      'name' : name,
       'username': username,
       'email': email,
     };
@@ -41,6 +44,7 @@ class Profile {
     return Profile(
         uuid: resultJson['uuid'] as String,
         username: resultJson['username'] as String,
+        name: resultJson['name'] as String,
         email: resultJson['email'] as String,
         country: Country.fromMap(resultJson['country'] as Map));
   }
@@ -52,6 +56,7 @@ class Profile {
     final Map<String, dynamic> userMap = {
       'uuid': profile.uuid,
       'username': profile.username,
+      'name' : profile.name,
       'email': profile.email,
       'country': profile.country.toMap(),
     };
